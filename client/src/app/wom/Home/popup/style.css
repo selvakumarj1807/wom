@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+.doyou {
+    width: fit-content;
+    margin-left: 22%;
+    margin-top: 10%;
+}
+
+.flex-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid rgb(62, 45, 45);
+    flex-direction: column;
+    padding: 60px;
+    box-shadow: 10px 10px rgb(220, 162, 162);
+}
+
+.flex-box h4, .flex-h4{
+    font-family: "Roboto Condensed", sans-serif;}
+
+.btn-flex {
+    display: flex;
+    margin-right:12em;
+    margin-top: 10px;
+}
+
+.user-btn {
+    padding: 25px;
+}
+.btn-1 {
+    color: rgb(106, 213, 106);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn-2 {
+    color: rgb(194, 82, 82);
+    font-size: 20px;
+    font-weight: bold;
+}

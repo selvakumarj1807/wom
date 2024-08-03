@@ -1,0 +1,71 @@
+.outer-container {
+    /* border: 1px solid black; */
+    background-color: #fff;
+}
+
+.inner-container {
+    margin-top: 5px;
+    border: 2px solid rgb(145, 135, 135);
+    padding: 20px;
+    color: #0e2a47;
+}
+
+.h3 {
+    text-align: center;
+    text-decoration: underline;
+    font-weight: 400;
+}
+
+.flex {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1px;
+}
+
+.head h4 {
+    margin-top: 10px;
+    margin-left: 5px;
+    font-size: 32px;
+}
+
+.para p {
+    margin-top: 5px;
+    margin-left: 5px;
+    font-size: 32px;
+    color: red;
+    font-weight: 700;
+    margin-left: 30px;
+    margin-left: 10px;
+}
+
+form label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+form input,
+form select {
+    padding: 5px;
+    width: 20em;
+}
+
+form select option {
+    padding: 5px;
+}
+
+.text {
+    margin-left: 15%;
+}
+
+button {
+    padding: 8px;
+    /*margin-left: 30%;*/
+    margin-top: -3px;
+    border-radius: 10px;
+    background-color: #0e2a47;
+}
+
+.link {
+    color: #fff;
+    font-size: 18px;
+}

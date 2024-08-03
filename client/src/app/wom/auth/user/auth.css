@@ -1,0 +1,104 @@
+
+@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css');
+@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+/* {
+    
+--darkblue: #4154f1;
+--light blue: #717ff5;
+--white: #f6f9ff;
+} */
+
+.body {
+    height: 100%
+}
+
+.body {
+    display: grid;
+    place-items: center
+}
+
+.card {
+    padding: 0px 15px;
+    border-radius: 20px;
+    box-shadow:5px 3px 20px 3px #888888;
+}
+
+.c1 {
+    background-color:  #f6f9ff;
+    border-radius: 20px
+}
+
+.a {
+    margin: 0px;
+    font-size: 14px;
+    border-radius: 7px;
+    text-decoration: none;
+    color: black
+}
+
+.a:hover {
+    color:  #717ff5;
+    background-color:  #b6b9d8
+}
+
+.nav-link {
+    padding: 1rem 1.4rem;
+    margin: 0rem 0.7rem
+}
+
+.ac {
+    font-weight: bold;
+    color: #717ff5;
+    font-size: 14px;
+    border: 1px solid  #717ff5;
+}
+
+input,
+button {
+    width: 96%;
+    background-color: #d1d2e2;
+    border-radius: 8px;
+    padding: 8px 17px;
+    font-size: 14px;
+    border: 1px solid #f5f0ef;
+    color: #110440
+}
+
+input {
+    text-decoration: none
+}
+
+.bt {
+    background-color: #4154f1;
+    border: 1px solid rgb(300, 200, 200)
+}
+
+form {
+    margin-top: 70px
+}
+
+form>* {
+    margin: 10px 0px
+}
+
+#forgot {
+    margin: 0px -60px
+}
+
+#register {
+    text-align: center
+}
+
+.wlcm {
+    font-size: 30px
+}
+
+.sp1 {
+    font-size: 5px
+}
+
+.sp1>span {
+    background-color: #f0c3be
+}
