@@ -1,0 +1,38 @@
+.navbar {
+    background-color: #000080;
+}
+.flex-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 35px;
+    list-style-type: none;
+    margin-top: 10px;
+}
+.list-head {
+    color: #fff;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.list-head:hover, .select:hover {
+    color: rgb(193, 177, 12);
+}
+.select {
+    border: 1px solid #000080;
+    color: #fff;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: #000080;
+
+}
+
+.option {
+   margin: 50px;
+   padding: 50px;
+}
+
+
+.option {
+    padding: 20px;
+}

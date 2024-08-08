@@ -1,0 +1,40 @@
+.contact .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .contact .row .map {
+    flex: 1 1 42rem;
+    width: 100%;
+    padding: 2rem;
+    border: #002D62;
+    border-radius: 0.5rem;
+    box-shadow: #002D62;
+  }
+  .contact .row form {
+    flex: 1 1 42rem;
+    padding: 2rem;
+    border:#002D62;
+    border-radius: 0.5rem;
+    box-shadow: #002D62;
+    text-align: center;
+  }
+  .contact .row form h3 {
+    font-size: 3rem;
+    color: black;
+  }
+  .contact .row form .box {
+    margin: 0.7rem 0;
+    width: 100%;
+    border: #002D62;
+    padding: 1rem;
+    font-size: 1.6rem;
+    color: var(--black);
+    text-transform: none;
+    border-radius: 0.5rem;
+  }
+  .contact .row form textarea {
+    height: 15rem;
+    
+    size: none;
+  }
