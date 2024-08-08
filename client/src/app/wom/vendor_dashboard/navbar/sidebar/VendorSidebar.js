@@ -6,13 +6,13 @@ function UserSidebar() {
         <aside id="sidebar" className='sidebar'>
             <ul className="sidebar-nav" id='sidebar-nav'>
                 <li className="nav-item">
-                    <Link to="/VendorDashboard" className='nav-link a'>
+                    <Link to="/vendor" className='nav-link a'>
 
                         <span>Dashboard</span>
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/VendorDashboard/register" className='nav-link collapsed'>
+                    <Link to="/vendor/register" className='nav-link collapsed'>
 
                         <span>Vendor Registration</span>
                     </Link>
@@ -28,21 +28,21 @@ function UserSidebar() {
                         data-bs-parent="#sidebar-nav"
                     >
                         <li>
-                            <Link to="/VendorDashboard/product/add" className='a'>
+                            <Link to="/vendor/product/add" className='a'>
 
                                 <span>Add Product</span>
                             </Link>
                         </li>
 
                         <li>
-                            <Link to="/VendorDashboard/product/list" className='a'>
+                            <Link to="/vendor/product/list" className='a'>
 
                                 <span>Product List</span>
                             </Link>
                         </li>
                     </ul>
                 </li>
-            
+
                 <li className="nav-item">
                     <Link to="" className='nav-link collapsed a' data-bs-target="#forms-nav" data-bs-toggle="collapse" >
 
@@ -54,14 +54,14 @@ function UserSidebar() {
                         data-bs-parent="#sidebar-nav"
                     >
                         <li>
-                            <Link to="/VendorDashboard/quote/generator" className='a'>
+                            <Link to="/vendor/quote/generator" className='a'>
 
                                 <span>Quote Generator</span>
                             </Link>
                         </li>
 
                         <li>
-                            <Link to="/VendorDashboard/quote/success" className='a'>
+                            <Link to="/vendor/quote/success" className='a'>
 
                                 <span>Quote Success</span>
                             </Link>
@@ -70,7 +70,7 @@ function UserSidebar() {
                     </ul>
                 </li>
                 <li className="nav-item">
-                    <Link to="/VendorDashboard/payment" className='nav-link collapsed'>
+                    <Link to="/vendor/payment" className='nav-link collapsed'>
 
                         <span>Payment Response</span>
                     </Link>

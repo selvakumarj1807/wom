@@ -20,11 +20,19 @@ const JwtAdminLogin = Loadable(lazy(() =>
 const AdminForgotPassword = Loadable(lazy(() =>
     import ("app/views/sessions/adminForgotPassword")));
 
+const HomeRedirect = () => {
+    window.location.href = "https://wom-omega.vercel.app/home";
+    return null;
+};
+
 const routes = [
     { path: "/", element: < Navigate to = "adminLogin" / > },
     { path: "*", element: < NotFound / > },
 
     { path: "/Admin/*", element: < AdminDashboard / > },
+
+    // Home redirect route
+    { path: "/home", element: < HomeRedirect / > },
 
 
     // session pages route

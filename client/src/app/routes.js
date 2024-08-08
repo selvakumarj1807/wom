@@ -30,14 +30,22 @@ const JwtVendorRegister = Loadable(lazy(() =>
 const VendorForgotPassword = Loadable(lazy(() =>
     import ("app/views/sessions/VendorForgotPassword")));
 
+const AdminRedirect = () => {
+    window.location.href = "https://wom-admin.vercel.app/adminLogin";
+    return null;
+};
+
 const routes = [
     { path: "/", element: < Navigate to = "home" / > },
     { path: "*", element: < NotFound / > },
     { path: "/home", element: < Home / > },
     { path: "/partinformation", element: < PartInformation / > },
     { path: "/home/doYou", element: < DoYou / > },
-    { path: "/UserDashboard/*", element: < UserDashboard / > },
-    { path: "/VendorDashboard/*", element: < VendorDashboard / > },
+    { path: "/user/*", element: < UserDashboard / > },
+    { path: "/vendor/*", element: < VendorDashboard / > },
+
+    // Admin redirect route
+    { path: "/admin", element: < AdminRedirect / > },
 
     // session pages route
     { path: "/session/404", element: < NotFound / > },

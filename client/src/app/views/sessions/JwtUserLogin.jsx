@@ -155,7 +155,7 @@ export default function JwtLogin() {
                       variant="contained"
                       sx={{ my: 2 }}
                     >
-                      <NavLink to="/UserDashboard" style={{ color: "white", marginLeft: 5 }}>
+                      <NavLink to="/user" style={{ color: "white", marginLeft: 5 }}>
                         Login
                       </NavLink>
                     </LoadingButton>
