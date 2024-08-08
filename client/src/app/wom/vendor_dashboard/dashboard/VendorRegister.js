@@ -226,7 +226,7 @@ const VendorRegister = () => {
                   marginBottom: "10px",
                 }}
               >
-                <NavLink to="/VendorDashboard" style={{ color: "#fff", textDecoration: "none" }}>Back</NavLink>
+                <NavLink to="/vendor" style={{ color: "#fff", textDecoration: "none" }}>Back</NavLink>
               </div>
               <div
                 style={{
@@ -242,7 +242,7 @@ const VendorRegister = () => {
                   marginBottom: "10px",
                 }}
               >
-                <NavLink to="/VendorDashboard" style={{ color: "#fff", textDecoration: "none" }}>Submit</NavLink>
+                <NavLink to="/vendor" style={{ color: "#fff", textDecoration: "none" }}>Submit</NavLink>
               </div>
             </div>
           </Grid>

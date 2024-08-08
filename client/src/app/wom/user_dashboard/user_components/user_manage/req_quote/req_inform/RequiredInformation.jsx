@@ -165,7 +165,7 @@ const PartInformation = () => {
               />
             </Grid>
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-              <Button component={NavLink} to="/UserDashboard" sx={buttonStyle}>
+              <Button component={NavLink} to="/user" sx={buttonStyle}>
                 Back
               </Button>
               <Popup
@@ -181,7 +181,7 @@ const PartInformation = () => {
                   <Box sx={{ height: '20vh', p: 2, backgroundColor: 'rgba(46, 46, 46, 0.8)', color: '#fff' }}>
                     <Typography variant="h6" align="center">Do you want to Register as a User?</Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
-                      <Button component={Link} to="/UserDashboard" sx={buttonStyle}>
+                      <Button component={Link} to="/user" sx={buttonStyle}>
                         NO
                       </Button>
                       <Popup
@@ -211,7 +211,7 @@ const PartInformation = () => {
                             <Typography variant="body1" sx={{ mt: 1 }}>
                               Enquiry Number <span style={{ color: 'blue', fontWeight: '600' }}>#256</span>
                             </Typography>
-                            <Button component={Link} to="/UserDashboard" sx={{ mt: 3, backgroundColor: '#0e2a47', color: '#fff', px: 3, py: 1, borderRadius: 1 }}>
+                            <Button component={Link} to="/user" sx={{ mt: 3, backgroundColor: '#0e2a47', color: '#fff', px: 3, py: 1, borderRadius: 1 }}>
                               Done
                             </Button>
                           </Box>

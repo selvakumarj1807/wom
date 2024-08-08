@@ -55,7 +55,7 @@ function GetTheQuote() {
                   }}
                   onClick={handleClose}
                 >
-                  <Link style={{ color: '#fff' }} to="/UserDashboard/user/user_invoice">Get the Invoice</Link>
+                  <Link style={{ color: '#fff' }} to="/user/user/user_invoice">Get the Invoice</Link>
                 </Button>
               </Modal.Footer>
             </Modal>

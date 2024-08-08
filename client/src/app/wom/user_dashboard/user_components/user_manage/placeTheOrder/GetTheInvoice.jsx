@@ -10,30 +10,7 @@ function GetTheInvoice() {
     if (amount === "") {
       alert("please enter amount");
     } else {
-      var options = {
-        key: "rzp_test_8JN583iIRfHQ8y",
-        key_secret: "fyYjBcVQgcEwUjxyc3wjfl1Q",
-        amount: amount * 100,
-        currency: "INR",
-        name: "workorder_manage",
-        description: "for testing purpose",
-        handler: function (response) {
-          alert(response.rezorpay_payment_id);
-        },
-        prefill: {
-          name: "sannasi",
-          email: "sannasi@gmail.com",
-          contact: "9876543210"
-        },
-        notes: {
-          address: "Razorpay Corporate office"
-        },
-        theme: {
-          color: "#3399cc"
-        }
-      };
-      var pay = new window.Razorpay(options);
-      pay.open();
+      alert("pay the amount successfully");
     }
   }
 

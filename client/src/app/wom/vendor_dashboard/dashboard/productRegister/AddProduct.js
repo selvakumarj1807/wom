@@ -118,7 +118,7 @@ const AddProduct = () => {
                   marginTop: '20px'
                 }}
               >
-                <NavLink to="/VendorDashboard" style={{ color: "#fff", textDecoration: "none" }}>Submit</NavLink>
+                <NavLink to="/vendor" style={{ color: "#fff", textDecoration: "none" }}>Submit</NavLink>
               </button>
             </Stack>
           </Grid>
