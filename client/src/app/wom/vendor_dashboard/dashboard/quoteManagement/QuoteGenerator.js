@@ -1,6 +1,6 @@
 import {
   Container, Grid, TextField, Button, Table, TableHead, TableRow,
-  TableCell, TableBody, IconButton, useMediaQuery, Box, Typography
+  TableCell, TableBody, IconButton, useMediaQuery, Box, Typography, Input
 } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import React, { useState } from 'react';
@@ -12,6 +12,7 @@ const QuoteGenerator = () => {
     customerName: '',
     quoteNumber: '',
     items: [{ productname: '', description: '', quantity: 0, price: 0 }],
+    attachedFiles: null, // State to store attached files
   });
 
   const theme = useTheme();
@@ -37,9 +38,16 @@ const QuoteGenerator = () => {
     setQuoteData({ ...quoteData, items });
   };
 
+  const handleFileChange = (event) => {
+    setQuoteData({ ...quoteData, attachedFiles: event.target.files });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Submitted Quote:', quoteData);
+    if (quoteData.attachedFiles) {
+      console.log('Attached Files:', quoteData.attachedFiles);
+    }
     // Here you can send the quoteData to your backend for further processing
   };
 
@@ -79,6 +87,17 @@ const QuoteGenerator = () => {
       border: 'none',
       color: '#fff',
       borderRadius: '4px',
+    },
+    fileInput: {
+      display: 'block',
+      width: '100%',
+      padding: '10px',
+      marginTop: '10px',
+      marginBottom: '10px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      backgroundColor: '#f8f9fa',
     },
   };
 
@@ -120,6 +139,14 @@ const QuoteGenerator = () => {
                   name="quoteNumber"
                   value={quoteData.quoteNumber}
                   onChange={(e) => setQuoteData({ ...quoteData, quoteNumber: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Input
+                  type="file"
+                  inputProps={{ multiple: true }}
+                  sx={styles.fileInput}
+                  onChange={handleFileChange}
                 />
               </Grid>
             </Grid>

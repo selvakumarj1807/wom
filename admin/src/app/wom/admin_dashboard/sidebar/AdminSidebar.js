@@ -22,7 +22,7 @@ function AdminSidebar() {
                 </li>
                 <li className="nav-item">
                     <Link to="" className='nav-link collapsed a' data-bs-target="#components-nav" data-bs-toggle="collapse" >
-                        <span>Access Management</span>
+                        <span>Employee Management</span>
                         <i className="bi bi-chevron-down ms-auto"></i>
                     </Link>
                     <ul id='components-nav'
@@ -32,17 +32,18 @@ function AdminSidebar() {
                         <li>
                             <Link to="/Admin/access/roles" className='a'>
                                 <i className="bi bi-circle"></i>
-                                <span>Roles</span>
+                                <span>Add Employee</span>
                             </Link>
                         </li>
                         <li>
                             <Link to="/Admin/access/permission" className='a'>
                                 <i className="bi bi-circle"></i>
-                                <span>Permission</span>
+                                <span>Employee Details</span>
                             </Link>
                         </li>
                     </ul>
                 </li>
+                {/*
                 <li className="nav-item">
                     <Link to="" className='nav-link collapsed a' data-bs-target="#components-nav1" data-bs-toggle="collapse" >
                         <span>Enquiry Management</span>
@@ -66,6 +67,7 @@ function AdminSidebar() {
                         </li>
                     </ul>
                 </li>
+                */}
                 <li className="nav-item">
                     <Link to="/Admin/PushNotification" className='nav-link collapsed'>
                         <span>Push Notification</span>
@@ -117,17 +119,19 @@ function AdminSidebar() {
                         className='nav-content collapse'
                         data-bs-parent="#sidebar-nav"
                     >
+                        {/*
                         <li>
                             <Link to="/Admin/user/delivery" className='a'>
                                 <i className="bi bi-circle"></i>
                                 <span>User</span>
                             </Link>
                         </li>
+                        */}
 
                         <li>
                             <Link to="/Admin/vendor/delivery" className='a'>
                                 <i className="bi bi-circle"></i>
-                                <span>Vendor</span>
+                                <span>Delivary Tracking</span>
                             </Link>
                         </li>
                     </ul>

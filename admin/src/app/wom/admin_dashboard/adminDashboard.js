@@ -9,6 +9,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import Header from './Header';
 import AdminSidebar from './sidebar/AdminSidebar';
+import Footer from './footer/Footer';
 
 import Dashboard from "./Dashboard/Dashboard";
 import UserManagement from "./Dashboard/UserManagement";
@@ -109,7 +110,8 @@ function UserDashboard() {
         <Route path='/setting/mail' element={<MailConfig />} />
 
       </Routes>
-      
+      <br></br><br></br>
+      <Footer />
     </div>
   );
 }

@@ -47,8 +47,8 @@ const StyledRoot = styled("div")(() => ({
 
 // initial login credentials
 const initialValues = {
-    email: "san@gmail.com",
-    password: "pass",
+    email: "admin@gmail.com",
+    password: "12345678",
     remember: true,
     role: "" // new select field
 };
@@ -129,32 +129,7 @@ export default function JwtLogin() {
                                             sx={{ mb: 1.5 }}
                                         />
 
-                                        <FormControl
-                                            fullWidth
-                                            size="small"
-                                            variant="outlined"
-                                            error={Boolean(errors.role && touched.role)}
-                                            sx={{ mb: 3 }}
-                                        >
-                                            <InputLabel>Role</InputLabel>
-                                            <Select
-                                                name="role"
-                                                value={values.role}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                label="Role"
-                                            >
-                                                <MenuItem value="">
-                                                    <em>None</em>
-                                                </MenuItem>
-                                                <MenuItem value="admin">Admin</MenuItem>
-                                                <MenuItem value="Reception">Reception</MenuItem>
-                                                <MenuItem value="Manager">Manager</MenuItem>
-                                            </Select>
-                                            {touched.role && errors.role && (
-                                                <FormHelperText>{errors.role}</FormHelperText>
-                                            )}
-                                        </FormControl>
+                                        
 
                                         <FlexBox justifyContent="space-between">
                                             <FlexBox gap={1}>
@@ -173,7 +148,7 @@ export default function JwtLogin() {
                                                 to="/adminForgot-password"
                                                 style={{ color: theme.palette.primary.main }}
                                             >
-                                                Forgot password?
+                                                Change password?
                                             </NavLink>
                                         </FlexBox>
 
