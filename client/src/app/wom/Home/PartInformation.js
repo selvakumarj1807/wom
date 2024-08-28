@@ -172,7 +172,7 @@ const PartInformation = () => {
           </Grid>
         </Grid>
       </Box>
-      <Section />
+      {/*<Section />*/}
       <Testimonial />
       <Footer />
     </Box>
