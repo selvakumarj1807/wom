@@ -19,7 +19,12 @@ import UserPayment from './user_components/user_manage/placeTheOrder/payment/Use
 import UserRegister from '../auth/user/UserRegister';
 import UserLogin from '../auth/user/UserLogin.js';
 
+import useAuthRedirect from '../../../hooks/useAuthRedirect';
+
 function UserDashboard() {
+
+  useAuthRedirect(); // Check for the token and redirect if not present
+
   return (
     <div>
       <Header />

@@ -1,31 +1,36 @@
+import { Formik } from "formik";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Card, Checkbox, Grid, TextField, Box, styled, useTheme } from "@mui/material";
+import { Card, Checkbox, Grid, TextField, useTheme, Box, styled } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { Formik } from "formik";
 import * as Yup from "yup";
 
 import useAuth from "app/hooks/useAuth";
 import { Paragraph } from "app/components/Typography";
 
+import axios from 'axios';
+
+import Cookies from 'js-cookie';
+
 // STYLED COMPONENTS
 const FlexBox = styled(Box)(() => ({
-  display: "flex"
+  display: "flex",
+  alignItems: "center"
 }));
 
-const ContentBox = styled("div")(() => ({
+const JustifyBox = styled(FlexBox)(() => ({
+  justifyContent: "center"
+}));
+
+const ContentBox = styled(JustifyBox)(() => ({
   height: "100%",
   padding: "32px",
-  position: "relative",
   background: "rgba(0, 0, 0, 0.01)"
 }));
 
-const StyledRoot = styled("div")(() => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#1A2038",
-  minHeight: "100% !important",
+const JWTRegister = styled(JustifyBox)(() => ({
+  background: "#1A2038",
+  minHeight: "100vh !important",
   "& .card": {
     maxWidth: 800,
     minHeight: 400,
@@ -33,70 +38,96 @@ const StyledRoot = styled("div")(() => ({
     display: "flex",
     borderRadius: 12,
     alignItems: "center"
-  },
-
-  ".img-wrapper": {
-    height: "100%",
-    minWidth: 320,
-    display: "flex",
-    padding: "2rem",
-    alignItems: "center",
-    justifyContent: "center"
   }
 }));
 
 // initial login credentials
 const initialValues = {
-  email: "san@gmail.com",
-  password: "pass",
+  email: "",
+  password: "",
   remember: true
 };
 
 // form field validation schema
 const validationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(6, "Password must be 6 character length")
+    .min(6, "Password must be 6 characters long")
     .required("Password is required!"),
   email: Yup.string().email("Invalid Email address").required("Email is required!")
 });
 
-export default function JwtLogin() {
+export default function JwtRegister() {
   const theme = useTheme();
+  const { register } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
-
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values, { setErrors }) => {
+    
     setLoading(true);
+    console.log("Submitting values:", values);
+
     try {
-      await login(values.email, values.password);
-      navigate("/");
-    } catch (e) {
+      await register(values.email, values.password);
+
+      const result = await axios.post('https://wom-backend.onrender.com/api/v1/user/login', {
+        email: values.email,
+        password: values.password
+      });
+
+      console.log("API response:", result);
+
+      const { token } = result.data;
+      // Store the token in localStorage
+      localStorage.setItem('token', token);
+
+      // Store the email in a cookie
+      Cookies.set('email', values.email, { expires: 7 }); // cookie expires in 7 days
+
+      navigate('/user');
+
+    } catch (error) {
+      console.error("Error during login:", error);
+
+      if (error.response && error.response.data.message) {
+        // If the error is related to email or password, display it under the appropriate field
+        if (error.response.data.message.includes("Invalid email or password")) {
+          setErrors({ email: "Invalid email or password", password: "Invalid email or password" });
+        } else {
+          window.location.reload();
+        }
+      } else {
+        setErrors({ email: "An unexpected error occurred. Please try again." });
+      }
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <StyledRoot>
+    <JWTRegister>
       <Card className="card">
         <Grid container>
           <Grid item sm={6} xs={12}>
-            <div className="img-wrapper">
-              <img src="/assets/images/illustrations/dreamer.svg" width="100%" alt="" />
-            </div>
+            <ContentBox>
+              <img
+                width="100%"
+                alt="Register"
+                src="/assets/images/illustrations/posting_photo.svg"
+              />
+            </ContentBox>
           </Grid>
 
           <Grid item sm={6} xs={12}>
-            <ContentBox>
+            <Box p={4} height="100%">
               <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}
-                validationSchema={validationSchema}
-              >
+                validationSchema={validationSchema}>
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                   <form onSubmit={handleSubmit}>
-                    <h2 style={{marginBottom:'20px', textAlign:'center', textDecoration:'underline', fontWeight:'bold', color:'darkblue'}}>User Login</h2>
+                    <h2 style={{ marginBottom: '20px', textAlign: 'center', textDecoration: 'underline', fontWeight: 'bold', color: 'darkblue' }}>User Login</h2>
+
                     <TextField
                       fullWidth
                       size="small"
@@ -111,7 +142,6 @@ export default function JwtLogin() {
                       error={Boolean(errors.email && touched.email)}
                       sx={{ mb: 3 }}
                     />
-
                     <TextField
                       fullWidth
                       size="small"
@@ -124,28 +154,21 @@ export default function JwtLogin() {
                       onChange={handleChange}
                       helperText={touched.password && errors.password}
                       error={Boolean(errors.password && touched.password)}
-                      sx={{ mb: 1.5 }}
+                      sx={{ mb: 2 }}
                     />
 
-                    <FlexBox justifyContent="space-between">
-                      <FlexBox gap={1}>
-                        <Checkbox
-                          size="small"
-                          name="remember"
-                          onChange={handleChange}
-                          checked={values.remember}
-                          sx={{ padding: 0 }}
-                        />
+                    <FlexBox gap={1} alignItems="center">
+                      <Checkbox
+                        size="small"
+                        name="remember"
+                        onChange={handleChange}
+                        checked={values.remember}
+                        sx={{ padding: 0 }}
+                      />
 
-                        <Paragraph>Remember Me</Paragraph>
-                      </FlexBox>
-
-                      <NavLink
-                        to="/session/USerForgot-password"
-                        style={{ color: theme.palette.primary.main }}
-                      >
-                        Forgot password?
-                      </NavLink>
+                      <Paragraph fontSize={13}>
+                        I have read and agree to the terms of service.
+                      </Paragraph>
                     </FlexBox>
 
                     <LoadingButton
@@ -153,22 +176,19 @@ export default function JwtLogin() {
                       color="primary"
                       loading={loading}
                       variant="contained"
-                      sx={{ my: 2 }}
-                    >
-                      <NavLink to="/user" style={{ color: "white", marginLeft: 5 }}>
-                        Login
-                      </NavLink>
+                      sx={{ mb: 2, mt: 3 }}>
+                      Login
                     </LoadingButton>
 
                     <Paragraph>
                       Don't have an account?
                       <NavLink
                         to="/session/UserSignup"
-                        style={{ color: theme.palette.primary.main, marginLeft: 5 }}
-                      >
+                        style={{ color: theme.palette.primary.main, marginLeft: 5 }}>
                         Register
                       </NavLink>
                     </Paragraph>
+
                     <Paragraph>
                       Vendor
                       <NavLink
@@ -181,10 +201,10 @@ export default function JwtLogin() {
                   </form>
                 )}
               </Formik>
-            </ContentBox>
+            </Box>
           </Grid>
         </Grid>
       </Card>
-    </StyledRoot>
+    </JWTRegister>
   );
 }

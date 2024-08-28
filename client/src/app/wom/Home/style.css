@@ -421,9 +421,12 @@ p {
     color: rgb(255, 47, 0);
 }
 
+
+/*
 .card img {
     max-width: 50px;
 }
+*/
 
 @media (max-width: 765px) {
     .cards {

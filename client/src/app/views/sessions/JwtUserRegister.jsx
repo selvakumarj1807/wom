@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import useAuth from "app/hooks/useAuth";
 import { Paragraph } from "app/components/Typography";
 
+import axios from 'axios';
 // STYLED COMPONENTS
 const FlexBox = styled(Box)(() => ({
   display: "flex",
@@ -41,16 +42,16 @@ const JWTRegister = styled(JustifyBox)(() => ({
 const initialValues = {
   email: "",
   password: "",
-  username: "",
+  name: "",
   remember: true
 };
 
-// form field validation schema
 const validationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(6, "Password must be 6 character length")
+    .min(6, "Password must be 6 characters length")
     .required("Password is required!"),
-  email: Yup.string().email("Invalid Email address").required("Email is required!")
+  email: Yup.string().email("Invalid Email address").required("Email is required!"),
+  name: Yup.string().required("Name is required!")
 });
 
 export default function JwtRegister() {
@@ -58,15 +59,35 @@ export default function JwtRegister() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values, { setSubmitting, setErrors }) => {
     setLoading(true);
+    setServerError(""); // Reset server error
 
     try {
-      await register(values.email, values.username, values.password);
-      navigate("/session/UserSignin"); // Redirect to login page after successful registration
-    } catch (e) {
-      console.log(e);
+      // Attempt to register the user
+      await register(values.email, values.name, values.password);
+
+      // Send the registration details to your backend
+      const result = await axios.post('https://wom-backend.onrender.com/api/v1/user/register', {
+        name: values.name,
+        email: values.email,
+        password: values.password
+      });
+
+      console.log(result);  // Log the result for debugging purposes
+
+      // Redirect to the login page after successful registration
+      window.location.replace('/session/UserSignin');
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        // Handle the error message returned from the server
+        setServerError(error.response.data.message);
+      } else {
+        setServerError("An unexpected error occurred. Please try again.");
+      }
+      setSubmitting(false);
     } finally {
       setLoading(false);
     }
@@ -89,25 +110,26 @@ export default function JwtRegister() {
           <Grid item sm={6} xs={12}>
             <Box p={4} height="100%">
               <Formik
-                onSubmit={handleFormSubmit}
                 initialValues={initialValues}
-                validationSchema={validationSchema}>
+                validationSchema={validationSchema}
+                onSubmit={handleFormSubmit}
+              >
                 {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
                   <form onSubmit={handleSubmit}>
-                    <h2 style={{marginBottom:'20px', textAlign:'center', textDecoration:'underline', fontWeight:'bold', color:'darkblue'}}>User Register</h2>
-                   
+                    <h2 style={{ marginBottom: '20px', textAlign: 'center', textDecoration: 'underline', fontWeight: 'bold', color: 'darkblue' }}>User Register</h2>
+
                     <TextField
                       fullWidth
                       size="small"
                       type="text"
-                      name="username"
-                      label="Username"
+                      name="name"
+                      label="Name"
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.username}
+                      value={values.name}
                       onChange={handleChange}
-                      helperText={touched.username && errors.username}
-                      error={Boolean(errors.username && touched.username)}
+                      helperText={touched.name && errors.name}
+                      error={Boolean(errors.name && touched.name)}
                       sx={{ mb: 3 }}
                     />
 
@@ -125,6 +147,7 @@ export default function JwtRegister() {
                       error={Boolean(errors.email && touched.email)}
                       sx={{ mb: 3 }}
                     />
+
                     <TextField
                       fullWidth
                       size="small"
@@ -139,6 +162,12 @@ export default function JwtRegister() {
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 2 }}
                     />
+
+                    {serverError && (
+                      <Box mb={2} sx={{ color: 'red' }}>
+                        {serverError}
+                      </Box>
+                    )}
 
                     <FlexBox gap={1} alignItems="center">
                       <Checkbox
@@ -159,7 +188,8 @@ export default function JwtRegister() {
                       color="primary"
                       loading={loading}
                       variant="contained"
-                      sx={{ mb: 2, mt: 3 }}>
+                      sx={{ mb: 2, mt: 3 }}
+                    >
                       Register
                     </LoadingButton>
 
@@ -167,7 +197,8 @@ export default function JwtRegister() {
                       Already have an account?
                       <NavLink
                         to="/session/UserSignin"
-                        style={{ color: theme.palette.primary.main, marginLeft: 5 }}>
+                        style={{ color: theme.palette.primary.main, marginLeft: 5 }}
+                      >
                         Login
                       </NavLink>
                     </Paragraph>
