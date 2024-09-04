@@ -8,7 +8,7 @@ import App from "./app/App";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'datatables.net-dt/css/jquery.dataTables.min.css';
+//import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import 'datatables.net-responsive-dt/css/responsive.dataTables.min.css';
 
 
