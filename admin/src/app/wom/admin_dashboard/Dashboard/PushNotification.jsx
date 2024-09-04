@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "datatables.net-dt/css/jquery.dataTables.min.css";
+//import "datatables.net-dt/css/jquery.dataTables.min.css";
 import "datatables.net-responsive-dt/css/responsive.dataTables.min.css";
 import $ from "jquery";
 import "datatables.net";
