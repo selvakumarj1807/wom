@@ -1,0 +1,47 @@
+.navbar-container {
+    margin-bottom: 20px;
+    background-color: rgb(14, 42, 71);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+}
+
+.navbar li {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 5px;
+}
+
+.navbar a {
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    padding: 10px 15px;
+    display: block;
+    text-align: center;
+}
+
+
+/* Hover effect for links */
+
+.navbar a:hover {
+    background-color: white;
+    color: black;
+    /* Optional: change text color on hover for better contrast */
+}
+
+
+/* Media query for smaller screens */
+
+@media (max-width: 600px) {
+    .navbar a {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+}

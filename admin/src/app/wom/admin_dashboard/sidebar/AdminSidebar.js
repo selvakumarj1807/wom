@@ -11,6 +11,11 @@ function AdminSidebar() {
                     </Link>
                 </li>
                 <li className="nav-item">
+                    <Link to="/Admin/recycleEngineMarket" className='nav-link collapsed'>
+                        <span>Recycle Engine Market</span>
+                    </Link>
+                </li>
+                <li className="nav-item">
                     <Link to="/Admin/userManage" className='nav-link collapsed'>
                         <span>User Management</span>
                     </Link>

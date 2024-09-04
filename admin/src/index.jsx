@@ -7,6 +7,11 @@ import App from "./app/App";
 // third party style
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'datatables.net-dt/css/jquery.dataTables.min.css';
+import 'datatables.net-responsive-dt/css/responsive.dataTables.min.css';
+
+
 const root = createRoot(document.getElementById("root"));
 
 root.render(

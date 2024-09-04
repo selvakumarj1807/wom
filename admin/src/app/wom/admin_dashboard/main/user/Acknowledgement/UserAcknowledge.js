@@ -3,15 +3,14 @@ import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from "react-router-dom";
-import { Tag } from 'antd';
 
 import '@fortawesome/fontawesome-free/css/all.min.css'; // Import Font Awesome
 
+import UserNavbar from '../../../Dashboard/UserNavbar';  // Import the new Navbar component
 
 const UserAcknowledge = () => {
   const [isMobile, setIsMobile] = useState(false);
-
+ 
   useEffect(() => {
     // Check the initial window size
     setIsMobile(window.innerWidth <= 768);
@@ -32,15 +31,9 @@ const UserAcknowledge = () => {
         [3, 5, 10, 25, "All"]
       ],
       "iDisplayLength": 3,
-      "responsive": true,
+      "responsive": false,
       "autoWidth": false,
-      "columnDefs": [
-        { "width": "20%", "targets": 0 }, // Adjust width for the first column
-        { "width": "25%", "targets": 1 }, // Adjust width for the second column
-        { "width": "20%", "targets": 2 }, // Adjust width for the third column
-        { "width": "20%", "targets": 3 }, // Adjust width for the fourth column
-        { "width": "20%", "targets": 4 }, // Adjust width for the fifth column
-      ]
+     
     });
 
     // Cleanup event listener on unmount
@@ -52,26 +45,9 @@ const UserAcknowledge = () => {
   return (
     <div id="main" className="main" style={{ padding: '20px' }}>
       <div>
-        <div className='navbar' style={{ marginBottom: '20px' }}>
-          <ul style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-            flexWrap: 'wrap' // Allows wrapping on smaller screens
-          }}>
-            <li style={liStyle}><Link to="/Admin/userManage" style={linkStyle}>User</Link></li>
-            <li style={liStyle}><Link to="/Admin/user/acknow" style={linkStyle}>Acknowledgement</Link></li>
-            <li style={liStyle}><Link to="/Admin/user/status" style={linkStyle}>Status</Link></li>
-            <li style={liStyle}><Link to="/Admin/user/history" style={linkStyle}>History</Link></li>
-            <li style={liStyle}><Link to="/Admin/user/invoice" style={linkStyle}>Invoice</Link></li>
-            <li style={liStyle}><Link to="/Admin/user/payment" style={linkStyle}>Payment</Link></li>
-          </ul>
-        </div>
+        <UserNavbar />
         <hr />
-        <h2 style={{ textAlign: 'center', fontSize: '16px' }}>Acknowledgement Details - User</h2>
+        <h3 style={{ textAlign: 'center' }}>User Enquiry</h3>
         <hr />
 
         <div className="container" style={{ overflowX: 'auto' }}>
@@ -79,62 +55,119 @@ const UserAcknowledge = () => {
             <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
               <thead>
                 <tr>
-                  <th scope="col">Order Number</th>
-                  <th scope="col">Material Name</th>
-                  <th scope="col">Entry Date</th>
-                  <th scope="col">Accepting Date</th>
-                  <th scope="col">Status</th>
+                  <th scope="col">Enquiry Number</th>
+                  <th scope="col">Year</th>
+                  <th scope="col">Make</th>
+                  <th scope="col">Model</th>
+                  <th scope="col">Cantact Name</th>
+                  <th scope="col">Mobile</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Postal Code</th>
+                  <th scope="col">State</th>
+                  <th scope="col">Shipping Method</th>
+                  <th scope="col">Additional Notes</th>
+                  <th scope="col">Enquiry Date</th>
+                  <th scope="col">Notification</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA120</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
+                  <td style={{ wordWrap: 'break-word' }}>#256</td>
+                  <td style={{ wordWrap: 'break-word' }}>2020</td>
+                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
+                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
+                  <td style={{ wordWrap: 'break-word' }}>name1</td>
+                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
+                  <td style={{ wordWrap: 'break-word' }}>name1@gmail.com</td>
+                  <td style={{ wordWrap: 'break-word' }}>624003</td>
+                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
+                  <td style={{ wordWrap: 'break-word' }}>option1</td>
+                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
+                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
+                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
                 </tr>
 
                 <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA121</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'red', fontWeight: 'bold' }}>Reject / Cancel</td>
+                  <td style={{ wordWrap: 'break-word' }}>#257</td>
+                  <td style={{ wordWrap: 'break-word' }}>2020</td>
+                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
+                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
+                  <td style={{ wordWrap: 'break-word' }}>name2</td>
+                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
+                  <td style={{ wordWrap: 'break-word' }}>name2@gmail.com</td>
+                  <td style={{ wordWrap: 'break-word' }}>624003</td>
+                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
+                  <td style={{ wordWrap: 'break-word' }}>option1</td>
+                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
+                  <td style={{ wordWrap: 'break-word' }}>01/08/2024</td>
+                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
                 </tr>
 
                 <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA122</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
+                  <td style={{ wordWrap: 'break-word' }}>#258</td>
+                  <td style={{ wordWrap: 'break-word' }}>2020</td>
+                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
+                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
+                  <td style={{ wordWrap: 'break-word' }}>name3</td>
+                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
+                  <td style={{ wordWrap: 'break-word' }}>name3@gmail.com</td>
+                  <td style={{ wordWrap: 'break-word' }}>624003</td>
+                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
+                  <td style={{ wordWrap: 'break-word' }}>option1</td>
+                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
+                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
+                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
                 </tr>
 
                 <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA123</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'red', fontWeight: 'bold' }}>Reject / Cancel</td>
+                  <td style={{ wordWrap: 'break-word' }}>#259</td>
+                  <td style={{ wordWrap: 'break-word' }}>2020</td>
+                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
+                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
+                  <td style={{ wordWrap: 'break-word' }}>name4</td>
+                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
+                  <td style={{ wordWrap: 'break-word' }}>name4@gmail.com</td>
+                  <td style={{ wordWrap: 'break-word' }}>624003</td>
+                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
+                  <td style={{ wordWrap: 'break-word' }}>option1</td>
+                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
+                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
+                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
                 </tr>
 
                 <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA124</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
+                  <td style={{ wordWrap: 'break-word' }}>#250</td>
+                  <td style={{ wordWrap: 'break-word' }}>2020</td>
+                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
+                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
+                  <td style={{ wordWrap: 'break-word' }}>name5</td>
+                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
+                  <td style={{ wordWrap: 'break-word' }}>name5@gmail.com</td>
+                  <td style={{ wordWrap: 'break-word' }}>624003</td>
+                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
+                  <td style={{ wordWrap: 'break-word' }}>option1</td>
+                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
+                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
+                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
                 </tr>
 
                 <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA125</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'red', fontWeight: 'bold' }}>Reject / Cancel</td>
+                  <td style={{ wordWrap: 'break-word' }}>#251</td>
+                  <td style={{ wordWrap: 'break-word' }}>2020</td>
+                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
+                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
+                  <td style={{ wordWrap: 'break-word' }}>name6</td>
+                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
+                  <td style={{ wordWrap: 'break-word' }}>name6@gmail.com</td>
+                  <td style={{ wordWrap: 'break-word' }}>624003</td>
+                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
+                  <td style={{ wordWrap: 'break-word' }}>option1</td>
+                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
+                  <td style={{ wordWrap: 'break-word' }}>27/08/2024</td>
+                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
                 </tr>
 
+                {/*
                 <tr>
                   <td style={{ wordWrap: 'break-word' }}>MDA126</td>
                   <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
@@ -142,7 +175,7 @@ const UserAcknowledge = () => {
                   <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
                   <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
                 </tr>
-            
+                */}
               </tbody>
             </table>
           </div>

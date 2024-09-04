@@ -1,115 +1,121 @@
-import React from 'react';
-import { Link } from 'react-router-dom'
-import './style.css'
-import { CalendarOutlined, FormOutlined, SnippetsOutlined, UserOutlined } from '@ant-design/icons'
-import { FaRupeeSign, FaVideo } from 'react-icons/fa'
-import Chart from './charts/Chart'
+import React, { useEffect, useState } from 'react';
+import $ from 'jquery';
+import 'datatables.net-dt/css/dataTables.dataTables.css';
+import 'datatables.net';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import VendorNavbar from './VendorNavbar';  // Import the new Navbar component
+
 
 const VendorManage = () => {
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        // Check the initial window size
+        setIsMobile(window.innerWidth <= 768);
+
+        // Function to update state based on window size
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Initialize DataTable
+        $('#bootstrapdatatable').DataTable({
+            "pagingType": "simple_numbers",
+            "aLengthMenu": [
+                [3, 5, 10, 25, -1],
+                [3, 5, 10, 25, "All"]
+            ],
+            "iDisplayLength": 3,
+            "responsive": false,
+            "autoWidth": false,
+            "columnDefs": [
+                { "width": "10%", "targets": 0 }, // Adjust width for the first column
+                { "width": "20%", "targets": 1 }, // Adjust width for the second column
+                { "width": "20%", "targets": 2 }, // Adjust width for the third column
+
+            ]
+        });
+
+        // Cleanup event listener on unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+
     return (
 
-        <div id="main" className="main">
+        <div id="main" className="main" style={{ padding: '20px' }}>
             <div>
 
-                <div className='navbar'>
-                    <ul className='flex-list'>
-                        <li><Link to="/Admin/vendorManage" className='list-head'>Vendor</Link> </li>
+                <VendorNavbar /> {/* Replace with the new Navbar component */}
 
-                        <li><Link to="/Admin/vendor/acknow" className='list-head'>Acknowledgement</Link> </li>
-                        <li><Link to="/Admin/vendor/status" className='list-head'>Status</Link> </li>
-                        <li><Link to="/Admin/vendor/history" className='list-head'>History</Link> </li>
-                        <li><Link to="/Admin/vendor/invoice" className='list-head'>Invoice</Link> </li>
-                        <li><Link to="/Admin/vendor/payment" className='list-head'>Payment</Link> </li>
-                        <li><Link to="/Admin/vendor/delivery" className='list-head'>Delivery</Link> </li>
-                    </ul>
-                </div>
-                 <hr />
-                <h2 style={{ textAlign: 'center', fontSize: '16px' }}>Vendor Management</h2>
+                <hr />
+                <h3 style={{ textAlign: 'center' }}>Vendor</h3>
                 <hr />
 
-                <main>
-                    <div className='main_container'>
-                        <div className='main_cards'>
-                            <div className='card'>
-                                <UserOutlined className='i text-green' style={{ color: "green", padding: '10px' }} />
-                                <div className='card_inner'>
-                                    <p className='text-primary-p'>
-                                        Number of Member
-                                    </p>
-                                    <span className='font-bold text_tile'>578</span>
-                                </div>
-                            </div>
+                <div className="container" style={{ overflowX: 'auto' }}>
+                    <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
+                        <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
+                            <thead>
+                                <tr>
+                                    <th scope="col">S.No</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">User Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style={{ wordWrap: 'break-word' }}>1</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name1</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name1@gmail.com</td>
+                                </tr>
 
-                            <div className='card'>
-                                <CalendarOutlined className='i text-red' style={{ color: "royalblue", padding: '10px' }} />
+                                <tr>
+                                    <td style={{ wordWrap: 'break-word' }}>2</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name2</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name2@gmail.com</td>
+                                </tr>
 
-                                <div className='card_inner'>
-                                    <p className='text-primary-p'>Times of Watching</p>
-                                    <span className='font-bold text-title'>2465</span>
-                                </div>
-                            </div>
+                                <tr>
+                                    <td style={{ wordWrap: 'break-word' }}>3</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name3</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name3@gmail.com</td>
+                                </tr>
 
-                            <div className='card'>
-                                <FaVideo className='i text-red' />
-                                <FormOutlined className='i text-red' style={{ color: "red", padding: '10px' }} />
-                                <div className='card_inner'>
-                                    <p className='text-primary-p'>Number of User Invoice</p>
-                                    <span className='font-bold text-title'>340</span>
-                                </div>
-                            </div>
+                                <tr>
+                                    <td style={{ wordWrap: 'break-word' }}>4</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name4</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name4@gmail.com</td>
+                                </tr>
 
-                            <div className='card'>
-                                <SnippetsOutlined className='i text-brown' style={{ color: "brown", padding: '10px' }} />
-                                <div className='card_inner'>
-                                    <p className='text-primary-p'>Number of Vendor Invoice</p>
-                                    <span className='font-bold text-title'>645</span>
-                                </div>
-                            </div>
-                        </div>
+                                <tr>
+                                    <td style={{ wordWrap: 'break-word' }}>5</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name5</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name5@gmail.com</td>
+                                </tr>
 
-                        <div className='charts'>
-                            <div className='charts_left'>
-                                <div className='charts_left_title'>
-                                    <div>
-                                        <h1>Daily Reports</h1>
-                                        <p>Dindigul, TamilNadu, IND</p>
-                                    </div>
-                                    <FaRupeeSign />
-                                </div>
-                                <Chart />
-                            </div>
-                            <div className='charts_right'>
-                                <div className='charts_right_title'>
-                                    <div>
-                                        <h1>Status Reports</h1>
-                                        <p>Dindigul, TamilNadu, IND</p>
-                                    </div>
-                                    <FaRupeeSign />
-                                </div>
+                                <tr>
+                                    <td style={{ wordWrap: 'break-word' }}>6</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name6</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name6@gmail.com</td>
+                                </tr>
 
-                                <div className='charts_right_cards'>
-                                    <div className='card1'>
-                                        <h1>Income</h1>
-                                        <p>₹ 75,300</p>
-                                    </div>
-                                    <div className='card2'>
-                                        <h1>Sales</h1>
-                                        <p>₹ 1,24,800</p>
-                                    </div>
-                                    <div className='card3'>
-                                        <h1>Users</h1>
-                                        <p>3900</p>
-                                    </div>
-                                    <div className='card1'>
-                                        <h1>Orders</h1>
-                                        <p>1881</p>
-                                    </div>
-                                </div>
+                                <tr>
+                                    <td style={{ wordWrap: 'break-word' }}>7</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name7</td>
+                                    <td style={{ wordWrap: 'break-word' }}>name7@gmail.com</td>
+                                </tr>
 
-                            </div>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
-                </main>
+                </div>
 
             </div>
         </div>
@@ -117,3 +123,5 @@ const VendorManage = () => {
 }
 
 export default VendorManage
+
+

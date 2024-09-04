@@ -12,6 +12,9 @@ import AdminSidebar from './sidebar/AdminSidebar';
 import Footer from './footer/Footer';
 
 import Dashboard from "./Dashboard/Dashboard";
+
+import RecycleEngineMarket from "./main/RecycleEngineMarket/RecycleEngineMarket";
+
 import UserManagement from "./Dashboard/UserManagement";
 
 import UserAcknowledge from "./main/user/Acknowledgement/UserAcknowledge";
@@ -28,6 +31,9 @@ import VendorHistory from "./main/vendor/OrderHistory/VendorHistory";
 import VendorInvoice from "./main/vendor/Invoice/VendorInvoice";
 import VendorPayment from "./main/vendor/Payment/VendorPayment";
 import VendorDelivery from "./main/vendor/Delivery/VendorDelivery";
+import VendorRegistration from "./main/vendor/VendorRegistraion/VendorRegistration";
+import VendorProducts from "./main/vendor/VendorProducts/VendorProducts";
+
 
 import AdminRoles from "./Dashboard/Access Manage/AdminRoles";
 import AdminPermission from "./Dashboard/Access Manage/AdminPermission";
@@ -64,6 +70,9 @@ function UserDashboard() {
       <Routes>
 
         <Route path='/' element={<Dashboard />} />
+
+        <Route path='/recycleEngineMarket' element={<RecycleEngineMarket />} />
+
         <Route path='/userManage' element={<UserManagement />} />
 
         <Route path='/user/acknow' element={<UserAcknowledge />} />
@@ -76,11 +85,12 @@ function UserDashboard() {
         <Route path='/vendorManage' element={<VendorManagement />} />
 
         <Route path='/vendor/acknow' element={<VendorAcknowledge />} />
+        <Route path='/vendor/VendorProducts' element={<VendorProducts />} />
         <Route path='/vendor/status' element={<VendorStatus />} />
         <Route path='/vendor/history' element={<VendorHistory />} />
         <Route path='/vendor/invoice' element={<VendorInvoice />} />        
         <Route path='/vendor/payment' element={<VendorPayment />} /> 
-        <Route path='/vendor/delivery' element={<VendorDelivery />} />  
+        <Route path='/vendor/register' element={<VendorRegistration />} />  
 
         <Route path='/access/roles' element={<AdminRoles />} /> 
         <Route path='/access/permission' element={<AdminPermission />} />  

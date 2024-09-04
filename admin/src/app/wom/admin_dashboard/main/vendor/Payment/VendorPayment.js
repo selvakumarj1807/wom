@@ -9,25 +9,17 @@ import {
   MDBRow,
 } from "mdb-react-ui-kit";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+
+import VendorNavbar from '../../../Dashboard/VendorNavbar';  // Import the new Navbar component
 
 const VendorPayment = () => {
   return (
-    <div id="main" className="main">
+    <div id="main" className="main" style={{ padding: '20px' }}>
       <>
         <MDBContainer>
-          <div className='navbar'>
-            <ul className='flex-list'>
-              <li><Link to="/Admin/vendorManage" className='list-head'>Vendor</Link> </li>
 
-              <li><Link to="/Admin/vendor/acknow" className='list-head'>Acknowledgement</Link> </li>
-              <li><Link to="/Admin/vendor/status" className='list-head'>Status</Link> </li>
-              <li><Link to="/Admin/vendor/history" className='list-head'>History</Link> </li>
-              <li><Link to="/Admin/vendor/invoice" className='list-head'>Invoice</Link> </li>
-              <li><Link to="/Admin/vendor/payment" className='list-head'>Payment</Link> </li>
-              <li><Link to="/Admin/vendor/delivery" className='list-head'>Delivery</Link> </li>
-            </ul>
-          </div>
+        <VendorNavbar /> {/* Replace with the new Navbar component */}
+
           <hr />
           <h2 style={{ textAlign: "center", fontSize: '16px' }}>
             Vendor Payment History

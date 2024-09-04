@@ -15,15 +15,15 @@ const Dashboard = () => {
                             <div style={cardStyle}>
                                 <UserOutlined style={iconStyle('green')} />
                                 <div style={cardInnerStyle}>
-                                    <p style={textPrimaryPStyle}>Number of Member</p>
+                                    <p style={textPrimaryPStyle}>Number of User</p>
                                     <span style={textTitleStyle}>578</span>
                                 </div>
                             </div>
 
                             <div style={cardStyle}>
-                                <CalendarOutlined style={iconStyle('royalblue')} />
+                                <UserOutlined style={iconStyle('royalblue')} />
                                 <div style={cardInnerStyle}>
-                                    <p style={textPrimaryPStyle}>Times of Watching</p>
+                                    <p style={textPrimaryPStyle}>Number of Vendor</p>
                                     <span style={textTitleStyle}>2465</span>
                                 </div>
                             </div>
@@ -31,7 +31,7 @@ const Dashboard = () => {
                             <div style={cardStyle}>
                                 <FormOutlined style={iconStyle('red')} />
                                 <div style={cardInnerStyle}>
-                                    <p style={textPrimaryPStyle}>Number of User Invoice</p>
+                                    <p style={textPrimaryPStyle}>Number of Vendor Invoice</p>
                                     <span style={textTitleStyle}>340</span>
                                 </div>
                             </div>
@@ -39,7 +39,7 @@ const Dashboard = () => {
                             <div style={cardStyle}>
                                 <SnippetsOutlined style={iconStyle('brown')} />
                                 <div style={cardInnerStyle}>
-                                    <p style={textPrimaryPStyle}>Number of Vendor Invoice</p>
+                                    <p style={textPrimaryPStyle}>Number of Order</p>
                                     <span style={textTitleStyle}>645</span>
                                 </div>
                             </div>

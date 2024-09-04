@@ -1,6 +1,8 @@
 import React from 'react'
 import { Table, Tag } from 'antd';
-import { Link } from 'react-router-dom';
+
+import UserNavbar from '../../../Dashboard/UserNavbar';  // Import the new Navbar component
+
 
 const columns = [
   {
@@ -148,18 +150,9 @@ const data = [
 
 const UserPayment = () => {
   return (
-    <div id="main" className="main">
+    <div id="main" className="main" style={{ padding: '20px' }}>
       <div>
-        <div className='navbar'>
-          <ul className='flex-list'>
-            <li><Link to="/Admin/userManage" className='list-head'>User</Link> </li>
-            <li><Link to="/Admin/user/acknow" className='list-head'>Acknowledgement</Link> </li>
-            <li><Link to="/Admin/user/status" className='list-head'>Status</Link> </li>
-            <li><Link to="/Admin/user/history" className='list-head'>History</Link> </li>
-            <li><Link to="/Admin/user/invoice" className='list-head'>Invoice</Link> </li>
-            <li><Link to="/Admin/user/payment" className='list-head'>Payment</Link> </li>
-          </ul>
-        </div>
+        <UserNavbar />
         <hr />
         <h2 style={{ textAlign: 'center', color: "darkred", fontSize: '16px' }}> User Payment History</h2>
 
