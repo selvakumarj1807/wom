@@ -1,157 +1,157 @@
-import React from 'react'
-import { Space, Table } from 'antd';
-import { Link } from 'react-router-dom';
-const columns = [
-  {
-    title: 'Order Num',
-    dataIndex: 'ordernum',
-    key: 'ordernum',
-  }, {
-    title: "Forward Date",
-    dataIndex: "date",
-    key: "date",
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text) => text,
-  },
-  {
-    title: 'Engine Code',
-    dataIndex: 'code',
-    key: 'code',
-  },
-  {
-    title: 'Qunatity',
-    dataIndex: 'quantity',
-    key: 'quantity',
-  },
-  {
-    title: 'Unit Price',
-    dataIndex: 'unitPrice',
-    key: 'unitPrice',
-  },
-  {
-    title: 'Total Price',
-    dataIndex: 'totalPrice',
-    key: 'totalPrice',
-  },
+import React, { useEffect, useState } from 'react';
+import $ from 'jquery';
+import 'datatables.net-dt/css/dataTables.dataTables.css';
+import 'datatables.net';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-  {
-    title: 'Action',
-    key: 'action',
-    render: (_, record) => (
-      <Space size="middle">
-        <Link to="/quote/editAdmin">Edit</Link>
-      </Space>
-    ),
-  },
-];
-const data = [
-  {
-    key: '1',
-    ordernum: "#123",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Dec-07-2023",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '2',
-    ordernum: "#124",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Dec-16-2023",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '3',
-    ordernum: "#125",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Dec-23-2023",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '4',
-    ordernum: "#126",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Jan-07-2024",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '5',
-    ordernum: "#127",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Jan-17-2024",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '6',
-    ordernum: "#128",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Jan-23-2024",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '7',
-    ordernum: "#129",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Jan-25-2024",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '8',
-    ordernum: "#130",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Feb-03-2024",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-  {
-    key: '9',
-    ordernum: "#131",
-    name: 'Zhou Maomao5-speed R151 manual 6-speed AC60 automatic',
-    code: '2TR-FE',
-    quantity: 2,
-    date: "Feb-17-2024",
-    unitPrice: "₹ 3000",
-    totalPrice: "₹ 6000"
-  },
-
-];
 
 const ForwardUserQuote = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check the initial window size
+    setIsMobile(window.innerWidth <= 768);
+
+    // Function to update state based on window size
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Initialize DataTable
+    $('#bootstrapdatatable').DataTable({
+      "pagingType": "simple_numbers",
+      "aLengthMenu": [
+        [3, 5, 10, 25, -1],
+        [3, 5, 10, 25, "All"]
+      ],
+      "iDisplayLength": 3,
+      "responsive": false,
+      "autoWidth": false,
+
+    });
+
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <div id="main" className="main">
+    <div id="main" className="main" style={{ padding: '20px' }}>
       <div>
         <hr />
-        <h2 style={{ textAlign: 'center', fontSize: '16px' }}>Quotation Forward to User</h2>
+        <h3 style={{ textAlign: 'center' }}>User Quote (Forward)</h3>
         <hr />
-        <Table columns={columns} dataSource={data} />
+
+        <div className="container" style={{ overflowX: 'auto' }}>
+          <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
+            <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
+              <thead>
+                <tr>
+                  <th scope="col">Quote Number</th>
+                  <th scope="col">Product Name</th>
+                  <th scope="col">Qunatity</th>
+                  <th scope="col">Unit Price</th>
+                  <th scope="col">Total Price</th>
+                  <th scope="col">Forward Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ wordWrap: 'break-word' }}>#256</td>
+                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
+                  <td style={{ wordWrap: 'break-word' }}>2</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
+                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
+                </tr>
+
+                <tr>
+                  <td style={{ wordWrap: 'break-word' }}>#257</td>
+                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
+                  <td style={{ wordWrap: 'break-word' }}>2</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
+                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
+                </tr>
+
+                <tr>
+                  <td style={{ wordWrap: 'break-word' }}>#258</td>
+                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
+                  <td style={{ wordWrap: 'break-word' }}>2</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
+                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
+                </tr>
+
+                <tr>
+                  <td style={{ wordWrap: 'break-word' }}>#259</td>
+                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
+                  <td style={{ wordWrap: 'break-word' }}>2</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
+                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
+                </tr>
+
+                <tr>
+                  <td style={{ wordWrap: 'break-word' }}>#250</td>
+                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
+                  <td style={{ wordWrap: 'break-word' }}>2</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
+                  <td style={{ wordWrap: 'break-word' }}>03/09/2024</td>
+                </tr>
+
+                <tr>
+                  <td style={{ wordWrap: 'break-word' }}>#251</td>
+                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
+                  <td style={{ wordWrap: 'break-word' }}>2</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
+                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
+                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
+                </tr>
+
+                {/*
+                <tr>
+                  <td style={{ wordWrap: 'break-word' }}>MDA126</td>
+                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
+                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
+                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
+                  <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
+                </tr>
+                */}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
-    </div>  )
+    </div>
+  );
+};
+
+export default ForwardUserQuote;
+
+// Inline Styles for Responsiveness
+const linkStyle = {
+  textDecoration: 'none',
+  fontSize: '18px', // Increased font size
+  color: 'white', // White text color
+  padding: '10px 15px',
+  display: 'block', // Ensures the link takes full width in the li
+  textAlign: 'center'
+};
+
+
+// Media Query in JS (Optional)
+const mediaQuery = window.matchMedia('(max-width: 600px)');
+
+if (mediaQuery.matches) {
+  linkStyle.fontSize = '12px'; // Adjust font size for mobile
+  linkStyle.padding = '8px 10px'; // Adjust padding for mobile
 }
 
-export default ForwardUserQuote

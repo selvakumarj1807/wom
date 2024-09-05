@@ -5,6 +5,9 @@ import $ from "jquery";
 import "datatables.net";
 import "datatables.net-responsive";
 
+import { TextField, Grid } from '@mui/material'; // Assuming you're using Material-UI
+
+
 const PushNotification = () => {
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -65,56 +68,76 @@ const PushNotification = () => {
         <hr />
         <h3 style={{ textAlign: 'center' }}>Push Notification</h3>
         <hr />
-
+        <br></br>
         <div className="container">
-          <div className="RecycleContainer d-flex justify-content-center gap-4 flex-wrap">
-            <select className="form-select">
-              <option selected>Select Year</option>
-              <option value={2024}>2024</option>
-              <option value={2023}>2023</option>
-              <option value={2022}>2022</option>
-              <option value={2021}>2021</option>
-              <option value={2020}>2020</option>
-              <option value={2019}>2019</option>
-              <option value={2018}>2018</option>
-              <option value={2017}>2017</option>
-              <option value={2016}>2016</option>
-              <option value={2015}>2015</option>
-              <option value={2014}>2014</option>
-              <option value={2013}>2013</option>
-              <option value={2012}>2012</option>
-              <option value={2011}>2011</option>
-              <option value={2010}>2010</option>
-            </select>
-            <select className="form-select">
-              <option selected>Select Make</option>
-              <option value={"AMC"}>AMC</option>
-              <option value={"Acura"}>Acura</option>
-              <option value={"Alfa"}>Alfa</option>
-              <option value={"Audi"}>Audi</option>
-              <option value={"BMW"}>BMW</option>
-              <option value={"Buick"}>Buick</option>
-              <option value={"Ford"}>Ford</option>
-            </select>
-            <select className="form-select">
-              <option selected>Select Model</option>
-              <option value={"Ambassador"}>Ambassador</option>
-              <option value={"American"}>American</option>
-              <option value={"Amx"}>Amx</option>
-              <option value={"Classic"}>Classic</option>
-              <option value={"RDX"}>RDX</option>
-              <option value={"RL"}>RL</option>
-              <option value={"RSX"}>RSX</option>
-              <option value={"147"}>147</option>
-              <option value={"GTV6"}>GTV6</option>
-              <option value={"Mito"}>Mito</option>
-              <option value={"A3"}>A3</option>
-              <option value={"A4"}>A4</option>
-              <option value={"Q3"}>Q3</option>
-              <option value={"R8"}>R8</option>
-              <option value={"RS3"}>RS3</option>
-            </select>
+          <div className="d-flex justify-content-center flex-wrap">
+            <div className="col-12 col-md-4 mb-3">
+              <select className="form-select">
+                <option selected>Select Year</option>
+                <option value={2024}>2024</option>
+                <option value={2023}>2023</option>
+                <option value={2022}>2022</option>
+                <option value={2021}>2021</option>
+                <option value={2020}>2020</option>
+                <option value={2019}>2019</option>
+                <option value={2018}>2018</option>
+                <option value={2017}>2017</option>
+                <option value={2016}>2016</option>
+                <option value={2015}>2015</option>
+                <option value={2014}>2014</option>
+                <option value={2013}>2013</option>
+                <option value={2012}>2012</option>
+                <option value={2011}>2011</option>
+                <option value={2010}>2010</option>
+              </select>
+            </div>
+
+            <div className="col-12 col-md-4 mb-3">
+              <select className="form-select">
+                <option selected>Select Make</option>
+                <option value={"AMC"}>AMC</option>
+                <option value={"Acura"}>Acura</option>
+                <option value={"Alfa"}>Alfa</option>
+                <option value={"Audi"}>Audi</option>
+                <option value={"BMW"}>BMW</option>
+                <option value={"Buick"}>Buick</option>
+                <option value={"Ford"}>Ford</option>
+              </select>
+            </div>
+
+            <div className="col-12 col-md-4 mb-3">
+              <select className="form-select">
+                <option selected>Select Model</option>
+                <option value={"Ambassador"}>Ambassador</option>
+                <option value={"American"}>American</option>
+                <option value={"Amx"}>Amx</option>
+                <option value={"Classic"}>Classic</option>
+                <option value={"RDX"}>RDX</option>
+                <option value={"RL"}>RL</option>
+                <option value={"RSX"}>RSX</option>
+                <option value={"147"}>147</option>
+                <option value={"GTV6"}>GTV6</option>
+                <option value={"Mito"}>Mito</option>
+                <option value={"A3"}>A3</option>
+                <option value={"A4"}>A4</option>
+                <option value={"Q3"}>Q3</option>
+                <option value={"R8"}>R8</option>
+                <option value={"RS3"}>RS3</option>
+              </select>
+            </div>
+
+            <div className="col-12">
+              <TextField
+                id="notes"
+                label="Additional Notes and Comments..."
+                multiline
+                rows={4}
+                variant="outlined"
+                fullWidth
+              />
+            </div>
           </div>
+
 
           <hr />
 

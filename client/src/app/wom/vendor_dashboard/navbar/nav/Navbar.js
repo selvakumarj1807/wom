@@ -10,11 +10,6 @@ function Navbar() {
     <nav className="header-nav ms-auto">
     <br></br>
     <ul className="d-flex align-items-center">
-      <div className='d-flex gap-4' >
-      {/* <Link to="/user_dashboard">User_Dashboard</Link>
-      <Link to="/vendor_dashboard">Vendor_Dashboard</Link>
-      <Link to="/admin_dashboard">Admin_Dashboard</Link> */}
-      </div>
         <NavNotice />
         <NavMessage />
         <NavAvatar />

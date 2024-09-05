@@ -4,16 +4,18 @@
     list-style: none;
 }
 
-.header-nav > ul {
+.header-nav>ul {
     margin: 0;
     padding: 0;
 }
+
 .header-nav .nav-icon {
     font-size: 22px;
     color: #012970;
     margin-right: 25px;
     position: relative;
 }
+
 .header-nav .nav-profile {
     color: #012978;
 }
@@ -51,6 +53,7 @@
     margin: 0 20px 0 10px;
     font-size: 24px;
 }
+
 .header-nav .notifications .notification-item h4 {
     font-size: 16px;
     font-weight: 600;
@@ -66,22 +69,26 @@
 .header-nav .notifications .notification-item:hover {
     background-color: #f6f9ff;
 }
+
 .header-nav .messages {
     inset: 8px -15px auto auto !important;
 }
+
 .header-nav .messages .message-item {
     padding: 15px 10px;
     transition: 0.3s;
 }
-.header-nav .messages .message-item .a{
+
+.header-nav .messages .message-item .a {
     display: flex;
 }
+
 .header-nav .messages .message-item img {
     margin: 0 20px 0 10px;
     max-height: 40px;
 }
 
-.header-nav .messages .message-item h4{
+.header-nav .messages .message-item h4 {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 5px;

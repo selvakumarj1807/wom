@@ -83,49 +83,37 @@ const RecycleEngineMarket = () => {
                 <hr />
                 <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>Make Recycle Engine Market</h2>
                 <hr />
-
-                <h4>Year</h4>
-
-                <div style={styles.formContainer}>
-                    <input
-                        type="text"
-                        placeholder="Enter your Year"
-                        style={styles.inputField}
-                    />
-                    <button type="submit" style={styles.submitButton}>
-                        Submit
-                    </button>
+                <br></br>
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-bs-whatever="@mdo">Add Year</button>
                 </div>
 
-                <h4>Make</h4>
+                <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Year </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form>
+                                <div class="modal-body">
 
-                <div style={styles.formContainer}>
-                    <input
-                        type="text"
-                        placeholder="Enter your Make"
-                        style={styles.inputField}
-                    />
-                    <button type="submit" style={styles.submitButton}>
-                        Submit
-                    </button>
+                                    <div class="mb-3">
+                                        <label for="recipient-name" class="col-form-label">Year:</label>
+                                        <input type="text" class="form-control" id="recipient-name" placeholder='Enter a Year' />
+                                    </div>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-                <h4>Model</h4>
-
-                <div style={styles.formContainer}>
-                    <input
-                        type="text"
-                        placeholder="Enter your Model"
-                        style={styles.inputField}
-                    />
-                    <button type="submit" style={styles.submitButton}>
-                        Submit
-                    </button>
-                </div>
-
-                <hr />
-
-                <h3 style={{ textAlign: 'center', color: 'black' }}>Year</h3>
 
                 <br></br><br></br>
                 <div className="container" style={{ overflowX: 'auto' }}>
@@ -201,7 +189,37 @@ const RecycleEngineMarket = () => {
 
                 <hr></hr>
 
-                <h3 style={{ textAlign: 'center', color: 'black' }}>Make</h3>
+                <br></br>
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@mdo">Add Make</button>
+                </div>
+
+                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Make </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form>
+                                <div class="modal-body">
+
+                                    <div class="mb-3">
+                                        <label for="recipient-name" class="col-form-label">Make:</label>
+                                        <input type="text" class="form-control" id="recipient-name" placeholder='Enter a Make' />
+                                    </div>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
 
                 <br></br><br></br>
                 <div className="container" style={{ overflowX: 'auto' }}>
@@ -277,7 +295,36 @@ const RecycleEngineMarket = () => {
 
                 <hr></hr>
 
-                <h3 style={{ textAlign: 'center', color: 'black' }}>Model</h3>
+                <br></br>
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="@mdo">Add Model</button>
+                </div>
+
+                <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Model </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form>
+                                <div class="modal-body">
+
+                                    <div class="mb-3">
+                                        <label for="recipient-name" class="col-form-label">Model:</label>
+                                        <input type="text" class="form-control" id="recipient-name" placeholder='Enter a Model' />
+                                    </div>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
                 <br></br><br></br>
                 <div className="container" style={{ overflowX: 'auto' }}>
@@ -388,7 +435,7 @@ const styles = {
         border: 'none',
         borderRadius: '3px',
         cursor: 'pointer',
-        marginRight: '30px' ,// Gap between Edit and Delete
+        marginRight: '30px',// Gap between Edit and Delete
         //marginLeft: '30px'
     },
     deleteButton: {

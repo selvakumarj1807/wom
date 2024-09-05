@@ -12,6 +12,12 @@ function UserSidebar() {
                     </Link>
                 </li>
                 <li className="nav-item">
+                    <Link to="/vendor/Enquiry" className='nav-link collapsed'>
+
+                        <span>Enquiry</span>
+                    </Link>
+                </li>
+                <li className="nav-item">
                     <Link to="/vendor/register" className='nav-link collapsed'>
 
                         <span>Vendor Registration</span>

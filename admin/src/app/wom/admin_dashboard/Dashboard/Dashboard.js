@@ -1,9 +1,7 @@
 import React from 'react'
 import './dashboard.css'
-import { FaRupeeSign, FaVideo } from 'react-icons/fa'
 
-import { CalendarOutlined, FormOutlined, SnippetsOutlined, UserOutlined } from '@ant-design/icons'
-import Chart from './charts/Chart'
+import { FormOutlined, SnippetsOutlined, UserOutlined } from '@ant-design/icons'
 
 const Dashboard = () => {
     return (

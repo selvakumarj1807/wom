@@ -1,43 +1,12 @@
-import { Fragment } from "react";
-import { Card, Grid, styled, useTheme } from "@mui/material";
-import RowCards from "./shared/RowCards";
-import StatCards from "./shared/StatCards";
-import Campaigns from "./shared/Campaigns";
-import StatCards2 from "./shared/StatCards2";
-import DoughnutChart from "./shared/Doughnut";
-import TopSellingTable from "./shared/TopSellingTable";
+import React from 'react'
+//import './dashboard.css'
+
+import { ShopOutlined,FormOutlined, SnippetsOutlined, UserOutlined } from '@ant-design/icons'
 
 import { Link } from "react-router-dom";
 
 
-// STYLED COMPONENTS
-const ContentBox = styled("div")(({ theme }) => ({
-  margin: "30px",
-  [theme.breakpoints.down("sm")]: { margin: "16px" }
-}));
-
-const Title = styled("span")(() => ({
-  fontSize: "1rem",
-  fontWeight: "500",
-  marginRight: ".5rem",
-  textTransform: "capitalize"
-}));
-
-const SubTitle = styled("span")(({ theme }) => ({
-  fontSize: "0.875rem",
-  color: theme.palette.text.secondary
-}));
-
-const H4 = styled("h4")(({ theme }) => ({
-  fontSize: "1rem",
-  fontWeight: "500",
-  marginBottom: "16px",
-  textTransform: "capitalize",
-  color: theme.palette.text.secondary
-}));
-
 export default function VendorDashboard() {
-  const { palette } = useTheme();
 
   return (
     <main id='main' className='main'>
@@ -55,35 +24,86 @@ export default function VendorDashboard() {
           </ol>
         </nav>
       </div>
-      <Fragment>
-        <ContentBox className="analytics">
-          <Grid container spacing={3}>
-            <Grid item lg={8} md={8} sm={12} xs={12}>
-              <StatCards />
-              <TopSellingTable />
-              <StatCards2 />
 
-              <H4>Ongoing Projects</H4>
-              <RowCards />
-            </Grid>
+      <div style={mainContainerStyle}>
+        <div style={mainCardsStyle}>
+          <div style={cardStyle}>
+            <ShopOutlined  style={iconStyle('green')} />
+            <div style={cardInnerStyle}>
+              <p style={textPrimaryPStyle}>Number of Product</p>
+              <span style={textTitleStyle}>578</span>
+            </div>
+          </div>
 
-            <Grid item lg={4} md={4} sm={12} xs={12}>
-              <Card sx={{ px: 3, py: 2, mb: 3 }}>
-                <Title>Vendor Chart</Title>
-                <SubTitle>Last 30 days</SubTitle>
+          <div style={cardStyle}>
+            <FormOutlined style={iconStyle('royalblue')} />
+            <div style={cardInnerStyle}>
+              <p style={textPrimaryPStyle}>Number of Quote</p>
+              <span style={textTitleStyle}>2465</span>
+            </div>
+          </div>
 
-                <DoughnutChart
-                  height="300px"
-                  color={[palette.primary.dark, palette.primary.main, palette.primary.light]}
-                />
-              </Card>
+          <div style={cardStyle}>
+            <UserOutlined style={iconStyle('red')} />
+            <div style={cardInnerStyle}>
+              <p style={textPrimaryPStyle}>Number of Enquiry</p>
+              <span style={textTitleStyle}>340</span>
+            </div>
+          </div>
 
-              {/* <UpgradeCard /> */}
-              <Campaigns />
-            </Grid>
-          </Grid>
-        </ContentBox>
-      </Fragment>
+          <div style={cardStyle}>
+            <SnippetsOutlined style={iconStyle('brown')} />
+            <div style={cardInnerStyle}>
+              <p style={textPrimaryPStyle}>Number of Payment</p>
+              <span style={textTitleStyle}>645</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </main>
   );
 }
+
+const mainContainerStyle = {
+    padding: '10px'
+};
+
+const mainCardsStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    marginBottom: '20px'
+};
+
+const cardStyle = {
+    flex: '1 1 200px',
+    backgroundColor: '#f4f4f4',
+    margin: '10px',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+    textAlign: 'center',
+    minWidth: '150px',
+};
+
+const cardInnerStyle = {
+    marginTop: '10px'
+};
+
+const textPrimaryPStyle = {
+    fontSize: '14px',
+    margin: '0'
+};
+
+const textTitleStyle = {
+    fontSize: '22px',
+    fontWeight: 'bold'
+};
+
+const iconStyle = (color) => ({
+    fontSize: '24px',
+    color: color,
+    padding: '10px'
+});

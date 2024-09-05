@@ -27,6 +27,7 @@
         ]
     },
     "dependencies": {
+        "@ant-design/icons": "^5.4.0",
         "@auth0/auth0-spa-js": "^2.1.3",
         "@autocomplete/material-ui": "^0.0.17",
         "@emotion/react": "^11.11.3",
