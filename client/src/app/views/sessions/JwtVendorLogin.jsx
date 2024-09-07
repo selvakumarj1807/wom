@@ -47,8 +47,8 @@ const StyledRoot = styled("div")(() => ({
 
 // initial login credentials
 const initialValues = {
-  email: "san@gmail.com",
-  password: "pass",
+  email: "vendor@gmail.com",
+  password: "12345678",
   remember: true
 };
 
@@ -71,7 +71,7 @@ export default function JwtLogin() {
     setLoading(true);
     try {
       await login(values.email, values.password);
-      navigate("/");
+      navigate("/vendor");
     } catch (e) {
       setLoading(false);
     }
