@@ -36,22 +36,6 @@ const UserAcknowledge = () => {
 
     });
 
-    // Initialize DataTable
-    $('#bootstrapdatatable2').DataTable({
-            "pagingType": "simple_numbers",
-            "aLengthMenu": [
-                [3, 5, 10, 25, -1],
-                [3, 5, 10, 25, "All"]
-            ],
-            "iDisplayLength": 3,
-            "responsive": false,
-            "autoWidth": false,
-            "columnDefs": [
-                { "width": "5%", "targets": 0 }, // Adjust width for the first column
-                { "width": "10%", "targets": 1 }, // Adjust width for the second column
-                { "width": "20%", "targets": 2 }, // Adjust width for the third column
-            ]
-        });
 
     // Cleanup event listener on unmount
     return () => {
@@ -198,112 +182,6 @@ const UserAcknowledge = () => {
           </div>
         </div>
 
-
-        <hr></hr>
-        <br></br>
-
-        <br></br>
-        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="@mdo">Add Shipping Method</button>
-        </div>
-
-        <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Shipping Method </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <form>
-                <div class="modal-body">
-
-                  <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label">Shipping Method:</label>
-                    <input type="text" class="form-control" id="recipient-name" placeholder='Enter a Shipping Method' />
-                  </div>
-
-
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Add</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <br></br><br></br>
-        <div className="container" style={{ overflowX: 'auto' }}>
-          <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
-            <table id="bootstrapdatatable2" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
-              <thead>
-                <tr>
-                  <th scope="col">S.No</th>
-                  <th scope="col">Shipping Method</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>1</td>
-                  <td style={{ wordWrap: 'break-word' }}>Shipping Method 1</td>
-                  <td style={{ wordWrap: 'break-word' }}>
-                    <button style={styles.editButton}>Edit</button>
-                    {' '}
-                    <button style={styles.deleteButton}>Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>Shipping Method 2</td>
-                  <td style={{ wordWrap: 'break-word' }}>
-                    <button style={styles.editButton}>Edit</button>
-                    {' '}
-                    <button style={styles.deleteButton}>Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>3</td>
-                  <td style={{ wordWrap: 'break-word' }}>Shipping Method 3</td>
-                  <td style={{ wordWrap: 'break-word' }}>
-                    <button style={styles.editButton}>Edit</button>
-                    {' '}
-                    <button style={styles.deleteButton}>Delete</button>
-                  </td>
-                </tr>
-                {/* Add more rows as needed */}
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>4</td>
-                  <td style={{ wordWrap: 'break-word' }}>Shipping Method 4</td>
-                  <td style={{ wordWrap: 'break-word' }}>
-                    <button style={styles.editButton}>Edit</button>
-                    {' '}
-                    <button style={styles.deleteButton}>Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>5</td>
-                  <td style={{ wordWrap: 'break-word' }}>Shipping Method 5</td>
-                  <td style={{ wordWrap: 'break-word' }}>
-                    <button style={styles.editButton}>Edit</button>
-                    {' '}
-                    <button style={styles.deleteButton}>Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>6</td>
-                  <td style={{ wordWrap: 'break-word' }}>Shipping Method 6</td>
-                  <td style={{ wordWrap: 'break-word' }}>
-                    <button style={styles.editButton}>Edit</button>
-                    {' '}
-                    <button style={styles.deleteButton}>Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -321,11 +199,6 @@ const linkStyle = {
   textAlign: 'center'
 };
 
-const liStyle = {
-  flex: '1 1 auto', // Flex-grow and flex-shrink with auto basis
-  textAlign: 'center',
-  padding: '5px'
-};
 
 // Media Query in JS (Optional)
 const mediaQuery = window.matchMedia('(max-width: 600px)');
@@ -334,27 +207,3 @@ if (mediaQuery.matches) {
   linkStyle.fontSize = '12px'; // Adjust font size for mobile
   linkStyle.padding = '8px 10px'; // Adjust padding for mobile
 }
-
-const styles = {
-    editButton: {
-        padding: '5px 10px',
-        fontSize: '14px',
-        backgroundColor: 'green',
-        color: 'white',
-        border: 'none',
-        borderRadius: '3px',
-        cursor: 'pointer',
-        marginRight: '30px',// Gap between Edit and Delete
-        //marginLeft: '30px'
-    },
-    deleteButton: {
-        padding: '5px 10px',
-        fontSize: '14px',
-        backgroundColor: 'red',
-        color: 'white',
-        border: 'none',
-        borderRadius: '3px',
-        cursor: 'pointer',
-    }
-};
-

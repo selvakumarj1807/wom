@@ -61,6 +61,18 @@ import Payment from "./Dashboard/Settings/Payment";
 import SocialMedia from "./Dashboard/Settings/SocialMedia";
 import MailConfig from "./Dashboard/Settings/MailConfig";
 
+import AddYear from "./MasterManagement/AddYear";
+import AddMake from "./MasterManagement/AddMake";
+import AddModel from "./MasterManagement/AddModel";
+import AddShippingMethod from "./MasterManagement/AddShippingMethod";
+import AddStatus from "./MasterManagement/AddStatus";
+import AddCategories from "./MasterManagement/AddCategories";
+import AddRole from "./MasterManagement/AddRole";
+import AddPermissions from "./MasterManagement/AddPermissions";
+
+
+
+
 function UserDashboard() {
   return (
     <div>
@@ -78,9 +90,9 @@ function UserDashboard() {
         <Route path='/user/acknow' element={<UserAcknowledge />} />
         <Route path='/user/status' element={<UserStatus />} />
         <Route path='/user/history' element={<UserHistory />} />
-        <Route path='/user/invoice' element={<UserInvoice />} />        
-        <Route path='/user/payment' element={<UserPayment />} /> 
-        <Route path='/user/delivery' element={<UserDelivery />} />  
+        <Route path='/user/invoice' element={<UserInvoice />} />
+        <Route path='/user/payment' element={<UserPayment />} />
+        <Route path='/user/delivery' element={<UserDelivery />} />
 
         <Route path='/vendorManage' element={<VendorManagement />} />
 
@@ -88,18 +100,18 @@ function UserDashboard() {
         <Route path='/vendor/VendorProducts' element={<VendorProducts />} />
         <Route path='/vendor/status' element={<VendorStatus />} />
         <Route path='/vendor/history' element={<VendorHistory />} />
-        <Route path='/vendor/invoice' element={<VendorInvoice />} />        
-        <Route path='/vendor/payment' element={<VendorPayment />} /> 
-        <Route path='/vendor/register' element={<VendorRegistration />} />  
+        <Route path='/vendor/invoice' element={<VendorInvoice />} />
+        <Route path='/vendor/payment' element={<VendorPayment />} />
+        <Route path='/vendor/register' element={<VendorRegistration />} />
 
-        <Route path='/access/roles' element={<AdminRoles />} /> 
-        <Route path='/access/permission' element={<AdminPermission />} />  
+        <Route path='/access/roles' element={<AdminRoles />} />
+        <Route path='/access/permission' element={<AdminPermission />} />
 
-        <Route path='/user/enquiry/recived' element={<RecivedUserForm />} /> 
-        <Route path='/user/enquiry/forward' element={<ForwardUserForm />} />  
+        <Route path='/user/enquiry/recived' element={<RecivedUserForm />} />
+        <Route path='/user/enquiry/forward' element={<ForwardUserForm />} />
 
-        <Route path='/vendor/enquiry/recived' element={<RecivedVendorForm />} />  
-        <Route path='/vendor/enquiry/forward' element={<ForwardVendorForm />} />  
+        <Route path='/vendor/enquiry/recived' element={<RecivedVendorForm />} />
+        <Route path='/vendor/enquiry/forward' element={<ForwardVendorForm />} />
 
         <Route path='/PushNotification' element={<PushNotification />} />
 
@@ -118,6 +130,17 @@ function UserDashboard() {
         <Route path='/setting/payment' element={<Payment />} />
         <Route path='/setting/social' element={<SocialMedia />} />
         <Route path='/setting/mail' element={<MailConfig />} />
+
+
+        <Route path='/masterManagement/AddYear' element={<AddYear />} />
+        <Route path='/masterManagement/AddMake' element={<AddMake />} />
+        <Route path='/masterManagement/AddModel' element={<AddModel />} />
+        <Route path='/masterManagement/AddShippingMethod' element={<AddShippingMethod />} />
+        <Route path='/masterManagement/AddStatus' element={<AddStatus />} />
+        <Route path='/masterManagement/AddCategories' element={<AddCategories />} />
+        <Route path='/masterManagement/AddRole' element={<AddRole />} />
+        <Route path='/masterManagement/AddPermissions' element={<AddPermissions />} />
+
 
       </Routes>
       <br></br><br></br>

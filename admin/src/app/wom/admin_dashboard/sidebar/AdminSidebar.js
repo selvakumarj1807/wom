@@ -10,11 +10,11 @@ function AdminSidebar() {
                         <span>Dashboard</span>
                     </Link>
                 </li>
-                <li className="nav-item">
+                {/*<li className="nav-item">
                     <Link to="/Admin/recycleEngineMarket" className='nav-link collapsed'>
                         <span>Recycle Engine Market</span>
                     </Link>
-                </li>
+                </li>*/}
                 <li className="nav-item">
                     <Link to="/Admin/userManage" className='nav-link collapsed'>
                         <span>User Management</span>
@@ -27,7 +27,7 @@ function AdminSidebar() {
                 </li>
                 <li className="nav-item">
                     <Link to="" className='nav-link collapsed a' data-bs-target="#components-nav" data-bs-toggle="collapse" >
-                        <span>Employee Management</span>
+                        <span>Access Management</span>
                         <i className="bi bi-chevron-down ms-auto"></i>
                     </Link>
                     <ul id='components-nav'
@@ -48,31 +48,6 @@ function AdminSidebar() {
                         </li>
                     </ul>
                 </li>
-                {/*
-                <li className="nav-item">
-                    <Link to="" className='nav-link collapsed a' data-bs-target="#components-nav1" data-bs-toggle="collapse" >
-                        <span>Enquiry Management</span>
-                        <i className="bi bi-chevron-down ms-auto"></i>
-                    </Link>
-                    <ul id='components-nav1'
-                        className='nav-content collapse'
-                        data-bs-parent="#sidebar-nav"
-                    >
-                        <li>
-                            <Link to="/Admin/user/enquiry/recived" className='a'>
-                                <i className="bi bi-circle"></i>
-                                <span>User</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/Admin/vendor/enquiry/recived" className='a'>
-                                <i className="bi bi-circle"></i>
-                                <span>Vendor</span>
-                            </Link>
-                        </li>
-                    </ul>
-                </li>
-                */}
                 <li className="nav-item">
                     <Link to="/Admin/PushNotification" className='nav-link collapsed'>
                         <span>Push Notification</span>
@@ -124,14 +99,6 @@ function AdminSidebar() {
                         className='nav-content collapse'
                         data-bs-parent="#sidebar-nav"
                     >
-                        {/*
-                        <li>
-                            <Link to="/Admin/user/delivery" className='a'>
-                                <i className="bi bi-circle"></i>
-                                <span>User</span>
-                            </Link>
-                        </li>
-                        */}
 
                         <li>
                             <Link to="/Admin/vendor/delivery" className='a'>
@@ -182,6 +149,73 @@ function AdminSidebar() {
                             <Link to="/Admin/setting/mail" className='a'>
                                 <i className="bi bi-circle"></i>
                                 <span>Mail configuration</span>
+                            </Link>
+                        </li>
+                    </ul>
+                </li>
+
+                <li className="nav-item">
+                    <Link to="" className='nav-link collapsed a' data-bs-target="#forms-nav3" data-bs-toggle="collapse" >
+                        <span>Master Management</span>
+                        <i className="bi bi-chevron-down ms-auto"></i>
+                    </Link>
+                    <ul id='forms-nav3'
+                        className='nav-content collapse'
+                        data-bs-parent="#sidebar-nav"
+                    >
+                        <li>
+                            <Link to="/Admin/masterManagement/AddYear" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Year</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/Admin/masterManagement/AddMake" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Make</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/Admin/masterManagement/AddModel" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Model</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/Admin/masterManagement/AddShippingMethod" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Shipping Method</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/Admin/masterManagement/AddStatus" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Status</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/Admin/masterManagement/AddCategories" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Categories</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/Admin/masterManagement/AddRole" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Roles</span>
+                            </Link>
+                        </li>
+
+                        <li>
+                            <Link to="/Admin/masterManagement/AddPermissions" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add Permissions</span>
                             </Link>
                         </li>
                     </ul>
