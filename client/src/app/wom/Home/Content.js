@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormControl, Grid, MenuItem, Select, Stack, Typography, Box } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Content() {
   const [year, setYear] = useState('');
   const [model, setModel] = useState('');
   const [make, setMake] = useState('');
+
 
   const handleChange = (event) => {
     setYear(event.target.value);
@@ -16,6 +18,74 @@ export default function Content() {
   const handleChange2 = (event) => {
     setMake(event.target.value);
   };
+
+  const [dataYear, setDataYear] = useState([]);
+
+  const fetchDataYear = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addYear');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.addYear;
+
+      // Update the state that the table uses
+      setDataYear(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchDataYear();
+  }, []);
+
+
+  const [dataMake, setDataMake] = useState([]);
+
+  const fetchDataMake = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addMake');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedDataMake = response.data.addMake;
+
+      // Update the state that the table uses
+      setDataMake(fetchedDataMake);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchDataMake();
+  }, []);
+
+  const [dataModel, setDataModel] = useState([]);
+
+  const fetchDataModel = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addModel');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedDataModel = response.data.addModel;
+
+      // Update the state that the table uses
+      setDataModel(fetchedDataModel);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchDataModel();
+  }, []);
+
 
   return (
     <Box p={2}>
@@ -44,22 +114,13 @@ export default function Content() {
                     <MenuItem disabled value="" sx={{ color: 'text.secondary' }}>
                       Select Year
                     </MenuItem>
-
-                    <MenuItem value={2024}>2024</MenuItem>
-                    <MenuItem value={2023}>2023</MenuItem>
-                    <MenuItem value={2022}>2022</MenuItem>
-                    <MenuItem value={2021}>2021</MenuItem>
-                    <MenuItem value={2020}>2020</MenuItem>
-                    <MenuItem value={2019}>2019</MenuItem>
-                    <MenuItem value={2018}>2018</MenuItem>
-                    <MenuItem value={2017}>2017</MenuItem>
-                    <MenuItem value={2016}>2016</MenuItem>
-                    <MenuItem value={2015}>2015</MenuItem>
-                    <MenuItem value={2014}>2014</MenuItem>
-                    <MenuItem value={2013}>2013</MenuItem>
-                    <MenuItem value={2012}>2012</MenuItem>
-                    <MenuItem value={2011}>2011</MenuItem>
-                    <MenuItem value={2010}>2010</MenuItem>
+                    {dataYear.length > 0 ? (
+                      dataYear.map((elem, index) => (
+                        <MenuItem value={elem.year}>{elem.year}</MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="">No Year</MenuItem>
+                    )}
                   </Select>
                 </FormControl>
               </Grid>
@@ -73,13 +134,13 @@ export default function Content() {
                     <MenuItem disabled value="" sx={{ color: 'text.secondary' }}>
                       Select Make
                     </MenuItem>
-                    <MenuItem value={"AMC"}>AMC</MenuItem>
-                    <MenuItem value={"Acura"}>Acura</MenuItem>
-                    <MenuItem value={"Alfa"}>Alfa</MenuItem>
-                    <MenuItem value={"Audi"}>Audi</MenuItem>
-                    <MenuItem value={"BMW"}>BMW</MenuItem>
-                    <MenuItem value={"Buick"}>Buick</MenuItem>
-                    <MenuItem value={"Ford"}>Ford</MenuItem>
+                    {dataMake.length > 0 ? (
+                      dataMake.map((elem, index) => (
+                        <MenuItem value={elem.make}>{elem.make}</MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="">No Make</MenuItem>
+                    )}
                   </Select>
                 </FormControl>
               </Grid>
@@ -93,21 +154,13 @@ export default function Content() {
                     <MenuItem disabled value="" sx={{ color: 'text.secondary' }}>
                       Select Model
                     </MenuItem>
-                    <MenuItem value={"Ambassador"}>Ambassador</MenuItem>
-                    <MenuItem value={"American"}>American</MenuItem>
-                    <MenuItem value={"Amx"}>Amx</MenuItem>
-                    <MenuItem value={"Classic"}>Classic</MenuItem>
-                    <MenuItem value={"RDX"}>RDX</MenuItem>
-                    <MenuItem value={"RL"}>RL</MenuItem>
-                    <MenuItem value={"RSX"}>RSX</MenuItem>
-                    <MenuItem value={"147"}>147</MenuItem>
-                    <MenuItem value={"GTV6"}>GTV6</MenuItem>
-                    <MenuItem value={"Mito"}>Mito</MenuItem>
-                    <MenuItem value={"A3"}>A3</MenuItem>
-                    <MenuItem value={"A4"}>A4</MenuItem>
-                    <MenuItem value={"Q3"}>Q3</MenuItem>
-                    <MenuItem value={"R8"}>R8</MenuItem>
-                    <MenuItem value={"RS3"}>RS3</MenuItem>
+                    {dataModel.length > 0 ? (
+                      dataModel.map((elem, index) => (
+                        <MenuItem value={elem.model}>{elem.model}</MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="">No Model</MenuItem>
+                    )}
                   </Select>
                 </FormControl>
               </Grid>
@@ -129,7 +182,7 @@ export default function Content() {
                     mx: 'auto' // Centers the box horizontally
                   }}
                 >
-                  <NavLink to="/partinformation" style={{ color: '#fff', textDecoration: 'none', width: '100%', textAlign: 'center' }}>
+                  <NavLink to={`/partinformation?year=${year}&make=${make}&model=${model}`} style={{ color: '#fff', textDecoration: 'none', width: '100%', textAlign: 'center' }}>
                     Submit
                   </NavLink>
                 </Box>

@@ -3,10 +3,18 @@ import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddModel = () => {
 
     const [isMobile, setIsMobile] = useState(false);
+    const [model, setModel] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [data, setData] = useState([]);
+    const [selectedId, setSelectedId] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         // Check the initial window size
@@ -20,167 +28,200 @@ const AddModel = () => {
         // Add event listener for window resize
         window.addEventListener('resize', handleResize);
 
-        // Initialize DataTable
-        $('#bootstrapdatatable2').DataTable({
-            "pagingType": "simple_numbers",
-            "aLengthMenu": [
-                [3, 5, 10, 25, -1],
-                [3, 5, 10, 25, "All"]
-            ],
-            "iDisplayLength": 3,
-            "responsive": false,
-            "autoWidth": false,
-            "columnDefs": [
-                { "width": "5%", "targets": 0 }, // Adjust width for the first column
-                { "width": "10%", "targets": 1 }, // Adjust width for the second column
-                { "width": "20%", "targets": 2 }, // Adjust width for the third column
-            ]
-        });
-
         // Cleanup event listener on unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
+
+    const fetchData = async () => {
+        try {
+            // Make a GET request to fetch the updated list of years
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addModel');
+
+            // Extract the array from the response (assuming it's called addYear)
+            const fetchedData = response.data.addModel;
+
+            // Update the state that the table uses
+            setData(fetchedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        // Initialize DataTable after data is loaded and cleanup before reinitialization
+        if (data.length > 0) {
+            const table = $('#bootstrapdatatable').DataTable({
+                "pagingType": "simple_numbers",
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "responsive": false,
+                "autoWidth": false,
+                "columnDefs": [
+                    { "width": "5%", "targets": 0 }, // Adjust width for the first column
+                    { "width": "10%", "targets": 1 }, // Adjust width for the second column
+                    { "width": "20%", "targets": 2 }, // Adjust width for the third column
+                ]
+            });
+
+            // Cleanup function to destroy DataTable on unmount or before reinitialization
+            return () => {
+                table.destroy();
+            };
+        }
+    }, [data]); // Only reinitialize DataTable when data changes
+
+    const Submit = async (e) => {
+        e.preventDefault();
+
+        try {
+            if (editMode) {
+                const response = await axios.put(`https://wom-server.onrender.com/api/v1/masterManagement/addModel/${selectedId}`, { model });
+                if (response.status === 200) {
+                    setSuccessMessage('Successfully updated!');
+                }
+            } else {
+                const response = await axios.post("https://wom-server.onrender.com/api/v1/masterManagement/addModel/new", { model });
+                if (response.status === 200 || response.status === 201) {
+                    setSuccessMessage('Successfully added!');
+                }
+            }
+
+            setIsModalOpen(false);
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        } catch (err) {
+            console.error("Error submitting data:", err);
+        }
+    };
+
+
+    const handleDelete = (id) => {
+        axios.delete("https://wom-server.onrender.com/api/v1/masterManagement/addModel/" + id)
+            .then(res => {
+                console.log(res)
+
+                // Set the success message
+                setSuccessMessage('Successfully deleted...!');
+
+                // Optionally reload the page or refresh data after a delay
+                setTimeout(() => {
+                    window.location.reload();  // Reload after showing the message
+                }, 2000);  // Show the message for 2 seconds before reload
+            })
+            .catch(err => console.log(err))
+    };
+
+    const openAddModal = () => {
+        setModel('');
+        setEditMode(false);
+        setIsModalOpen(true);
+    };
+
+    const openEditModal = (id, model) => {
+        setModel(model);
+        setSelectedId(id);
+        setEditMode(true);
+        setIsModalOpen(true);
+    };
+
+
     return (
         <div id="main" className="main" style={{ padding: '20px' }}>
-            <div>
-                <hr />
-                <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>Make Recycle Engine Market</h2>
-                <hr />
-                <br></br>
-                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3" data-bs-whatever="@mdo">Add Model</button>
-                </div>
+            {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
 
-                <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Add Model </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>Make Recycle Engine Market</h2>
+            <button type="button" className="btn btn-primary" onClick={openAddModal}>
+                Add Model
+            </button>
+
+            {isModalOpen && (
+                <div className="modal show" tabindex="-1" style={{ display: 'block' }} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">
+                                    {editMode ? 'Edit Model' : 'Add Model'}
+                                </h5>
+                                <button type="button" className="btn-close" onClick={() => setIsModalOpen(false)}></button>
                             </div>
-                            <form>
-                                <div class="modal-body">
-
-                                    <div class="mb-3">
-                                        <label for="recipient-name" class="col-form-label">Model:</label>
-                                        <input type="text" class="form-control" id="recipient-name" placeholder='Enter a Model' />
+                            <form onSubmit={Submit}>
+                                <div className="modal-body">
+                                    <div className="mb-3">
+                                        <label htmlFor="model" className="col-form-label">Model:</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="model"
+                                            value={model}
+                                            onChange={(e) => setModel(e.target.value)}
+                                        />
                                     </div>
-
-
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Add</button>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>
+                                        Close
+                                    </button>
+                                    <button type="submit" className="btn btn-primary">
+                                        {editMode ? 'Update' : 'Add'}
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
+            )}
 
-                <br></br><br></br>
-                <div className="container" style={{ overflowX: 'auto' }}>
-                    <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
-                        <table id="bootstrapdatatable2" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
-                            <thead>
+            <div className="container" style={{ overflowX: 'auto' }}>
+                <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
+                        <thead>
+                            <tr>
+                                <th scope="col">S.No</th>
+                                <th scope="col">Model</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.length > 0 ? (
+                                data.map((elem, index) => (
+                                    <tr key={elem._id}>
+                                        <td>{index + 1}</td>
+                                        <td>{elem.model}</td>
+                                        <td>
+                                            <button style={styles.editButton} onClick={() => openEditModal(elem._id, elem.model)}>Edit</button>
+                                            <button style={styles.deleteButton} onClick={() => handleDelete(elem._id)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
                                 <tr>
-                                    <th scope="col">S.No</th>
-                                    <th scope="col">Model</th>
-                                    <th scope="col">Action</th>
+                                    <td colSpan="3">No data available</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>1</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Ambassador</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>American</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>3</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Amx</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                {/* Add more rows as needed */}
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>4</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Classic</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>5</td>
-                                    <td style={{ wordWrap: 'break-word' }}>RDX</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>6</td>
-                                    <td style={{ wordWrap: 'break-word' }}>RL</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-
-
             </div>
         </div>
     );
 };
 
+
+export default AddModel;
+
 const styles = {
-    formContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '10px',
-        marginTop: '20px'
-    },
-    inputField: {
-        flex: '1',
-        maxWidth: '500px',
-        padding: '10px',
-        fontSize: '16px'
-    },
-    submitButton: {
-        padding: '10px 20px',
-        fontSize: '16px',
-        backgroundColor: 'rgb(14, 42, 71)',
-        color: 'white',
-        border: 'none',
-        cursor: 'pointer'
-    },
     editButton: {
         padding: '5px 10px',
         fontSize: '14px',
@@ -189,8 +230,7 @@ const styles = {
         border: 'none',
         borderRadius: '3px',
         cursor: 'pointer',
-        marginRight: '30px',// Gap between Edit and Delete
-        //marginLeft: '30px'
+        marginRight: '30px', // Gap between Edit and Delete
     },
     deleteButton: {
         padding: '5px 10px',
@@ -200,7 +240,18 @@ const styles = {
         border: 'none',
         borderRadius: '3px',
         cursor: 'pointer',
+    },
+    successMessage: {
+        height: '30px',
+        backgroundColor: 'lightgreen',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '18px',
+        paddingLeft: '30px',
+        position: 'fixed',   // Fix the element to the top
+        top: '60px',         // Offset from the top by 30px
+        width: '100%',       // Optionally set the width to 100% to stretch across the screen
+        zIndex: 1000         // Ensure it's above other content if needed
     }
-};
 
-export default AddModel;
+};

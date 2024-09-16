@@ -70,7 +70,7 @@ export default function JwtRegister() {
       await register(values.email, values.name, values.password);
 
       // Send the registration details to your backend
-      const result = await axios.post('https://wom-backend.onrender.com/api/v1/user/register', {
+      const result = await axios.post('https://wom-server.onrender.com/api/v1/user/register', {
         name: values.name,
         email: values.email,
         password: values.password

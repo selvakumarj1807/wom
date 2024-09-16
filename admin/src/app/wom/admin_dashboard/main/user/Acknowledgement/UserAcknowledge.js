@@ -4,12 +4,15 @@ import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import axios from 'axios';
+
 import '@fortawesome/fontawesome-free/css/all.min.css'; // Import Font Awesome
 
 import UserNavbar from '../../../Dashboard/UserNavbar';  // Import the new Navbar component
 
 const UserAcknowledge = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     // Check the initial window size
@@ -23,25 +26,77 @@ const UserAcknowledge = () => {
     // Add event listener for window resize
     window.addEventListener('resize', handleResize);
 
-    // Initialize DataTable
-    $('#bootstrapdatatable').DataTable({
-      "pagingType": "simple_numbers",
-      "aLengthMenu": [
-        [3, 5, 10, 25, -1],
-        [3, 5, 10, 25, "All"]
-      ],
-      "iDisplayLength": 3,
-      "responsive": false,
-      "autoWidth": false,
-
-    });
-
-
     // Cleanup event listener on unmount
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+
+  const fetchData = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/user/enquiry');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.enquiry;
+
+      // Update the state that the table uses
+      setData(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Add custom sorting for the "DD/MM/YYYY - HH:mm AM/PM" date format
+  $.fn.dataTable.ext.order['dom-date-custom'] = function (settings, colIndex) {
+    return this.api().column(colIndex, { order: 'index' }).nodes().map(function (td) {
+      // Extract the date text
+      const dateText = $(td).text().trim();
+
+      // Convert dateText from "DD/MM/YYYY - HH:mm AM/PM" to a JavaScript Date object
+      const [datePart, timePart] = dateText.split(' - ');
+      const [day, month, year] = datePart.split('/');
+      const dateString = `${year}-${month}-${day} ${timePart}`;
+
+      return new Date(dateString).getTime(); // Return timestamp for sorting
+    });
+  };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const table = $('#bootstrapdatatable').DataTable({
+        "aLengthMenu": [
+          [3, 5, 10, 25, -1],
+          [3, 5, 10, 25, "All"]
+        ],
+        "iDisplayLength": 3,
+        "responsive": false,
+        "autoWidth": false,
+
+        // Set the initial order of the table by the 'enquiryDate' column in descending order
+        "order": [[11, 'desc']], // Assuming 'enquiryDate' is in the 12th column (index 11)
+
+        // Apply custom sorting to the 'enquiryDate' column
+        "columnDefs": [
+          {
+            "targets": 11, // Index of 'enquiryDate' column
+            "orderDataType": 'dom-date-custom' // Use custom sorting plugin
+          }
+        ]
+      });
+
+      // Cleanup function to destroy DataTable on unmount or before reinitialization
+      return () => {
+        table.destroy();
+      };
+    }
+  }, [data]);
 
   return (
     <div id="main" className="main" style={{ padding: '20px' }}>
@@ -72,111 +127,29 @@ const UserAcknowledge = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#256</td>
-                  <td style={{ wordWrap: 'break-word' }}>2020</td>
-                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
-                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
-                  <td style={{ wordWrap: 'break-word' }}>name1</td>
-                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
-                  <td style={{ wordWrap: 'break-word' }}>name1@gmail.com</td>
-                  <td style={{ wordWrap: 'break-word' }}>624003</td>
-                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
-                  <td style={{ wordWrap: 'break-word' }}>option1</td>
-                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
-                </tr>
-
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#257</td>
-                  <td style={{ wordWrap: 'break-word' }}>2020</td>
-                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
-                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
-                  <td style={{ wordWrap: 'break-word' }}>name2</td>
-                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
-                  <td style={{ wordWrap: 'break-word' }}>name2@gmail.com</td>
-                  <td style={{ wordWrap: 'break-word' }}>624003</td>
-                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
-                  <td style={{ wordWrap: 'break-word' }}>option1</td>
-                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/08/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
-                </tr>
-
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#258</td>
-                  <td style={{ wordWrap: 'break-word' }}>2020</td>
-                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
-                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
-                  <td style={{ wordWrap: 'break-word' }}>name3</td>
-                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
-                  <td style={{ wordWrap: 'break-word' }}>name3@gmail.com</td>
-                  <td style={{ wordWrap: 'break-word' }}>624003</td>
-                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
-                  <td style={{ wordWrap: 'break-word' }}>option1</td>
-                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
-                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
-                </tr>
-
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#259</td>
-                  <td style={{ wordWrap: 'break-word' }}>2020</td>
-                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
-                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
-                  <td style={{ wordWrap: 'break-word' }}>name4</td>
-                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
-                  <td style={{ wordWrap: 'break-word' }}>name4@gmail.com</td>
-                  <td style={{ wordWrap: 'break-word' }}>624003</td>
-                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
-                  <td style={{ wordWrap: 'break-word' }}>option1</td>
-                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
-                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
-                </tr>
-
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#250</td>
-                  <td style={{ wordWrap: 'break-word' }}>2020</td>
-                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
-                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
-                  <td style={{ wordWrap: 'break-word' }}>name5</td>
-                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
-                  <td style={{ wordWrap: 'break-word' }}>name5@gmail.com</td>
-                  <td style={{ wordWrap: 'break-word' }}>624003</td>
-                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
-                  <td style={{ wordWrap: 'break-word' }}>option1</td>
-                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
-                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
-                </tr>
-
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#251</td>
-                  <td style={{ wordWrap: 'break-word' }}>2020</td>
-                  <td style={{ wordWrap: 'break-word' }}>AMC</td>
-                  <td style={{ wordWrap: 'break-word' }}>Classic</td>
-                  <td style={{ wordWrap: 'break-word' }}>name6</td>
-                  <td style={{ wordWrap: 'break-word' }}>8899001122</td>
-                  <td style={{ wordWrap: 'break-word' }}>name6@gmail.com</td>
-                  <td style={{ wordWrap: 'break-word' }}>624003</td>
-                  <td style={{ wordWrap: 'break-word' }}>Tamilnadu</td>
-                  <td style={{ wordWrap: 'break-word' }}>option1</td>
-                  <td style={{ wordWrap: 'break-word' }}>Argent Requirements</td>
-                  <td style={{ wordWrap: 'break-word' }}>27/08/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
-                </tr>
-
-                {/*
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA126</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
-                </tr>
-                */}
+                {data.length > 0 ? (
+                  data.map((elem, index) => (
+                    <tr>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.enquiryNumber}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.year}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.make}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.model}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.contactName}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.mobileNumber}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.email}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.postalCode}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.state}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.shippingMethod}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.additionalNotes}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.enquiryDate}</td>
+                      <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="13">No data available</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

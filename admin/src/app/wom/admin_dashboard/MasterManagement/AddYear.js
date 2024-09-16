@@ -3,10 +3,18 @@ import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddYear = () => {
 
     const [isMobile, setIsMobile] = useState(false);
+    const [year, setYear] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [data, setData] = useState([]);
+    const [selectedId, setSelectedId] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         // Check the initial window size
@@ -20,168 +28,202 @@ const AddYear = () => {
         // Add event listener for window resize
         window.addEventListener('resize', handleResize);
 
-        // Initialize DataTable
-        $('#bootstrapdatatable').DataTable({
-            "pagingType": "simple_numbers",
-            "aLengthMenu": [
-                [3, 5, 10, 25, -1],
-                [3, 5, 10, 25, "All"]
-            ],
-            "iDisplayLength": 3,
-            "responsive": false,
-            "autoWidth": false,
-            "columnDefs": [
-                { "width": "5%", "targets": 0 }, // Adjust width for the first column
-                { "width": "10%", "targets": 1 }, // Adjust width for the second column
-                { "width": "20%", "targets": 2 }, // Adjust width for the third column
-            ]
-        });
-
         // Cleanup event listener on unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
+
+    const fetchData = async () => {
+        try {
+            // Make a GET request to fetch the updated list of years
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addYear');
+
+            // Extract the array from the response (assuming it's called addYear)
+            const fetchedData = response.data.addYear;
+
+            // Update the state that the table uses
+            setData(fetchedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        // Initialize DataTable after data is loaded and cleanup before reinitialization
+        if (data.length > 0) {
+            const table = $('#bootstrapdatatable').DataTable({
+                "pagingType": "simple_numbers",
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "responsive": false,
+                "autoWidth": false,
+                "columnDefs": [
+                    { "width": "5%", "targets": 0 }, // Adjust width for the first column
+                    { "width": "10%", "targets": 1 }, // Adjust width for the second column
+                    { "width": "20%", "targets": 2 }, // Adjust width for the third column
+                ]
+            });
+
+            // Cleanup function to destroy DataTable on unmount or before reinitialization
+            return () => {
+                table.destroy();
+            };
+        }
+    }, [data]); // Only reinitialize DataTable when data changes
+
+    const Submit = async (e) => {
+        e.preventDefault();
+
+        try {
+            if (editMode) {
+                const response = await axios.put(`https://wom-server.onrender.com/api/v1/masterManagement/addYear/${selectedId}`, { year });
+                if (response.status === 200) {
+                    setSuccessMessage('Successfully updated!');
+                }
+            } else {
+                const response = await axios.post("https://wom-server.onrender.com/api/v1/masterManagement/addYear/new", { year });
+                if (response.status === 200 || response.status === 201) {
+                    setSuccessMessage('Successfully added!');
+                }
+            }
+
+            setIsModalOpen(false);
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        } catch (err) {
+            console.error("Error submitting data:", err);
+        }
+    };
+
+
+    const handleDelete = (id) => {
+        axios.delete("https://wom-server.onrender.com/api/v1/masterManagement/addYear/" + id)
+            .then(res => {
+                console.log(res)
+
+                // Set the success message
+                setSuccessMessage('Successfully deleted...!');
+
+                // Optionally reload the page or refresh data after a delay
+                setTimeout(() => {
+                    window.location.reload();  // Reload after showing the message
+                }, 2000);  // Show the message for 2 seconds before reload
+            })
+            .catch(err => console.log(err))
+    };
+
+    const openAddModal = () => {
+        setYear('');
+        setEditMode(false);
+        setIsModalOpen(true);
+    };
+
+    const openEditModal = (id, year) => {
+        setYear(year);
+        setSelectedId(id);
+        setEditMode(true);
+        setIsModalOpen(true);
+    };
+
+
     return (
         <div id="main" className="main" style={{ padding: '20px' }}>
-            <div>
-                <hr />
-                <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>Make Recycle Engine Market</h2>
-                <hr />
-                <br></br>
-                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-bs-whatever="@mdo">Add Year</button>
-                </div>
+            {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
 
-                <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Add Year </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>Make Recycle Engine Market</h2>
+            <button type="button" className="btn btn-primary" onClick={openAddModal}>
+                Add Year
+            </button>
+
+            {isModalOpen && (
+                <div className="modal show" tabindex="-1" style={{ display: 'block' }} aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">
+                                    {editMode ? 'Edit Year' : 'Add Year'}
+                                </h5>
+                                <button type="button" className="btn-close" onClick={() => setIsModalOpen(false)}></button>
                             </div>
-                            <form>
-                                <div class="modal-body">
-
-                                    <div class="mb-3">
-                                        <label for="recipient-name" class="col-form-label">Year:</label>
-                                        <input type="text" class="form-control" id="recipient-name" placeholder='Enter a Year' />
+                            <form onSubmit={Submit}>
+                                <div className="modal-body">
+                                    <div className="mb-3">
+                                        <label htmlFor="year" className="col-form-label">Year:</label>
+                                        <input
+                                            type="number"
+                                            className="form-control"
+                                            id="year"
+                                            value={year}
+                                            onChange={(e) => setYear(e.target.value)}
+                                            min="1900"
+                                            max={new Date().getFullYear()}
+                                        />
                                     </div>
-
-
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Add</button>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>
+                                        Close
+                                    </button>
+                                    <button type="submit" className="btn btn-primary">
+                                        {editMode ? 'Update' : 'Add'}
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
+            )}
 
-
-                <br></br><br></br>
-                <div className="container" style={{ overflowX: 'auto' }}>
-                    <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
-                        <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
-                            <thead>
+            <div className="container" style={{ overflowX: 'auto' }}>
+                <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
+                        <thead>
+                            <tr>
+                                <th scope="col">S.No</th>
+                                <th scope="col">Year</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.length > 0 ? (
+                                data.map((elem, index) => (
+                                    <tr key={elem._id}>
+                                        <td>{index + 1}</td>
+                                        <td>{elem.year}</td>
+                                        <td>
+                                            <button style={styles.editButton} onClick={() => openEditModal(elem._id, elem.year)}>Edit</button>
+                                            <button style={styles.deleteButton} onClick={() => handleDelete(elem._id)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
                                 <tr>
-                                    <th scope="col">S.No</th>
-                                    <th scope="col">Year</th>
-                                    <th scope="col">Action</th>
+                                    <td colSpan="3">No data available</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>1</td>
-                                    <td style={{ wordWrap: 'break-word' }}>2015</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>2016</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>3</td>
-                                    <td style={{ wordWrap: 'break-word' }}>2017</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                {/* Add more rows as needed */}
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>4</td>
-                                    <td style={{ wordWrap: 'break-word' }}>2018</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>5</td>
-                                    <td style={{ wordWrap: 'break-word' }}>2019</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>6</td>
-                                    <td style={{ wordWrap: 'break-word' }}>2020</td>
-                                    <td style={{ wordWrap: 'break-word' }}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        {' '}
-                                        <button style={styles.deleteButton}>Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            )}
+                        </tbody>
+                    </table>
                 </div>
-
-
             </div>
         </div>
     );
 };
 
+
+export default AddYear;
+
 const styles = {
-    formContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '10px',
-        marginTop: '20px'
-    },
-    inputField: {
-        flex: '1',
-        maxWidth: '500px',
-        padding: '10px',
-        fontSize: '16px'
-    },
-    submitButton: {
-        padding: '10px 20px',
-        fontSize: '16px',
-        backgroundColor: 'rgb(14, 42, 71)',
-        color: 'white',
-        border: 'none',
-        cursor: 'pointer'
-    },
     editButton: {
         padding: '5px 10px',
         fontSize: '14px',
@@ -190,8 +232,7 @@ const styles = {
         border: 'none',
         borderRadius: '3px',
         cursor: 'pointer',
-        marginRight: '30px',// Gap between Edit and Delete
-        //marginLeft: '30px'
+        marginRight: '30px', // Gap between Edit and Delete
     },
     deleteButton: {
         padding: '5px 10px',
@@ -201,7 +242,18 @@ const styles = {
         border: 'none',
         borderRadius: '3px',
         cursor: 'pointer',
+    },
+    successMessage: {
+        height: '30px',
+        backgroundColor: 'lightgreen',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '18px',
+        paddingLeft: '30px',
+        position: 'fixed',   // Fix the element to the top
+        top: '60px',         // Offset from the top by 30px
+        width: '100%',       // Optionally set the width to 100% to stretch across the screen
+        zIndex: 1000         // Ensure it's above other content if needed
     }
-};
 
-export default AddYear;
+};

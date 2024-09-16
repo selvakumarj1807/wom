@@ -70,7 +70,7 @@ export default function JwtRegister() {
     try {
       await register(values.email, values.password);
 
-      const result = await axios.post('https://wom-backend.onrender.com/api/v1/user/login', {
+      const result = await axios.post('https://wom-server.onrender.com/api/v1/user/login', {
         email: values.email,
         password: values.password
       });
