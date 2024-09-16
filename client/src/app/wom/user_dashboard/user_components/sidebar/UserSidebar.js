@@ -9,7 +9,7 @@ function UserSidebar() {
 
     const handleLogout = async () => {
         try {
-            await axios.get('https://wom-backend.onrender.com/api/v1/user/logout'); // Call backend to clear the token cookie
+            await axios.get('https://wom-server.onrender.com/api/v1/user/logout'); // Call backend to clear the token cookie
 
             // Optionally clear any client-side stored data (e.g., localStorage, cookies)
             Cookies.remove('email');
