@@ -30,6 +30,9 @@ const PartInformation = () => {
   const make = queryParams.get('make');
   const model = queryParams.get('model');
 
+  const [adminGmail, setAdminGmail] = useState(''); // To store admin Gmail
+  const [gmailSubject, setGmailSubject] = useState(''); // To store the email subject
+
   // Fetch shipping methods data
   const fetchData = async () => {
     try {
@@ -50,13 +53,32 @@ const PartInformation = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  // Fetch admin Gmail and subject when the component mounts
+  const fetchDataGmail = async () => {
+    try {
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/adminGmail');
+      const fetchedData = response.data.adminGmail;
+
+      // Assuming there's only one email and subject in the fetchedData
+      setAdminGmail(fetchedData[0]?.adminGmail); // Default if not found
+      setGmailSubject(fetchedData[0]?.gmailSubject);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataGmail();
+  }, []);
+
+
   // Handle form submission
   const handleFormSubmission = async () => {
     // Generate a 4-digit enquiry number
     const generatedEnquiryNumber = String(Math.floor(Math.random() * 9000) + 1000); // Generates a number between 1000 and 9999
     const formattedEnquiryNumber = `#${generatedEnquiryNumber}`;
     setEnquiryNumber(formattedEnquiryNumber);
-    
+
     const formatDate = (date) => {
       const d = new Date(date);
 
@@ -77,20 +99,38 @@ const PartInformation = () => {
     const formatDateTime = formatDate(createdAt); // Outputs: 15/09/2024 - 01:15 AM
 
     try {
+      // Submit form data to the server
       const response = await axios.post("https://wom-server.onrender.com/api/v1/user/enquiry/new", {
         year: year1,
         make: make,
         model: model,
         enquiryNumber: formattedEnquiryNumber,
         enquiryDate: formatDateTime,
-        ...formValues
+        ...formValues,
       });
 
+      // If form submission is successful, send the email
       if (response.status === 200 || response.status === 201) {
+
+        const emailBody = `New Enquiry Number: ${formattedEnquiryNumber}`;
+
+        // Send email
+        const emailResponse = await axios.post('https://wom-server.onrender.com/send-email', {
+          to: adminGmail,
+          subject: gmailSubject,
+          text: emailBody,
+        });
+
+        if (emailResponse.status === 200) {
+          console.log("Email sent successfully");
+        } else {
+          console.error("Error sending email:", emailResponse.statusText);
+        }
+
         setIsPopupOpen(true);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error submitting form or sending email:", error);
     }
   };
 
@@ -203,11 +243,11 @@ const PartInformation = () => {
       </Box>
 
       {/* Register or Not Popup */}
-      <Popup open={showRegisterPopup} modal nested>
+      <Popup open={showRegisterPopup} modal nested onClose={() => setShowRegisterPopup(false)}>
         <Box sx={{ height: '20vh', p: 2, backgroundColor: 'rgba(46, 46, 46, 0.8)', color: '#fff' }}>
           <Typography variant="h6" align="center">Do you want to Register as a User?</Typography>
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
-            <Button component={Link} to="/session/UserSignin" sx={buttonStyle}>
+            <Button component={Link} to="/session/UserSignup" sx={buttonStyle}>
               Yes
             </Button>
             <Button

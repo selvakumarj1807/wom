@@ -19,3 +19,13 @@
         /* No need for translateX on small screens */
     }
 }
+
+
+/* Set a fixed height and make the dropdown scrollable */
+
+.notifications {
+    max-height: 420px;
+    /* Set the maximum height */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+}

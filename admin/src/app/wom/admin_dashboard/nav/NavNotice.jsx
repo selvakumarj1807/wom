@@ -80,7 +80,7 @@ function NavNotice() {
                 <h4>{notification.enquiryNumber}</h4>
                 <p>{notification.contactName}</p>
                 <p>{notification.enquiryDate}</p>
-                <button onClick={() => markAsRead(notification._id)} className="btn btn-link">Mark as read</button>
+                <button onClick={() => markAsRead(notification._id)} className="btn">Mark as read</button>
               </div>
             </li>
             <li>

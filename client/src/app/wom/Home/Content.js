@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { FormControl, Grid, MenuItem, Select, Stack, Typography, Box } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { FormControl, Grid, MenuItem, Select, Typography, Box } from '@mui/material';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Content() {
@@ -8,7 +8,9 @@ export default function Content() {
   const [model, setModel] = useState('');
   const [make, setMake] = useState('');
 
+  const navigate = useNavigate(); // Use navigate to programmatically redirect
 
+  // Event handlers for dropdowns
   const handleChange = (event) => {
     setYear(event.target.value);
   };
@@ -20,72 +22,53 @@ export default function Content() {
   };
 
   const [dataYear, setDataYear] = useState([]);
+  const [dataMake, setDataMake] = useState([]);
+  const [dataModel, setDataModel] = useState([]);
 
+  // Fetch functions
   const fetchDataYear = async () => {
     try {
-      // Make a GET request to fetch the updated list of years
       const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addYear');
-
-      // Extract the array from the response (assuming it's called addYear)
-      const fetchedData = response.data.addYear;
-
-      // Update the state that the table uses
-      setDataYear(fetchedData);
+      setDataYear(response.data.addYear);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-
-  useEffect(() => {
-    fetchDataYear();
-  }, []);
-
-
-  const [dataMake, setDataMake] = useState([]);
 
   const fetchDataMake = async () => {
     try {
-      // Make a GET request to fetch the updated list of years
       const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addMake');
-
-      // Extract the array from the response (assuming it's called addYear)
-      const fetchedDataMake = response.data.addMake;
-
-      // Update the state that the table uses
-      setDataMake(fetchedDataMake);
+      setDataMake(response.data.addMake);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-
-  useEffect(() => {
-    fetchDataMake();
-  }, []);
-
-  const [dataModel, setDataModel] = useState([]);
 
   const fetchDataModel = async () => {
     try {
-      // Make a GET request to fetch the updated list of years
       const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addModel');
-
-      // Extract the array from the response (assuming it's called addYear)
-      const fetchedDataModel = response.data.addModel;
-
-      // Update the state that the table uses
-      setDataModel(fetchedDataModel);
+      setDataModel(response.data.addModel);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-
   useEffect(() => {
+    fetchDataYear();
+    fetchDataMake();
     fetchDataModel();
   }, []);
 
+  // Handle submit button click
+  const handleSubmit = () => {
+    // Set session variables
+    sessionStorage.setItem('year', year);
+    sessionStorage.setItem('make', make);
+    sessionStorage.setItem('model', model);
+
+    // Navigate to the new page
+    navigate(`/partinformation?year=${year}&make=${make}&model=${model}`);
+  };
 
   return (
     <Box p={2}>
@@ -116,7 +99,7 @@ export default function Content() {
                     </MenuItem>
                     {dataYear.length > 0 ? (
                       dataYear.map((elem, index) => (
-                        <MenuItem value={elem.year}>{elem.year}</MenuItem>
+                        <MenuItem key={index} value={elem.year}>{elem.year}</MenuItem>
                       ))
                     ) : (
                       <MenuItem value="">No Year</MenuItem>
@@ -136,7 +119,7 @@ export default function Content() {
                     </MenuItem>
                     {dataMake.length > 0 ? (
                       dataMake.map((elem, index) => (
-                        <MenuItem value={elem.make}>{elem.make}</MenuItem>
+                        <MenuItem key={index} value={elem.make}>{elem.make}</MenuItem>
                       ))
                     ) : (
                       <MenuItem value="">No Make</MenuItem>
@@ -156,7 +139,7 @@ export default function Content() {
                     </MenuItem>
                     {dataModel.length > 0 ? (
                       dataModel.map((elem, index) => (
-                        <MenuItem value={elem.model}>{elem.model}</MenuItem>
+                        <MenuItem key={index} value={elem.model}>{elem.model}</MenuItem>
                       ))
                     ) : (
                       <MenuItem value="">No Model</MenuItem>
@@ -178,13 +161,14 @@ export default function Content() {
                     padding: 1,
                     borderRadius: 2,
                     color: '#fff',
-                    width: '50%', // Adjust the width as needed
-                    mx: 'auto' // Centers the box horizontally
+                    width: '50%',
+                    mx: 'auto'
                   }}
+                  onClick={handleSubmit} // Set the onClick handler here
                 >
-                  <NavLink to={`/partinformation?year=${year}&make=${make}&model=${model}`} style={{ color: '#fff', textDecoration: 'none', width: '100%', textAlign: 'center' }}>
+                  <span style={{ color: '#fff', textDecoration: 'none', width: '100%', textAlign: 'center' }}>
                     Submit
-                  </NavLink>
+                  </span>
                 </Box>
               </Grid>
             </Grid>
