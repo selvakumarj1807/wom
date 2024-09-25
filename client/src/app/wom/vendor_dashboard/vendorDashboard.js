@@ -1,5 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import "bootstrap-icons/font/bootstrap-icons.css";
+import 'remixicon/fonts/remixicon.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 
 import VendorMain from './VendorMain';
 import VendorEnquiry from './dashboard/VendorEnquiry';
@@ -16,8 +20,13 @@ import Footer from '../user_dashboard/user_components/user_dash/footer/Footer';
 import Header from './navbar/Header';
 import VendorSidebar from './navbar/sidebar/VendorSidebar';
 
+import useAuthRedirect from '../../../hooks/useAuthRedirect';
+
 
 function VendorDashboard() {
+    
+    useAuthRedirect(); // Check for the token and redirect if not present
+
     return (
         <div>
             <Header />

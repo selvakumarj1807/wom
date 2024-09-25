@@ -49,9 +49,27 @@ function AdminSidebar() {
                     </ul>
                 </li>
                 <li className="nav-item">
-                    <Link to="/Admin/PushNotification" className='nav-link collapsed'>
-                        <span>Push Notification</span>
+                    <Link to="" className='nav-link collapsed a' data-bs-target="#components-nav-push" data-bs-toggle="collapse" >
+                        <span>Push Notification Management</span>
+                        <i className="bi bi-chevron-down ms-auto"></i>
                     </Link>
+                    <ul id='components-nav-push'
+                        className='nav-content collapse'
+                        data-bs-parent="#sidebar-nav"
+                    >
+                        <li>
+                            <Link to="/Admin/PushNotification" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Push Notification</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/Admin/viewPushNotification" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>View Push Notification</span>
+                            </Link>
+                        </li>
+                    </ul>
                 </li>
                 <li className="nav-item">
                     <Link to="" className='nav-link collapsed a' data-bs-target="#forms-nav" data-bs-toggle="collapse" >

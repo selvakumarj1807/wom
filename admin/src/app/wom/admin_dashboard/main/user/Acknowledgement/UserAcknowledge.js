@@ -142,7 +142,7 @@ const UserAcknowledge = () => {
                       <td style={{ wordWrap: 'break-word' }}>{elem.shippingMethod}</td>
                       <td style={{ wordWrap: 'break-word' }}>{elem.additionalNotes}</td>
                       <td style={{ wordWrap: 'break-word' }}>{elem.enquiryDate}</td>
-                      <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/PushNotification'>Push Notification</a></td>
+                      <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href={`/Admin/PushNotification?year=${elem.year}&make=${elem.make}&model=${elem.model}&notes=${elem.additionalNotes}&enquiryNo=${elem.enquiryNumber}`}>Push Notification</a></td> 
                     </tr>
                   ))
                 ) : (

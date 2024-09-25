@@ -1,20 +1,146 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import "./vendor.css";
-import { FormControl, Grid, MenuItem, Select, Stack } from "@mui/material";
+import { FormControl, Grid, MenuItem, Select, Stack, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
 
-const VendorRegister = () => {
-  const [year, setYear] = useState("");
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-  const handleChange = (event) => {
-    setYear(event.target.value);
+import { useCallback } from 'react';
+
+
+const VendorRegister = () => {
+
+  const emailCookie = Cookies.get('email');
+
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const [formValues, setFormValues] = useState({
+    businessName: '',
+    companyName: '',
+    streetAddress: '',
+    city: '',
+    phoneNo: '',
+    postalCode: '',
+    bankName: '',
+    brachName: '',
+    accounterName: '',
+    accountNumber: '',
+    ifscCode: '',
+    upiId: '',
+    state: ''
+  });
+
+  const [vendorId, setVendorId] = useState(''); // State to store the vendor _id
+
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await axios.get(`https://wom-server.onrender.com/api/v1/vendor/vendorRegDetails/${emailCookie}`);
+      const fetchedData = response.data.vendorDetail;
+      setFormValues(fetchedData);
+
+      // Assuming _id is directly available inside the fetchedData or response
+      const vendorId = fetchedData._id || response.data._id;
+
+      // Set the vendorId in state
+      setVendorId(vendorId);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [emailCookie]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+
+  // Handle input changes
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  // Form Submission Logic
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.put(`https://wom-server.onrender.com/api/v1/vendor/vendorDetail/${vendorId}`, {
+        email: emailCookie,
+        ...formValues  // Spread form values into the request body
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        console.log('Updated Successfully');
+        setSuccessMessage('Successfully Updated!');
+
+        // Refresh the page or redirect after success
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        console.error('Unexpected response status:', response.status);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
+  // Function to insert a new vendor
+  const handleInsert = async () => {
+    try {
+      const response = await axios.post(`https://wom-server.onrender.com/api/v1/vendor/vendorDetail/new`, {
+        email: emailCookie,
+        ...formValues  // Spread form values into the request body
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        console.log('Inserted Successfully');
+        setSuccessMessage('Successfully Inserted!');
+
+        // Refresh the page or redirect after success
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        console.error('Unexpected response status:', response.status);
+      }
+    } catch (error) {
+      console.error("Error inserting form:", error);
+    }
+  };
+
+
+  // Conditional click handler
+  const handleClick = () => {
+    if (vendorId) {
+      handleSubmit(); // Update existing vendor
+    } else {
+      handleInsert(); // Insert new vendor
+    }
+  };
+
+  const buttonStyle = {
+    fontStyle: 'italic',
+    fontWeight: 'bold',
+    fontSize: 16,
+    backgroundColor: '#0e2a47',
+    color: '#fff',
+    px: 3,
+    py: 1,
+    borderRadius: 1,
+    textDecoration: 'none',
+    width: '120px', // Ensure consistent width
+    height: '40px',   // Ensure consistent height
+    '&:hover': {
+      color: 'blue', // Change background color to blue on hover
+    }
   };
 
   return (
     <main id='main' className='main'>
+      {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
+
       <div className="pagetitle">
         <h1>Vendor Registration</h1>
         <nav>
@@ -56,6 +182,9 @@ const VendorRegister = () => {
             <Stack spacing={1}>
               <TextField
                 id="name"
+                name="businessName"
+                value={formValues.businessName}
+                onChange={handleInputChange}
                 label="Organization / Business Name"
                 type="text"
                 variant="outlined"
@@ -80,6 +209,9 @@ const VendorRegister = () => {
             <Stack spacing={1}>
               <TextField
                 id="name"
+                name="companyName"
+                value={formValues.companyName}
+                onChange={handleInputChange}
                 label="Company Name"
                 type="text"
                 variant="outlined"
@@ -87,16 +219,22 @@ const VendorRegister = () => {
                 style={{ marginTop: "15px" }}
               />
               <TextField
-                id="street-address"
-                label="Street Address"
+                id="mobile-no"
+                name="phoneNo"
+                value={formValues.phoneNo}
+                onChange={handleInputChange}
+                label="Mobile Number"
                 type="text"
                 variant="outlined"
                 fullWidth
                 style={{ marginTop: "15px" }}
               />
               <TextField
-                id="street-address-line-2"
-                label="Street Address Line 2"
+                id="street-address"
+                name="streetAddress"
+                value={formValues.streetAddress}
+                onChange={handleInputChange}
+                label="Street Address"
                 type="text"
                 variant="outlined"
                 fullWidth
@@ -108,6 +246,9 @@ const VendorRegister = () => {
             <Stack spacing={1}>
               <TextField
                 id="postal-code"
+                name="postalCode"
+                value={formValues.postalCode}
+                onChange={handleInputChange}
                 label="Postal (Zip) Code"
                 type="text"
                 variant="outlined"
@@ -116,6 +257,9 @@ const VendorRegister = () => {
               />
               <TextField
                 id="city"
+                name="city"
+                value={formValues.city}
+                onChange={handleInputChange}
                 label="City"
                 type="text"
                 variant="outlined"
@@ -126,9 +270,10 @@ const VendorRegister = () => {
                 <Select
                   labelId="state-province-select-label"
                   id="state-province-select"
-                  value={year}
+                  name="state"
+                  value={formValues.state}
                   displayEmpty
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                 >
                   <MenuItem disabled value="">
                     State/Province
@@ -157,6 +302,9 @@ const VendorRegister = () => {
             <Stack spacing={1}>
               <TextField
                 id="bank-name"
+                name="bankName"
+                value={formValues.bankName}
+                onChange={handleInputChange}
                 label="Bank Name"
                 type="text"
                 variant="outlined"
@@ -165,6 +313,9 @@ const VendorRegister = () => {
               />
               <TextField
                 id="branch-name"
+                name="brachName"
+                value={formValues.brachName}
+                onChange={handleInputChange}
                 label="Branch Name"
                 type="text"
                 variant="outlined"
@@ -173,6 +324,9 @@ const VendorRegister = () => {
               />
               <TextField
                 id="account-holder-name"
+                name="accounterName"
+                value={formValues.accounterName}
+                onChange={handleInputChange}
                 label="Account Holder Name"
                 type="text"
                 variant="outlined"
@@ -185,14 +339,20 @@ const VendorRegister = () => {
             <Stack spacing={1}>
               <TextField
                 id="account-number"
+                name="accountNumber"
+                value={formValues.accountNumber}
+                onChange={handleInputChange}
                 label="Account Number"
-                type="number"
+                type="text"
                 variant="outlined"
                 fullWidth
                 style={{ marginTop: "15px" }}
               />
               <TextField
                 id="ifsc-code"
+                name="ifscCode"
+                value={formValues.ifscCode}
+                onChange={handleInputChange}
                 label="IFSC Code"
                 type="text"
                 variant="outlined"
@@ -201,6 +361,9 @@ const VendorRegister = () => {
               />
               <TextField
                 id="upi-id"
+                name="upiId"
+                value={formValues.upiId}
+                onChange={handleInputChange}
                 label="UPI ID (optional)"
                 type="text"
                 variant="outlined"
@@ -209,42 +372,9 @@ const VendorRegister = () => {
               />
             </Stack>
           </Grid>
-          <Grid item xs={12} style={{ marginTop: "20px" }}>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", gap: "30px" }}>
-              <div
-                className="button"
-                style={{
-                  fontStyle: "italic",
-                  fontWeight: "bold",
-                  fontSize: "16px",
-                  backgroundColor: "#0e2a47",
-                  border: "2px solid #0e2a47",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  color: "#fff",
-                  textAlign: "center",
-                  marginBottom: "10px",
-                }}
-              >
-                <NavLink to="/vendor" style={{ color: "#fff", textDecoration: "none" }}>Back</NavLink>
-              </div>
-              <div
-                style={{
-                  fontStyle: "italic",
-                  fontWeight: "bold",
-                  fontSize: "16px",
-                  backgroundColor: "#0e2a47",
-                  border: "2px solid #0e2a47",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  color: "#fff",
-                  textAlign: "center",
-                  marginBottom: "10px",
-                }}
-              >
-                <NavLink to="/vendor" style={{ color: "#fff", textDecoration: "none" }}>Submit</NavLink>
-              </div>
-            </div>
+          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <Button component={NavLink} to="/vendor" sx={buttonStyle}>Back</Button>
+            <Button sx={buttonStyle} onClick={handleClick}>Submit</Button>
           </Grid>
         </Grid>
       </div>
@@ -253,3 +383,19 @@ const VendorRegister = () => {
 };
 
 export default VendorRegister;
+
+const styles = {
+  successMessage: {
+    height: '30px',
+    backgroundColor: 'lightgreen',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '18px',
+    paddingLeft: '30px',
+    position: 'fixed',   // Fix the element to the top
+    top: '60px',         // Offset from the top by 30px
+    width: '100%',       // Optionally set the width to 100% to stretch across the screen
+    zIndex: 1000         // Ensure it's above other content if needed
+  }
+
+};

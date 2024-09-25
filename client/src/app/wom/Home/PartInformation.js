@@ -76,7 +76,7 @@ const PartInformation = () => {
   const handleFormSubmission = async () => {
     // Generate a 4-digit enquiry number
     const generatedEnquiryNumber = String(Math.floor(Math.random() * 9000) + 1000); // Generates a number between 1000 and 9999
-    const formattedEnquiryNumber = `#${generatedEnquiryNumber}`;
+    const formattedEnquiryNumber = `ENQ${generatedEnquiryNumber}`;
     setEnquiryNumber(formattedEnquiryNumber);
 
     const formatDate = (date) => {

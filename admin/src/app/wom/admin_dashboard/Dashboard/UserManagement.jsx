@@ -4,43 +4,56 @@ import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import axios from 'axios';
+
 import UserNavbar from './UserNavbar';  // Import the new Navbar component
 
 const UserManagement = () => {
+    const [data, setData] = useState([]);
 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+    const fetchData = async () => {
+        try {
+            // Make a GET request to fetch the updated list of years
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/user/userDetails');
+
+            // Extract the array from the response (assuming it's called addYear)
+            const fetchedData = response.data.user;
+
+            // Update the state that the table uses
+            setData(fetchedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+
     useEffect(() => {
-        // Function to update state based on window size
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        // Add event listener for window resize
-        window.addEventListener('resize', handleResize);
-
-        // Initialize DataTable
-        $('#bootstrapdatatable').DataTable({
-            pagingType: "simple_numbers",
-            aLengthMenu: [
-                [3, 5, 10, 25, -1],
-                [3, 5, 10, 25, "All"]
-            ],
-            iDisplayLength: 3,
-            responsive: false,
-            autoWidth: false,
-            columnDefs: [
-                { width: "10%", targets: 0 },
-                { width: "20%", targets: 1 },
-                { width: "20%", targets: 2 },
-            ]
-        });
-
-        // Cleanup event listener on unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+        fetchData();
     }, []);
+
+    useEffect(() => {
+        // Initialize DataTable after data is loaded and cleanup before reinitialization
+        if (data.length > 0) {
+            const table = $('#bootstrapdatatable').DataTable({
+                "pagingType": "simple_numbers",
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "responsive": false,
+                "autoWidth": false,
+            });
+
+            // Cleanup function to destroy DataTable on unmount or before reinitialization
+            return () => {
+                table.destroy();
+            };
+        }
+    }, [data]); // Only reinitialize DataTable when data changes
+
 
     return (
         <div id="main" className="main" style={{ padding: '20px' }}>
@@ -59,41 +72,19 @@ const UserManagement = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>name1</td>
-                                <td>name1@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>name2</td>
-                                <td>name2@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>name3</td>
-                                <td>name3@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>name4</td>
-                                <td>name4@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>name5</td>
-                                <td>name5@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>name6</td>
-                                <td>name6@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>name7</td>
-                                <td>name7@gmail.com</td>
-                            </tr>
+                            {data.length > 0 ? (
+                                data.map((elem, index) => (
+                                    <tr>
+                                        <td>{index + 1}</td>
+                                        <td>{elem.name}</td>
+                                        <td>{elem.email}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="3">No data available</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>

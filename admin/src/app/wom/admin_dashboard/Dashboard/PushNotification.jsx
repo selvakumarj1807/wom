@@ -4,32 +4,100 @@ import "datatables.net-responsive-dt/css/responsive.dataTables.min.css";
 import $ from "jquery";
 import "datatables.net";
 import "datatables.net-responsive";
-
-import { TextField, Grid } from '@mui/material'; // Assuming you're using Material-UI
-
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { TextField } from '@mui/material'; // Assuming you're using Material-UI
 
 const PushNotification = () => {
+  const location = useLocation();  // Move useLocation outside of useEffect
   const [selectedRows, setSelectedRows] = useState([]);
+  const [year, setYear] = useState('');
+  const [model, setModel] = useState('');
+  const [make, setMake] = useState('');
+  const [notes, setNotes] = useState('');
+  const [enquiryNo, setEnquiryNo] = useState('');
 
   useEffect(() => {
-    // Initialize DataTable with responsive configuration
-    const table = $('#bootstrapdatatable').DataTable({
-      responsive: false,
-      autoWidth: false,
-      lengthMenu: [
-        [3, 5, 10, 25, -1],
-        [3, 5, 10, 25, "All"]
-      ],
-      displayLength: 3,
-      columnDefs: [
-        { orderable: false, targets: 0 }  // Disable sorting on the first column (checkboxes)
-      ]
-    });
+    const queryParams = new URLSearchParams(location.search);
+    const storedYear = queryParams.get('year');
+    const storedMake = queryParams.get('make');
+    const storedModel = queryParams.get('model');
+    const storedNotes = queryParams.get('notes');
+    const storedEnquiryNo = queryParams.get('enquiryNo');
 
-    return () => {
-      table.destroy();
-    };
+
+    // Set the retrieved values to state
+    setYear(storedYear);
+    setMake(storedMake);
+    setModel(storedModel);
+    setNotes(storedNotes);
+    setEnquiryNo(storedEnquiryNo);
+  }, [location.search]);  // Re-run when location.search changes
+
+  const handleChange = (event) => {
+    setYear(event.target.value);
+  };
+  const handleChange1 = (event) => {
+    setModel(event.target.value);
+  };
+  const handleChange2 = (event) => {
+    setMake(event.target.value);
+  };
+
+  const handleChangeNotes = (event) => {
+    setNotes(event.target.value);
+  };
+
+
+  const [dataYear, setDataYear] = useState([]);
+
+  const fetchDataYear = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addYear');
+      const fetchedData = response.data.addYear;
+      setDataYear(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataYear();
   }, []);
+
+  const [dataMake, setDataMake] = useState([]);
+
+  const fetchDataMake = async () => {
+    try {
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addMake');
+      const fetchedDataMake = response.data.addMake;
+      setDataMake(fetchedDataMake);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataMake();
+  }, []);
+
+  const [dataModel, setDataModel] = useState([]);
+
+  const fetchDataModel = async () => {
+    try {
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addModel');
+      const fetchedDataModel = response.data.addModel;
+      setDataModel(fetchedDataModel);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataModel();
+  }, []);
+
 
   const handleSelectAll = (event) => {
     const isChecked = event.target.checked;
@@ -49,80 +117,169 @@ const PushNotification = () => {
       }
     });
   };
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSubmit = (event) => {
+  const [pushData, setPushData] = useState([]);
+
+
+  const fetchPushData = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/vendor/vendorRegDetails');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.vendorDetails;
+
+      // Update the state that the table uses
+      setPushData(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchPushData();
+  }, []);
+
+  useEffect(() => {
+    // Initialize DataTable after data is loaded and cleanup before reinitialization
+    if (pushData.length > 0) {
+      const table = $('#bootstrapdatatable').DataTable({
+        responsive: false,
+        autoWidth: false,
+        lengthMenu: [
+          [3, 5, 10, 25, -1],
+          [3, 5, 10, 25, "All"]
+        ],
+        displayLength: 3,
+        columnDefs: [
+          { orderable: false, targets: 0 }
+        ]
+      });
+
+      return () => {
+        table.destroy();
+      };
+    }
+  }, [pushData]); // Only reinitialize DataTable when data changes
+
+  const handleSubmit = async (event) => {
+    const formatDate = (date) => {
+      const d = new Date(date);
+
+      // Get day, month, year, hours, and minutes
+      const day = d.getDate().toString().padStart(2, '0');
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const year = d.getFullYear();
+      const hours = d.getHours().toString().padStart(2, '0');
+      const minutes = d.getMinutes().toString().padStart(2, '0');
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
+
+      return `${day}/${month}/${year} - ${formattedHours}:${minutes} ${period}`;
+    };
+
+    // Example usage
+    const createdAt = new Date(); // Date from database
+    const formatDateTime = formatDate(createdAt); // Outputs: 15/09/2024 - 01:15 AM
+
     event.preventDefault();
     if (selectedRows.length > 0) {
-      alert("Push Notification sent successfully.");
+      // Filter the selected vendors' email addresses based on their IDs (stored in selectedRows)
+      const emails = pushData
+        .filter((vendor) => selectedRows.includes(vendor._id)) // Match selected IDs with vendor data
+        .map((vendor) => ({
+          email: vendor.email,    // Include the email
+          readStatus: false       // Set readStatus to false for each email
+        }));
+      const dataToSend = {
+        year: year,
+        make: make,
+        model: model,
+        additionalNotes: notes,
+        email: emails,
+        enquiryDate: formatDateTime,
+        enquiryNumber: enquiryNo
+      };
+
+      console.log('Data to send:', dataToSend);  // Log the data being sent
+
+      try {
+        const response = await axios.post("https://wom-server.onrender.com/api/v1/admin/pushNotification/new", dataToSend);
+        if (response.status === 200 || response.status === 201) {
+          setSuccessMessage('Push Notification sent Successfully!');
+        }
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } catch (err) {
+        console.error("Error submitting data:", err);
+      }
     } else {
       alert("Please select at least one Vendor.");
     }
-
-    // You can add your AJAX code here to send the form data to the server
   };
 
-  return (
 
+  return (
     <div id="main" className="main" style={{ padding: '20px' }}>
+      {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
       <div>
         <hr />
         <h3 style={{ textAlign: 'center' }}>Push Notification</h3>
         <hr />
-        <br></br>
         <div className="container">
           <div className="d-flex justify-content-center flex-wrap">
             <div className="col-12 col-md-4 mb-3">
-              <select className="form-select">
-                <option selected>Select Year</option>
-                <option value={2024}>2024</option>
-                <option value={2023}>2023</option>
-                <option value={2022}>2022</option>
-                <option value={2021}>2021</option>
-                <option value={2020}>2020</option>
-                <option value={2019}>2019</option>
-                <option value={2018}>2018</option>
-                <option value={2017}>2017</option>
-                <option value={2016}>2016</option>
-                <option value={2015}>2015</option>
-                <option value={2014}>2014</option>
-                <option value={2013}>2013</option>
-                <option value={2012}>2012</option>
-                <option value={2011}>2011</option>
-                <option value={2010}>2010</option>
+              <select
+                className="form-select"
+                id="preferenceSelect1"
+                value={year}
+                onChange={handleChange}>
+                <option>Select Year</option>
+                {dataYear.length > 0 ? (
+                  dataYear.map((elem, index) => (
+                    <option key={index} value={elem.year}>{elem.year}</option>
+                  ))
+                ) : (
+                  <option value="">No Year</option>
+                )}
               </select>
             </div>
 
             <div className="col-12 col-md-4 mb-3">
-              <select className="form-select">
-                <option selected>Select Make</option>
-                <option value={"AMC"}>AMC</option>
-                <option value={"Acura"}>Acura</option>
-                <option value={"Alfa"}>Alfa</option>
-                <option value={"Audi"}>Audi</option>
-                <option value={"BMW"}>BMW</option>
-                <option value={"Buick"}>Buick</option>
-                <option value={"Ford"}>Ford</option>
+              <select
+                className="form-select"
+                id="preferenceSelect2"
+                value={make}
+                onChange={handleChange2}>
+                <option>Select Make</option>
+                {dataMake.length > 0 ? (
+                  dataMake.map((elem, index) => (
+                    <option key={index} value={elem.make}>{elem.make}</option>
+                  ))
+                ) : (
+                  <option value="">No Make</option>
+                )}
               </select>
             </div>
 
             <div className="col-12 col-md-4 mb-3">
-              <select className="form-select">
-                <option selected>Select Model</option>
-                <option value={"Ambassador"}>Ambassador</option>
-                <option value={"American"}>American</option>
-                <option value={"Amx"}>Amx</option>
-                <option value={"Classic"}>Classic</option>
-                <option value={"RDX"}>RDX</option>
-                <option value={"RL"}>RL</option>
-                <option value={"RSX"}>RSX</option>
-                <option value={"147"}>147</option>
-                <option value={"GTV6"}>GTV6</option>
-                <option value={"Mito"}>Mito</option>
-                <option value={"A3"}>A3</option>
-                <option value={"A4"}>A4</option>
-                <option value={"Q3"}>Q3</option>
-                <option value={"R8"}>R8</option>
-                <option value={"RS3"}>RS3</option>
+              <select
+                className="form-select"
+                id="preferenceSelect3"
+                value={model}
+                onChange={handleChange1}>
+                <option>Select Model</option>
+                {dataModel.length > 0 ? (
+                  dataModel.map((elem, index) => (
+                    <option key={index} value={elem.model}>{elem.model}</option>
+                  ))
+                ) : (
+                  <option value="">No Model</option>
+                )}
               </select>
             </div>
 
@@ -134,16 +291,14 @@ const PushNotification = () => {
                 rows={4}
                 variant="outlined"
                 fullWidth
+                value={notes}  // Bind the state value to TextField
+                onChange={handleChangeNotes}  // Attach the handler to update state
               />
             </div>
           </div>
 
-
           <hr />
-
-          <center>
-            <h4>Select Vendors</h4>
-          </center>
+          <center><h4>Select Vendors</h4></center>
 
           <div className="table-responsive">
             <form id="tableForm" onSubmit={handleSubmit}>
@@ -161,47 +316,57 @@ const PushNotification = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {vendors.map((vendor, index) => (
-                    <tr key={index}>
-                      <td>
-                        <input
-                          type="checkbox"
-                          className="rowSelect"
-                          name="rowSelect[]"
-                          value={vendor.id}
-                          onChange={handleRowSelect}
-                        />
-                      </td>
-                      <td>{vendor.email}</td>
-                      <td>{vendor.businessName}</td>
-                      <td>{vendor.companyName}</td>
-                      <td>{vendor.city}</td>
-                      <td>{vendor.state}</td>
+                  {pushData.length > 0 ? (
+                    pushData.map((elem, index) => (
+                      <tr key={index}>
+                        <td>
+                          <input
+                            type="checkbox"
+                            className="rowSelect"
+                            name="rowSelect[]"
+                            value={elem._id}
+                            onChange={handleRowSelect}
+                          />
+                        </td>
+                        <td>{elem.email}</td>
+                        <td>{elem.businessName}</td>
+                        <td>{elem.companyName}</td>
+                        <td>{elem.city}</td>
+                        <td>{elem.state}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3">No data available</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
-              <br />
-              <br />
+              <br /><br />
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
           </div>
         </div>
-
       </div>
     </div>
   );
 };
 
-const vendors = [
-  { id: 1, email: "selva@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Coimbatore", state: "Tamil Nadu" },
-  { id: 2, email: "kumar@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Coimbatore", state: "Tamil Nadu" },
-  { id: 3, email: "ram@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Coimbatore", state: "Tamil Nadu" },
-  { id: 4, email: "arun@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Coimbatore", state: "Tamil Nadu" },
-  { id: 5, email: "selva@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Chennai", state: "Tamil Nadu" },
-  { id: 6, email: "deepa@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Chennai", state: "Tamil Nadu" },
-  { id: 7, email: "aa@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Trichy", state: "Tamil Nadu" },
-  { id: 8, email: "bb@gmail.com", businessName: "Recycle Engine", companyName: "Recycle Engine Pvt", city: "Trichy", state: "Tamil Nadu" }
-];
 
 export default PushNotification;
+
+const styles = {
+  successMessage: {
+    height: '30px',
+    backgroundColor: 'lightgreen',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '18px',
+    paddingLeft: '30px',
+    position: 'fixed',   // Fix the element to the top
+    top: '60px',         // Offset from the top by 30px
+    width: '100%',       // Optionally set the width to 100% to stretch across the screen
+    zIndex: 1000         // Ensure it's above other content if needed
+  }
+
+};

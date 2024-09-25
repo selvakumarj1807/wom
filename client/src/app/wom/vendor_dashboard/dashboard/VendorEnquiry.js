@@ -5,38 +5,74 @@ import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 
+import Cookies from 'js-cookie';  // Make sure js-cookie is imported
+
+import axios from 'axios';
+
 const VendorEnquiry = () => {
-    const [isMobile, setIsMobile] = useState(false);
+
+    const [notifications, setNotifications] = useState([]);
+
+    // Retrieve the user's email from the cookie
+    const emailCookie = Cookies.get('email');
+
+    // Function to fetch notifications for the specific user
+    const fetchNotifications = async () => {
+        try {
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/admin/pushNotification', {
+        params: {
+          email: emailCookie, // Pass the email as a query parameter
+        },
+      });
+      const newNotifications = response.data.push;
+
+      // Filter unread notifications for the user (checking if emailCookie is in notification.email array)
+      const unreadNotifications = newNotifications.filter((notification) => {
+        // Find the user's email object within the notification's email array
+        const userEmailInfo = notification.email.find(
+          (emailObj) => emailObj.email === emailCookie
+        );
+
+        // Return the notification if the user's email exists and the readStatus is false
+        return userEmailInfo !== undefined;
+      });
+
+      // Update state with unread notifications for this user
+      setNotifications(unreadNotifications);
+
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    };
 
     useEffect(() => {
-        // Check the initial window size
-        setIsMobile(window.innerWidth <= 768);
-
-        // Function to update state based on window size
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        // Add event listener for window resize
-        window.addEventListener('resize', handleResize);
-
-        // Initialize DataTable
-        $('#bootstrapdatatable').DataTable({
-            "pagingType": "simple_numbers",
-            "aLengthMenu": [
-                [3, 5, 10, 25, -1],
-                [3, 5, 10, 25, "All"]
-            ],
-            "iDisplayLength": 3,
-            "responsive": true,
-            "autoWidth": false,
-        });
-
-        // Cleanup event listener on unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+        fetchNotifications();
     }, []);
+
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+
+    useEffect(() => {
+        // Initialize DataTable after data is loaded and cleanup before reinitialization
+        if (notifications.length > 0) {
+            const table = $('#bootstrapdatatable').DataTable({
+                "pagingType": "simple_numbers",
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "autoWidth": false,
+                "responsive": false,
+            });
+
+            // Cleanup function to destroy DataTable on unmount or before reinitialization
+            return () => {
+                table.destroy();
+            };
+        }
+    }, [notifications]); // Only reinitialize DataTable when data changes
 
     return (
         <main id='main' className='main'>
@@ -68,60 +104,17 @@ const VendorEnquiry = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>#256</td>
-                                <td>2020</td>
-                                <td>AMC</td>
-                                <td>Classic</td>
-                                <td>Argent Requirements</td>
-                                <td>01/09/2024</td>
-                                <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
-                            </tr>
-                            <tr>
-                                <td>#257</td>
-                                <td>2020</td>
-                                <td>AMC</td>
-                                <td>Classic</td>
-                                <td>Argent Requirements</td>
-                                <td>25/08/2024</td>
-                                <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
-                            </tr>
-                            <tr>
-                                <td>#258</td>
-                                <td>2020</td>
-                                <td>AMC</td>
-                                <td>Classic</td>
-                                <td>Argent Requirements</td>
-                                <td>03/09/2024</td>
-                                <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
-                            </tr>
-                            <tr>
-                                <td>#259</td>
-                                <td>2020</td>
-                                <td>AMC</td>
-                                <td>Classic</td>
-                                <td>Argent Requirements</td>
-                                <td>25/09/2024</td>
-                                <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
-                            </tr>
-                            <tr>
-                                <td>#260</td>
-                                <td>2020</td>
-                                <td>AMC</td>
-                                <td>Classic</td>
-                                <td>Argent Requirements</td>
-                                <td>01/09/2024</td>
-                                <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
-                            </tr>
-                            <tr>
-                                <td>#261</td>
-                                <td>2020</td>
-                                <td>AMC</td>
-                                <td>Classic</td>
-                                <td>Argent Requirements</td>
-                                <td>25/08/2024</td>
-                                <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
-                            </tr>
+                            {notifications.map((notification, index) => (
+                                <tr>
+                                    <td>{notification.enquiryNumber}</td>
+                                    <td>{notification.year}</td>
+                                    <td>{notification.make}</td>
+                                    <td>{notification.model}</td>
+                                    <td>{notification.additionalNotes}</td>
+                                    <td>{notification.enquiryDate}</td>
+                                    <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

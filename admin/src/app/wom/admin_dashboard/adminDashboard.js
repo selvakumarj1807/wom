@@ -46,6 +46,9 @@ import ForwardVendorForm from "./main/vendor/EnquiryForm/ForwardVendorForm";
 
 import PushNotification from "./Dashboard/PushNotification";
 
+import ViewPushNotification from "./Dashboard/ViewPushNotifications";
+
+
 import RecivedVendorQuote from "./main/vendor/Quote/RecivedVendorQuote";
 import EditQuote from "./main/vendor/Quote/EditQuote";
 import ForwardUserQuote from "./main/user/Quote/ForwardUserQuote";
@@ -114,6 +117,8 @@ function UserDashboard() {
         <Route path='/vendor/enquiry/forward' element={<ForwardVendorForm />} />
 
         <Route path='/PushNotification' element={<PushNotification />} />
+
+        <Route path='/viewPushNotification' element={<ViewPushNotification />} />
 
         <Route path='/vendor/recivedQuote' element={<RecivedVendorQuote />} />
         <Route path='/vendor/editQuote' element={<EditQuote />} />

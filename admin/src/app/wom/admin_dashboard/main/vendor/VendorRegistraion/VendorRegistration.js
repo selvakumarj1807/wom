@@ -3,44 +3,56 @@ import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import axios from 'axios';
 import VendorNavbar from '../../../Dashboard/VendorNavbar';  // Import the new Navbar component
 
 
 const VendorRegistration = () => {
 
-    const [isMobile, setIsMobile] = useState(false);
+    const [data, setData] = useState([]);
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    const fetchData = async () => {
+        try {
+            // Make a GET request to fetch the updated list of years
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/vendor/vendorRegDetails');
+
+            // Extract the array from the response (assuming it's called addYear)
+            const fetchedData = response.data.vendorDetails;
+
+            // Update the state that the table uses
+            setData(fetchedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
 
     useEffect(() => {
-        // Check the initial window size
-        setIsMobile(window.innerWidth <= 768);
-
-        // Function to update state based on window size
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        // Add event listener for window resize
-        window.addEventListener('resize', handleResize);
-
-        // Initialize DataTable
-        $('#bootstrapdatatable').DataTable({
-            "pagingType": "simple_numbers",
-            "aLengthMenu": [
-                [3, 5, 10, 25, -1],
-                [3, 5, 10, 25, "All"]
-            ],
-            "iDisplayLength": 3,
-            "responsive": false,
-            "autoWidth": false,
-            
-        });
-
-        // Cleanup event listener on unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+        fetchData();
     }, []);
+
+    useEffect(() => {
+        // Initialize DataTable after data is loaded and cleanup before reinitialization
+        if (data.length > 0) {
+            const table = $('#bootstrapdatatable').DataTable({
+                "pagingType": "simple_numbers",
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "responsive": false,
+                "autoWidth": false,
+            });
+
+            // Cleanup function to destroy DataTable on unmount or before reinitialization
+            return () => {
+                table.destroy();
+            };
+        }
+    }, [data]); // Only reinitialize DataTable when data changes
 
 
     return (
@@ -63,8 +75,8 @@ const VendorRegistration = () => {
                                     <th scope="col">Vendor Email</th>
                                     <th scope="col">Business Name</th>
                                     <th scope="col">Company Name</th>
+                                    <th scope="col">Mobile Number</th>
                                     <th scope="col">Street Address</th>
-                                    <th scope="col">Street Address Line 2</th>
                                     <th scope="col">Postal (Zip) Code</th>
                                     <th scope="col">City</th>
                                     <th scope="col">State</th>
@@ -77,97 +89,31 @@ const VendorRegistration = () => {
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>1</td>
-                                    <td style={{ wordWrap: 'break-word' }}>name1@gmail.com</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine Pvt</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South 2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>641004</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Tamil Nadu </td>
-                                    <td style={{ wordWrap: 'break-word' }}>BOB</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE Main Branch</td>
-                                    <td style={{ wordWrap: 'break-word' }}>12345677654321</td>
-                                    <td style={{ wordWrap: 'break-word' }}>BARB0VJAGRO</td>
-                                    <td style={{ wordWrap: 'break-word' }}>bob@1232</td>
-                                </tr>
-
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>name2@gmail.com</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine Pvt</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South 2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>641004</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Tamil Nadu </td>
-                                    <td style={{ wordWrap: 'break-word' }}>BOB</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE Main Branch</td>
-                                    <td style={{ wordWrap: 'break-word' }}>12345677654321</td>
-                                    <td style={{ wordWrap: 'break-word' }}>BARB0VJAGRO</td>
-                                    <td style={{ wordWrap: 'break-word' }}>bob@1232</td>
-                                </tr>
-
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>3</td>
-                                    <td style={{ wordWrap: 'break-word' }}>name3@gmail.com</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine Pvt</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South 2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>641004</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Trichy</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Tamil Nadu </td>
-                                    <td style={{ wordWrap: 'break-word' }}>BOB</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE Main Branch</td>
-                                    <td style={{ wordWrap: 'break-word' }}>12345677654321</td>
-                                    <td style={{ wordWrap: 'break-word' }}>BARB0VJAGRO</td>
-                                    <td style={{ wordWrap: 'break-word' }}>bob@1232</td>
-                                </tr>
-
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>4</td>
-                                    <td style={{ wordWrap: 'break-word' }}>name4@gmail.com</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine Pvt</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South 2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>641004</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Chennai</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Tamil Nadu </td>
-                                    <td style={{ wordWrap: 'break-word' }}>BOB</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE Main Branch</td>
-                                    <td style={{ wordWrap: 'break-word' }}>12345677654321</td>
-                                    <td style={{ wordWrap: 'break-word' }}>BARB0VJAGRO</td>
-                                    <td style={{ wordWrap: 'break-word' }}>bob@1232</td>
-                                </tr>
-
-                                <tr>
-                                    <td style={{ wordWrap: 'break-word' }}>5</td>
-                                    <td style={{ wordWrap: 'break-word' }}>name5@gmail.com</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Recycle Engine Pvt</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Coimbatore South 2</td>
-                                    <td style={{ wordWrap: 'break-word' }}>641004</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Chennai</td>
-                                    <td style={{ wordWrap: 'break-word' }}>Tamil Nadu </td>
-                                    <td style={{ wordWrap: 'break-word' }}>BOB</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE</td>
-                                    <td style={{ wordWrap: 'break-word' }}>CBE Main Branch</td>
-                                    <td style={{ wordWrap: 'break-word' }}>12345677654321</td>
-                                    <td style={{ wordWrap: 'break-word' }}>BARB0VJAGRO</td>
-                                    <td style={{ wordWrap: 'break-word' }}>bob@1232</td>
-                                </tr>
-
+                                {data.length > 0 ? (
+                                    data.map((elem, index) => (
+                                        <tr>
+                                            <td style={{ wordWrap: 'break-word' }}>{index + 1}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.email}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.businessName}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.companyName}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.phoneNo}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.streetAddress}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.postalCode}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.city}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.state}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.bankName}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.brachName}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.accounterName}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.accountNumber}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.ifscCode}</td>
+                                            <td style={{ wordWrap: 'break-word' }}>{elem.upiId}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="3">No data available</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
