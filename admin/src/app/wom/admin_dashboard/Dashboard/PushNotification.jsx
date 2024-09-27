@@ -105,6 +105,14 @@ const PushNotification = () => {
     checkboxes.forEach(checkbox => checkbox.checked = isChecked);
     setSelectedRows(isChecked ? Array.from(checkboxes).map(cb => cb.value) : []);
   };
+  const [selectedVProductRows, setSelectedVProductRows] = useState([]); // For second table
+
+  const handleVProductSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    const checkboxes = document.querySelectorAll('.rowVProductSelect');
+    checkboxes.forEach(checkbox => checkbox.checked = isChecked);
+    setSelectedVProductRows(isChecked ? Array.from(checkboxes).map(cb => cb.value) : []);
+  };
 
   const handleRowSelect = (event) => {
     const isChecked = event.target.checked;
@@ -117,6 +125,22 @@ const PushNotification = () => {
       }
     });
   };
+
+
+  const handleVProductRowSelect = (event) => {
+    const isChecked = event.target.checked;
+    const value = event.target.value;
+    setSelectedVProductRows(prevState => {
+      if (isChecked) {
+        return [...prevState, value];
+      } else {
+        return prevState.filter(row => row !== value);
+      }
+    });
+  };
+
+
+
   const [successMessage, setSuccessMessage] = useState('');
 
   const [pushData, setPushData] = useState([]);
@@ -164,11 +188,55 @@ const PushNotification = () => {
     }
   }, [pushData]); // Only reinitialize DataTable when data changes
 
+  const [pushVendorProduct, setPushVendorProduct] = useState([]);
+
+  const fetchPushVendorProduct = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/vendor/products');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.products;
+
+      // Update the state that the table uses
+      setPushVendorProduct(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchPushVendorProduct();
+  }, []);
+
+
+  useEffect(() => {
+    // Initialize DataTable after data is loaded and cleanup before reinitialization
+    if (pushVendorProduct.length > 0) {
+      const table = $('#bootstrapdatatable1').DataTable({
+        responsive: false,
+        autoWidth: false,
+        lengthMenu: [
+          [3, 5, 10, 25, -1],
+          [3, 5, 10, 25, "All"]
+        ],
+        displayLength: 3,
+        columnDefs: [
+          { orderable: false, targets: 0 }
+        ]
+      });
+
+      return () => {
+        table.destroy();
+      };
+    }
+  }, [pushVendorProduct]); // Only reinitialize DataTable when data changes
+
+
   const handleSubmit = async (event) => {
     const formatDate = (date) => {
       const d = new Date(date);
-
-      // Get day, month, year, hours, and minutes
       const day = d.getDate().toString().padStart(2, '0');
       const month = (d.getMonth() + 1).toString().padStart(2, '0');
       const year = d.getFullYear();
@@ -176,39 +244,60 @@ const PushNotification = () => {
       const minutes = d.getMinutes().toString().padStart(2, '0');
       const period = hours >= 12 ? 'PM' : 'AM';
       const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
-
       return `${day}/${month}/${year} - ${formattedHours}:${minutes} ${period}`;
     };
 
-    // Example usage
-    const createdAt = new Date(); // Date from database
-    const formatDateTime = formatDate(createdAt); // Outputs: 15/09/2024 - 01:15 AM
-
     event.preventDefault();
-    if (selectedRows.length > 0) {
-      // Filter the selected vendors' email addresses based on their IDs (stored in selectedRows)
-      const emails = pushData
-        .filter((vendor) => selectedRows.includes(vendor._id)) // Match selected IDs with vendor data
+
+    if (selectedRows.length > 0 || selectedVProductRows.length > 0) {
+      // 1. Filter vendors' emails from the first table (vendor details)
+      const vendorEmails = pushData
+        .filter((vendor) => selectedRows.includes(vendor._id)) // Filter by selected rows in first table
         .map((vendor) => ({
-          email: vendor.email,    // Include the email
-          readStatus: false       // Set readStatus to false for each email
+          email: vendor.email,
+          readStatus: false
         }));
+
+      // 2. Filter vendors' emails from the second table (vendor product details)
+      const productEmails = pushVendorProduct
+        .filter((product) => selectedVProductRows.includes(product._id)) // Filter by selected rows in second table
+        .map((product) => ({
+          email: product.email,
+          readStatus: false
+        }));
+
+      // 3. Combine both email arrays
+      const combinedEmails = [...vendorEmails, ...productEmails];
+
+      // 4. Remove duplicates using a Set based on the email property
+      const uniqueEmails = Array.from(
+        new Set(combinedEmails.map((item) => item.email))
+      ).map((email) => {
+        return {
+          email: email,
+          readStatus: false // Add readStatus back for each unique email
+        };
+      });
+
       const dataToSend = {
         year: year,
         make: make,
         model: model,
         additionalNotes: notes,
-        email: emails,
-        enquiryDate: formatDateTime,
+        email: uniqueEmails,
+        enquiryDate: formatDate(new Date()), // Use the formatted date
         enquiryNumber: enquiryNo
       };
 
-      console.log('Data to send:', dataToSend);  // Log the data being sent
+      console.log('Data to send:', dataToSend);
 
       try {
-        const response = await axios.post("https://wom-server.onrender.com/api/v1/admin/pushNotification/new", dataToSend);
+        const response = await axios.post(
+          "https://wom-server.onrender.com/api/v1/admin/pushNotification/new",
+          dataToSend
+        );
         if (response.status === 200 || response.status === 201) {
-          setSuccessMessage('Push Notification sent Successfully!');
+          setSuccessMessage("Push Notification sent Successfully!");
         }
 
         setTimeout(() => {
@@ -218,9 +307,10 @@ const PushNotification = () => {
         console.error("Error submitting data:", err);
       }
     } else {
-      alert("Please select at least one Vendor.");
+      alert("Please select at least one Vendor or Vendor Product.");
     }
   };
+
 
 
   return (
@@ -338,6 +428,52 @@ const PushNotification = () => {
                   ) : (
                     <tr>
                       <td colSpan="3">No data available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              <br /><br />
+              <hr />
+              <center><h4>Select Vendors based on Vendor's Product</h4></center>
+              <table id="bootstrapdatatable1" className="table table-striped table-bordered dt-responsive nowrap" style={{ width: "100%" }}>
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" id="selectAll" onChange={handleVProductSelectAll} /> Select All
+                    </th>
+                    <th>Vendor Email</th>
+                    <th>Product Name</th>
+                    <th>Categories</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pushVendorProduct.length > 0 ? (
+                    pushVendorProduct.map((elem, index) => (
+                      <tr key={index}>
+                        <td>
+                          <input
+                            type="checkbox"
+                            className="rowVProductSelect"
+                            name="rowVProductSelect[]"
+                            value={elem._id}
+                            onChange={handleVProductRowSelect}
+                          />
+
+                        </td>
+                        <td>{elem.email}</td>
+                        <td>{elem.productName}</td>
+                        <td>{elem.category}</td>
+                        <td>{elem.description}</td>
+                        <td>{elem.quantity}</td>
+                        <td>{elem.status}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="7">No data available</td>
                     </tr>
                   )}
                 </tbody>

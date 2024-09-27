@@ -4,8 +4,11 @@ import Popup from 'reactjs-popup';
 import { FormControl, Grid, MenuItem, Select, Stack, TextField, Box, Button, Typography, Breadcrumbs, Link as MuiLink } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const PartInformation = () => {
+
+  const emailCookie = Cookies.get('email');
 
   const [year, setYear] = useState('');
   const [model, setModel] = useState('');
@@ -14,7 +17,6 @@ const PartInformation = () => {
 
   const [formValues, setFormValues] = useState({
     contactName: '',
-    email: '',
     mobileNumber: '',
     postalCode: '',
     shippingMethod: '',
@@ -131,6 +133,27 @@ const PartInformation = () => {
     fetchDataShippingMethod();
   }, []);
 
+  const [state, setState] = useState('');
+
+  const fetchStateData = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addState');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.addState;
+
+      // Update the state that the table uses
+      setState(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchStateData();
+  }, []);
 
   // Handle input changes
   const handleInputChange = (event) => {
@@ -194,6 +217,7 @@ const PartInformation = () => {
         model: model,
         enquiryNumber: formattedEnquiryNumber,
         enquiryDate: formatDateTime,
+        email: emailCookie,
         ...formValues
       });
 
@@ -328,7 +352,9 @@ const PartInformation = () => {
             <Grid item xs={12} md={6}>
               <Stack spacing={2}>
                 <TextField name="contactName" label="Contact Name" variant="outlined" onChange={handleInputChange} />
-                <TextField name="email" label="Email Id" type="email" variant="outlined" onChange={handleInputChange} />
+                <TextField name="email" label="Email Id" type="email" variant="outlined" value={emailCookie} InputProps={{
+                  readOnly: true,
+                }} />
                 <TextField name="mobileNumber" label="Mobile Number" type="number" variant="outlined" onChange={handleInputChange} />
               </Stack>
             </Grid>
@@ -360,9 +386,13 @@ const PartInformation = () => {
                     onChange={handleInputChange}
                   >
                     <MenuItem disabled value="">State/Province</MenuItem>
-                    <MenuItem value="tn">Tamil Nadu</MenuItem>
-                    <MenuItem value="kerala">Kerala</MenuItem>
-                    <MenuItem value="karnataka">Karnataka</MenuItem>
+                    {state.length > 0 ? (
+                      state.map((elem, index) => (
+                        <MenuItem key={index} value={elem.state}>{elem.state}</MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="">No State</MenuItem>
+                    )}
                   </Select>
                 </FormControl>
               </Stack>

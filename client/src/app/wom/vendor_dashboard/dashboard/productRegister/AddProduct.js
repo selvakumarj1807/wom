@@ -1,20 +1,104 @@
-import React from "react";
-import { FormControl, Grid, MenuItem, Select, Stack } from "@mui/material";
+import React, { useEffect, useState } from 'react';
+import { FormControl, Grid, MenuItem, Select, Stack, Button } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
+import axios from 'axios';
+
+import Cookies from 'js-cookie';
 
 const AddProduct = () => {
-  const [year, setYear] = useState("");
 
-  const handleChange = (event) => {
-    setYear(event.target.value);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const emailCookie = Cookies.get('email');
+
+  const [status, setStatus] = useState('');
+
+  const fetchDataStatus = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addStatus');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.addstatus;
+
+      // Update the state that the table uses
+      setStatus(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
+
+  useEffect(() => {
+    fetchDataStatus();
+  }, []);
+
+  const [category, setCategory] = useState('');
+
+
+  const fetchDataCategory = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addCategory');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.addCategory;
+
+      // Update the state that the table uses
+      setCategory(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchDataCategory();
+  }, []);
+
+  const [formValues, setFormValues] = useState({
+    productName: '',
+    description: '',
+    quantity: '',
+    category: '',
+    status: '',
+  });
+
+  // Handle input changes
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  // Handle form submission
+  const handleFormSubmission = async () => {
+
+    try {
+      const response = await axios.post("https://wom-server.onrender.com/api/v1/vendor/product/new", {
+        email: emailCookie,
+        ...formValues
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        setSuccessMessage('Successfully added!');
+      }
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
 
   return (
     <main id='main' className='main'>
       <div className="pagetitle">
+        {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
+
         <h1>Add Product</h1>
         <nav>
           <ol className="breadcrumb">
@@ -52,75 +136,102 @@ const AddProduct = () => {
         </h4>
 
         <Grid container spacing={2.5} style={{ marginTop: "2px" }}>
+          {/* Left column */}
           <Grid item xs={12} sm={6}>
             <Stack spacing={1}>
               <TextField
                 id="name"
                 label="Product Name"
+                name='productName'
                 type="text"
                 variant="outlined"
                 fullWidth
                 style={{ marginTop: "15px" }}
+                onChange={handleInputChange}
               />
               <TextField
                 id="description"
                 label="Description"
+                name='description'
                 type="text"
                 variant="outlined"
                 fullWidth
                 style={{ marginTop: "15px" }}
+                onChange={handleInputChange}
               />
-              <TextField
-                id="category"
-                label="Category"
-                type="text"
-                variant="outlined"
-                fullWidth
-                style={{ marginTop: "15px" }}
-              />
+              <FormControl fullWidth style={{ marginTop: "15px" }}>
+                <Select
+                  name="category"
+                  displayEmpty
+                  value={formValues.category}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem disabled value="">Category</MenuItem>
+                  {category.length > 0 ? (
+                    category.map((elem, index) => (
+                      <MenuItem key={index} value={elem.category}>{elem.category}</MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">No Category</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
             </Stack>
           </Grid>
+          {/* Right column */}
           <Grid item xs={12} sm={6}>
             <Stack spacing={1}>
               <TextField
                 id="quantity"
                 label="Quantity"
+                name='quantity'
                 type="text"
                 variant="outlined"
                 fullWidth
                 style={{ marginTop: "15px" }}
+                onChange={handleInputChange}
+
               />
               <FormControl fullWidth style={{ marginTop: "15px" }}>
                 <Select
-                  labelId="status-select-label"
-                  id="status-select"
-                  value={year}
+                  name="status"
                   displayEmpty
-                  onChange={handleChange}
+                  value={formValues.status}
+                  onChange={handleInputChange}
                 >
-                  <MenuItem disabled value="">
-                    Status
-                  </MenuItem>
-                  <MenuItem value={"in-stock"}>In Stock</MenuItem>
-                  <MenuItem value={"out-of-stock"}>Out of Stock</MenuItem>
+                  <MenuItem disabled value="">Status</MenuItem>
+                  {status.length > 0 ? (
+                    status.map((elem, index) => (
+                      <MenuItem key={index} value={elem.status}>{elem.status}</MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">No Status</MenuItem>
+                  )}
                 </Select>
               </FormControl>
-              <button
+            </Stack>
+          </Grid>
+          {/* Submit button in a new centered row */}
+          <Grid item xs={12}>
+            <Grid container justifyContent="center" alignItems="center">
+              <Button
+                variant="contained"
                 style={{
                   fontStyle: "italic",
                   fontWeight: "bold",
                   fontSize: "16px",
                   backgroundColor: "#0e2a47",
-                  border: "2px solid #0e2a47",
                   padding: "10px",
                   borderRadius: "10px",
                   color: "#fff",
-                  marginTop: '20px'
+                  width: "130px",
+                  height: "50px"
                 }}
+                onClick={handleFormSubmission}
               >
-                <NavLink to="/vendor" style={{ color: "#fff", textDecoration: "none" }}>Submit</NavLink>
-              </button>
-            </Stack>
+                Submit
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </div>
@@ -129,3 +240,19 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
+
+const styles = {
+  successMessage: {
+    height: '30px',
+    backgroundColor: 'lightgreen',
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '18px',
+    paddingLeft: '30px',
+    position: 'fixed',   // Fix the element to the top
+    top: '60px',         // Offset from the top by 30px
+    width: '100%',       // Optionally set the width to 100% to stretch across the screen
+    zIndex: 1000         // Ensure it's above other content if needed
+  }
+
+};

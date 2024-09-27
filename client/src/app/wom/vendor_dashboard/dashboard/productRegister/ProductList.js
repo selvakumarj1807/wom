@@ -4,9 +4,35 @@ import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const ProductTable = () => {
     const [isMobile, setIsMobile] = useState(false);
+    const emailCookie = Cookies.get('email');
+    const [data, setData] = useState([]);
+    const [successMessage, setSuccessMessage] = useState('');
+
+    const fetchData = async () => {
+        try {
+            // Make a GET request to fetch the updated list of years
+            const response = await axios.get(`https://wom-server.onrender.com/api/v1/vendor/products/${emailCookie}`);
+
+            // Extract the array from the response (assuming it's called addYear)
+            const fetchedData = response.data.products;
+
+            // Update the state that the table uses
+            setData(fetchedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
 
     useEffect(() => {
         // Check the initial window size
@@ -20,26 +46,53 @@ const ProductTable = () => {
         // Add event listener for window resize
         window.addEventListener('resize', handleResize);
 
-        // Initialize DataTable
-        $('#bootstrapdatatable').DataTable({
-            "pagingType": "simple_numbers",
-            "aLengthMenu": [
-                [3, 5, 10, 25, -1],
-                [3, 5, 10, 25, "All"]
-            ],
-            "iDisplayLength": 3,
-            "responsive": true,
-            "autoWidth": false,
-        });
-
         // Cleanup event listener on unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
+    useEffect(() => {
+        // Initialize DataTable after data is loaded and cleanup before reinitialization
+        if (data.length > 0) {
+            const table = $('#bootstrapdatatable').DataTable({
+                "pagingType": "simple_numbers",
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "responsive": false,
+                "autoWidth": false,
+            });
+
+            // Cleanup function to destroy DataTable on unmount or before reinitialization
+            return () => {
+                table.destroy();
+            };
+        }
+    }, [data]); // Only reinitialize DataTable when data changes
+
+    const handleDelete = (id) => {
+        axios.delete(`https://wom-server.onrender.com/api/v1/vendor/product/${id}`)
+            .then(res => {
+                console.log(res)
+
+                // Set the success message
+                setSuccessMessage('Successfully deleted...!');
+
+                // Optionally reload the page or refresh data after a delay
+                setTimeout(() => {
+                    window.location.reload();  // Reload after showing the message
+                }, 2000);  // Show the message for 2 seconds before reload
+            })
+            .catch(err => console.log(err))
+    };
+
     return (
         <main id='main' className='main'>
+            {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
+
             <div className="pagetitle">
                 <h1>Product List</h1>
                 <nav>
@@ -61,90 +114,40 @@ const ProductTable = () => {
                                 <th scope="col">S.No</th>
                                 <th scope="col">Product Name</th>
                                 <th scope="col">Categories</th>
-                                <th scope="col">Price</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Qty</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>5-speed R151 manual 6-speed AC60 automatic</td>
-                                <td>Petrol</td>
-                                <td>15</td>
-                                <td>₹ 2500</td>
-                                <td>In Stock</td>
-                                <td style={{ display: 'flex', alignItems: 'center', padding: '15px' }}>
-                                    <button style={styles.editButton}>Edit</button>
-                                    <button style={styles.deleteButton}>Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>5-speed R151 manual 6-speed AC60 automatic</td>
-                                <td>Diesel</td>
-                                <td>15</td>
-                                <td>₹ 2500</td>
-                                <td>In Stock</td>
-                                <td style={{ display: 'flex', alignItems: 'center', padding: '15px' }}>
-                                    <button style={styles.editButton}>Edit</button>
-                                    <button style={styles.deleteButton}>Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>5-speed R151 manual 6-speed AC60 automatic</td>
-                                <td>Petrol</td>
-                                <td>15</td>
-                                <td>₹ 2500</td>
-                                <td>In Stock</td>
-                                <td style={{ display: 'flex', alignItems: 'center', padding: '15px' }}>
-                                    <button style={styles.editButton}>Edit</button>
-                                    <button style={styles.deleteButton}>Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>5-speed R151 manual 6-speed AC60 automatic</td>
-                                <td>Gas</td>
-                                <td>15</td>
-                                <td>₹ 2500</td>
-                                <td>In Stock</td>
-                                <td style={{ display: 'flex', alignItems: 'center', padding: '15px' }}>
-                                    <button style={styles.editButton}>Edit</button>
-                                    <button style={styles.deleteButton}>Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>5-speed R151 manual 6-speed AC60 automatic</td>
-                                <td>Gas</td>
-                                <td>15</td>
-                                <td>₹ 2500</td>
-                                <td>In Stock</td>
-                                <td style={{ display: 'flex', alignItems: 'center', padding: '15px' }}>
-                                    <button style={styles.editButton}>Edit</button>
-                                    <button style={styles.deleteButton}>Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>5-speed R151 manual 6-speed AC60 automatic</td>
-                                <td>Petrol</td>
-                                <td>15</td>
-                                <td>₹ 2500</td>
-                                <td>In Stock</td>
-                                <td style={{ display: 'flex', alignItems: 'center', padding: '15px' }}>
-                                    <button style={styles.editButton}>Edit</button>
-                                    <button style={styles.deleteButton}>Delete</button>
-                                </td>
-                            </tr>
+                            {data.length > 0 ? (
+                                data.map((elem, index) => (
+                                    <tr>
+                                        <td>{index + 1}</td>
+                                        <td>{elem.productName}</td>
+                                        <td>{elem.category}</td>
+                                        <td>{elem.description}</td>
+                                        <td>{elem.quantity}</td>
+                                        <td>{elem.status}</td>
+                                        <td style={{ display: 'flex', alignItems: 'center', padding: '15px' }}>
+                                            <Link to={`/vendor/product/edit?id=${elem._id}`} style={styles.editButton}>
+                                                Edit
+                                            </Link>                                            
+                                            <button style={styles.deleteButton} onClick={() => handleDelete(elem._id)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="7">No data available</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
-            
+
         </main>
     );
 };
@@ -172,5 +175,17 @@ const styles = {
         borderRadius: '3px',
         cursor: 'pointer',
         width: '80px',
+    },
+    successMessage: {
+        height: '30px',
+        backgroundColor: 'lightgreen',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '18px',
+        paddingLeft: '30px',
+        position: 'fixed',   // Fix the element to the top
+        top: '60px',         // Offset from the top by 30px
+        width: '100%',       // Optionally set the width to 100% to stretch across the screen
+        zIndex: 1000         // Ensure it's above other content if needed
     }
 };

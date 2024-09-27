@@ -224,6 +224,13 @@ function AdminSidebar() {
                         </li>
 
                         <li>
+                            <Link to="/Admin/masterManagement/AddState" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Add State</span>
+                            </Link>
+                        </li>
+
+                        <li>
                             <Link to="/Admin/masterManagement/AddRole" className='a'>
                                 <i className="bi bi-circle"></i>
                                 <span>Add Roles</span>

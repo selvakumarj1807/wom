@@ -6,10 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const AddStatus = () => {
+const AddState = () => {
 
     const [isMobile, setIsMobile] = useState(false);
-    const [status, setStatus] = useState('');
+    const [state, setState] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [data, setData] = useState([]);
@@ -38,10 +38,10 @@ const AddStatus = () => {
     const fetchData = async () => {
         try {
             // Make a GET request to fetch the updated list of years
-            const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addStatus');
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addState');
 
             // Extract the array from the response (assuming it's called addYear)
-            const fetchedData = response.data.addstatus;
+            const fetchedData = response.data.addState;
 
             // Update the state that the table uses
             setData(fetchedData);
@@ -86,12 +86,12 @@ const AddStatus = () => {
 
         try {
             if (editMode) {
-                const response = await axios.put(`https://wom-server.onrender.com/api/v1/masterManagement/addStatus/${selectedId}`, { status });
+                const response = await axios.put(`https://wom-server.onrender.com/api/v1/masterManagement/addState/${selectedId}`, { state });
                 if (response.status === 200) {
                     setSuccessMessage('Successfully updated!');
                 }
             } else {
-                const response = await axios.post("https://wom-server.onrender.com/api/v1/masterManagement/addStatus/new", { status });
+                const response = await axios.post("https://wom-server.onrender.com/api/v1/masterManagement/addState/new", { state });
                 if (response.status === 200 || response.status === 201) {
                     setSuccessMessage('Successfully added!');
                 }
@@ -108,7 +108,7 @@ const AddStatus = () => {
 
 
     const handleDelete = (id) => {
-        axios.delete("https://wom-server.onrender.com/api/v1/masterManagement/addStatus/" + id)
+        axios.delete("https://wom-server.onrender.com/api/v1/masterManagement/addState/" + id)
             .then(res => {
                 console.log(res)
 
@@ -124,13 +124,13 @@ const AddStatus = () => {
     };
 
     const openAddModal = () => {
-        setStatus('');
+        setState('');
         setEditMode(false);
         setIsModalOpen(true);
     };
 
-    const openEditModal = (id, status) => {
-        setStatus(status);
+    const openEditModal = (id, state) => {
+        setState(state);
         setSelectedId(id);
         setEditMode(true);
         setIsModalOpen(true);
@@ -141,9 +141,9 @@ const AddStatus = () => {
         <div id="main" className="main" style={{ padding: '20px' }}>
             {successMessage && <div style={styles.successMessage}>{successMessage}</div>}
 
-            <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>Add Status For Vendor Product</h2>
+            <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>Add State</h2>
             <button type="button" className="btn btn-primary" onClick={openAddModal}>
-                Add Status
+                Add State
             </button>
 
             {isModalOpen && (
@@ -152,20 +152,20 @@ const AddStatus = () => {
                         <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title" id="exampleModalLabel">
-                                    {editMode ? 'Edit Status' : 'Add Status'}
+                                    {editMode ? 'Edit state' : 'Add state'}
                                 </h5>
                                 <button type="button" className="btn-close" onClick={() => setIsModalOpen(false)}></button>
                             </div>
                             <form onSubmit={Submit}>
                                 <div className="modal-body">
                                     <div className="mb-3">
-                                        <label htmlFor="status" className="col-form-label">Status:</label>
+                                        <label htmlFor="state" className="col-form-label">State:</label>
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="status"
-                                            value={status}
-                                            onChange={(e) => setStatus(e.target.value)}
+                                            id="state"
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -189,7 +189,7 @@ const AddStatus = () => {
                         <thead>
                             <tr>
                                 <th scope="col">S.No</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">state</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -198,9 +198,9 @@ const AddStatus = () => {
                                 data.map((elem, index) => (
                                     <tr key={elem._id}>
                                         <td>{index + 1}</td>
-                                        <td>{elem.status}</td>
+                                        <td>{elem.state}</td>
                                         <td>
-                                            <button style={styles.editButton} onClick={() => openEditModal(elem._id, elem.status)}>Edit</button>
+                                            <button style={styles.editButton} onClick={() => openEditModal(elem._id, elem.state)}>Edit</button>
                                             <button style={styles.deleteButton} onClick={() => handleDelete(elem._id)}>Delete</button>
                                         </td>
                                     </tr>
@@ -219,7 +219,7 @@ const AddStatus = () => {
 };
 
 
-export default AddStatus;
+export default AddState;
 
 const styles = {
     editButton: {

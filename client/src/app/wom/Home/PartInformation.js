@@ -7,9 +7,10 @@ import Navbar from "./Navbar";
 import Testimonial from "./Testimonial";
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+ 
 const PartInformation = () => {
   const [data, setData] = useState([]);
+  const [state, setState] = useState('');
   const [formValues, setFormValues] = useState({
     contactName: '',
     email: '',
@@ -45,6 +46,26 @@ const PartInformation = () => {
 
   useEffect(() => {
     fetchData();
+  }, []);
+
+  const fetchStateData = async () => {
+    try {
+      // Make a GET request to fetch the updated list of years
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addState');
+
+      // Extract the array from the response (assuming it's called addYear)
+      const fetchedData = response.data.addState;
+
+      // Update the state that the table uses
+      setState(fetchedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchStateData();
   }, []);
 
   // Handle input changes
@@ -217,9 +238,13 @@ const PartInformation = () => {
                   onChange={handleInputChange}
                 >
                   <MenuItem disabled value="">State/Province</MenuItem>
-                  <MenuItem value="tn">Tamil Nadu</MenuItem>
-                  <MenuItem value="kerala">Kerala</MenuItem>
-                  <MenuItem value="karnataka">Karnataka</MenuItem>
+                  {state.length > 0 ? (
+                    state.map((elem, index) => (
+                      <MenuItem key={index} value={elem.state}>{elem.state}</MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value="">No State</MenuItem>
+                  )}
                 </Select>
               </FormControl>
             </Stack>

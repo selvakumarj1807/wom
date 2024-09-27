@@ -70,6 +70,7 @@ import AddModel from "./MasterManagement/AddModel";
 import AddShippingMethod from "./MasterManagement/AddShippingMethod";
 import AddStatus from "./MasterManagement/AddStatus";
 import AddCategories from "./MasterManagement/AddCategories";
+import AddState from "./MasterManagement/AddState";
 import AddRole from "./MasterManagement/AddRole";
 import AddPermissions from "./MasterManagement/AddPermissions";
 
@@ -143,6 +144,7 @@ function UserDashboard() {
         <Route path='/masterManagement/AddShippingMethod' element={<AddShippingMethod />} />
         <Route path='/masterManagement/AddStatus' element={<AddStatus />} />
         <Route path='/masterManagement/AddCategories' element={<AddCategories />} />
+        <Route path='/masterManagement/AddState' element={<AddState />} />
         <Route path='/masterManagement/AddRole' element={<AddRole />} />
         <Route path='/masterManagement/AddPermissions' element={<AddPermissions />} />
 
