@@ -4,7 +4,7 @@ import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
-
+ 
 import Cookies from 'js-cookie';  // Make sure js-cookie is imported
 
 import axios from 'axios';
@@ -112,7 +112,7 @@ const VendorEnquiry = () => {
                                     <td>{notification.model}</td>
                                     <td>{notification.additionalNotes}</td>
                                     <td>{notification.enquiryDate}</td>
-                                    <td style={{ color: 'blue' }}><a href='/vendor/quote/generator'>Quote Generate</a></td>
+                                    <td style={{ color: 'blue' }}><a href={`/vendor/quote/generator?enquiryNo=${notification.enquiryNumber}`}>Quote Generate</a></td>
                                 </tr>
                             ))}
                         </tbody>

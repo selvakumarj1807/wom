@@ -4,168 +4,246 @@ import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import axios from 'axios';
 
-const RecivedVendorQuote = () => {
-  const [isMobile, setIsMobile] = useState(false);
+const VendorQuote = () => {
+    const [data, setData] = useState([]);
 
-  useEffect(() => {
-    // Check the initial window size
-    setIsMobile(window.innerWidth <= 768);
+    const fetchData = async() => {
+        try {
+            // Make a GET request to fetch the updated list of years
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/vendor/vendorQuote');
 
-    // Function to update state based on window size
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+            // Extract the array from the response (assuming it's called addYear)
+            const fetchedData = response.data.vendorQuote;
+
+            // Update the state that the table uses
+            setData(fetchedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     };
 
-    // Add event listener for window resize
-    window.addEventListener('resize', handleResize);
 
-    // Initialize DataTable
-    $('#bootstrapdatatable').DataTable({
-      "pagingType": "simple_numbers",
-      "aLengthMenu": [
-        [3, 5, 10, 25, -1],
-        [3, 5, 10, 25, "All"]
-      ],
-      "iDisplayLength": 3,
-      "responsive": false,
-      "autoWidth": false,
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    });
+    // Add custom sorting for the "DD/MM/YYYY - HH:mm AM/PM" date format
+    $.fn.dataTable.ext.order['dom-date-custom'] = function(settings, colIndex) {
+        return this.api().column(colIndex, { order: 'index' }).nodes().map(function(td) {
+            // Extract the date text
+            const dateText = $(td).text().trim();
 
+            // Convert dateText from "DD/MM/YYYY - HH:mm AM/PM" to a JavaScript Date object
+            const [datePart, timePart] = dateText.split(' - ');
+            const [day, month, year] = datePart.split('/');
+            const dateString = `${year}-${month}-${day} ${timePart}`;
 
-    // Cleanup event listener on unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
+            return new Date(dateString).getTime(); // Return timestamp for sorting
+        });
     };
-  }, []);
 
-  return (
-    <div id="main" className="main" style={{ padding: '20px' }}>
-      <div>
-        <hr />
-        <h3 style={{ textAlign: 'center' }}>Vendor-Quote(Received)</h3>
-        <hr />
+    useEffect(() => {
+        if (data.length > 0) {
+            const table = $('#bootstrapdatatable').DataTable({
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "responsive": false,
+                "autoWidth": false, // Disable auto width, so you can set widths manually
 
-        <div className="container" style={{ overflowX: 'auto' }}>
-          <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
-            <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
-              <thead>
-                <tr>
-                  <th scope="col">Quote Number</th>
-                  <th scope="col">Product Name</th>
-                  <th scope="col">Qunatity</th>
-                  <th scope="col">Unit Price</th>
-                  <th scope="col">Total Price</th>
-                  <th scope="col">Recived Date</th>
-                  <th scope="col">Quote Download</th>
-                  <th scope="col">Edit Quote</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#256</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}>Quote1.pdf</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/vendor/editQuote'>Edit</a></td>
-                </tr>
+                // Set the initial order of the table by the 'enquiryDate' column in descending order
+                "order": [
+                    [6, 'desc']
+                ], // Assuming 'enquiryDate' is in the 6th column (index 6)
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#257</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}>Quote1.pdf</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/vendor/editQuote'>Edit</a></td>
-                </tr>
+                // Apply custom sorting and column width to the 'enquiryDate' column
+                "columnDefs": [{
+                        "targets": 6, // Index of 'enquiryDate' column
+                        "orderDataType": 'dom-date-custom', // Use custom sorting plugin
+                        "width": "180px" // Adjust the width of 'enquiryDate' column
+                    },
+                    {
+                        "targets": 0, // Index of 'Enquiry Number' column
+                        "width": "100px" // Set a width for 'Enquiry Number' column
+                    },
+                    {
+                        "targets": 1, // Index of 'Year' column
+                        "width": "80px" // Set a width for 'Year' column
+                    },
+                    {
+                        "targets": 4, // Index of 'Year' column
+                        "width": "300px" // Set a width for 'Year' column
+                    },
+                    {
+                        "targets": 5, // Index of 'Emails' column
+                        "width": "300px" // Set a larger width for 'Emails' column since it contains lists
+                    },
+                    {
+                        "targets": 7, // Index of 'Emails' column
+                        "width": "150px" // Set a larger width for 'Emails' column since it contains lists
+                    }
+                    // Add more columnDefs for other columns if needed
+                ]
+            });
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#258</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}>Quote1.pdf</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/vendor/editQuote'>Edit</a></td>
-                </tr>
+            // Cleanup function to destroy DataTable on unmount or before reinitialization
+            return () => {
+                table.destroy();
+            };
+        }
+    }, [data]);
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#259</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}>Quote1.pdf</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/vendor/editQuote'>Edit</a></td>
-                </tr>
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#250</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>03/09/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}>Quote1.pdf</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/vendor/editQuote'>Edit</a></td>
-                </tr>
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#251</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}>Quote1.pdf</td>
-                  <td style={{ wordWrap: 'break-word', color: 'blue' }}><a href='/Admin/vendor/editQuote'>Edit</a></td>
-                </tr>
+    return ( <
+        div id = "main"
+        className = "main"
+        style = {
+            { padding: '20px' } } >
 
-                {/*
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA126</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
-                </tr>
-                */}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <
+        h2 style = {
+            { textAlign: 'center', color: 'rgb(14, 42, 71)' } } > Vendor - Quote(Received) < /h2> { /* Internal CSS */ } <
+        style > { `
+                .product-list {
+                    padding: 0;
+                    margin: 0;
+                    list-style: none;
+                }
 
-      </div>
-    </div>
-  );
+                .product-item {
+                    padding: 15px;
+                    border: 1px solid #ddd;
+                    margin-bottom: 10px;
+                }
+
+                .product-info {
+                    width: 100%;
+                    padding: 5px 0;
+                }
+
+                .product-label {
+                    font-weight: bold;
+                }
+
+                @media (max-width: 768px) {
+                    .product-info {
+                        width: 100%;
+                        padding: 5px 0;
+                    }
+
+                    .product-item {
+                        padding: 15px;
+                        border: 1px solid #ddd;
+                        margin-bottom: 10px;
+                    }
+                }
+                ` } <
+        /style> <
+        div className = "container"
+        style = {
+            { overflowX: 'auto' } } >
+        <
+        div className = "table-responsive" >
+        <
+        table id = "bootstrapdatatable"
+        className = "table table-striped table-bordered"
+        style = {
+            { width: '180%', height: 'auto' } } >
+        <
+        thead >
+        <
+        tr >
+        <
+        th > Enquiry Number < /th> <
+        th > Quote Number < /th> <
+        th > Vendor Email < /th> <
+        th > Customer Name < /th> <
+        th > Products < /th> <
+        th > Quote Download < /th> <
+        th > Quote Date < /th> <
+        th scope = "col" > Edit Quote < /th> <
+        /tr> <
+        /thead> <
+        tbody > {
+            data.length > 0 ? (
+                data.map((elem, index) => ( <
+                    tr key = { elem._id } >
+                    <
+                    td style = {
+                        { textAlign: 'center', alignContent: 'center' } } > { elem.enquiryNumber } < /td> <
+                    td style = {
+                        { textAlign: 'center', alignContent: 'center' } } > { elem.quoteNumber } < /td> <
+                    td style = {
+                        { textAlign: 'center', alignContent: 'center' } } > { elem.email } < /td> <
+                    td style = {
+                        { textAlign: 'center', alignContent: 'center' } } > { elem.customerName } < /td> <
+                    td style = {
+                        { alignContent: 'center' } } >
+                    <
+                    ul className = "product-list" > {
+                        elem.items.map((item) => ( <
+                            li key = { item._id }
+                            className = "product-item" >
+                            <
+                            div className = "product-info" >
+                            <
+                            span className = "product-label" > Product: < /span> {item.productname} <
+                            /div> <
+                            div className = "product-info" >
+                            <
+                            span className = "product-label" > Description: < /span> {item.description} <
+                            /div> <
+                            div className = "product-info" >
+                            <
+                            span className = "product-label" > Quantity: < /span> {item.quantity} <
+                            /div> <
+                            div className = "product-info" >
+                            <
+                            span className = "product-label" > Price: < /span> {item.price} <
+                            /div> <
+                            /li>
+                        ))
+                    } <
+                    /ul> <
+                    /td> <
+                    td style = {
+                        { wordWrap: 'break-word', color: 'orange', alignContent: 'center' } } > {
+                        elem.attachedFile ? ( <
+                            a href = { `https://wom-server.onrender.com/api/v1/vendor/vendorQuote/download/${elem.attachedFile}` }
+                            download > { elem.attachedFile } <
+                            /a>
+                        ) : (
+                            "No file attached"
+                        )
+                    } <
+                    /td>
+
+                    <
+                    td style = {
+                        { textAlign: 'center', alignContent: 'center' } } > { elem.quoteDate } < /td> <
+                    td style = {
+                        { textAlign: 'center', color: 'blue', alignContent: 'center' } } > < a href = '/Admin/vendor/editQuote' > Edit < /a></td >
+                    <
+                    /tr>
+                ))
+            ) : ( <
+                tr >
+                <
+                td colSpan = "7" > No data available < /td> <
+                /tr>
+            )
+        } <
+        /tbody> <
+        /table> <
+        /div> <
+        /div> <
+        /div>
+    );
 };
 
-export default RecivedVendorQuote;
-
-// Inline Styles for Responsiveness
-const linkStyle = {
-  textDecoration: 'none',
-  fontSize: '18px', // Increased font size
-  color: 'white', // White text color
-  padding: '10px 15px',
-  display: 'block', // Ensures the link takes full width in the li
-  textAlign: 'center'
-};
-
-
-// Media Query in JS (Optional)
-const mediaQuery = window.matchMedia('(max-width: 600px)');
-
-if (mediaQuery.matches) {
-  linkStyle.fontSize = '12px'; // Adjust font size for mobile
-  linkStyle.padding = '8px 10px'; // Adjust padding for mobile
-}
-
+export default VendorQuote;
