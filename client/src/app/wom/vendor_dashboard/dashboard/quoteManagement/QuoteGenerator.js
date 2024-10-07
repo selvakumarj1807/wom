@@ -88,10 +88,6 @@ const QuoteGenerator = () => {
         const handleSubmit = async(event) => {
             event.preventDefault();
 
-            // Generate a 4-digit quote number
-            const generatedQuoteNumber = String(Math.floor(Math.random() * 9000) + 1000); // Generates a number between 1000 and 9999
-            const formattedQuoteNumber = `QUOTE${generatedQuoteNumber}`;
-
             // Format the date
             const formatDate = (date) => {
                 const d = new Date(date);
@@ -109,7 +105,7 @@ const QuoteGenerator = () => {
             // Prepare formData to send via Axios
             const formData = new FormData(); // FormData for handling file uploads
             formData.append('customerName', quoteData.customerName);
-            formData.append('quoteNumber', formattedQuoteNumber); // Use the formatted quote number
+            formData.append('quoteNumber', quoteData.quoteNumber); // Use the formatted quote number
             formData.append('quoteDate', quoteDate); // Add the formatted date
             formData.append('enquiryNumber', enquiryNo); // Append enquiryNo from state
             formData.append('items', JSON.stringify(quoteData.items)); // Convert items array to a string
@@ -224,13 +220,13 @@ const QuoteGenerator = () => {
                 Link to = " "
                 className = "a" >
                 <
-                i className = "bi bi-card-checklist" > < /i> <
-                /Link> <
+                i className = "bi bi-card-checklist" > < /i> < /
+                Link > <
                 /li> <
-                li className = "breadcrumb-item active" > Quote Generator < /li> <
-                /ol> <
-                /nav> <
-                /div> <
+                li className = "breadcrumb-item active" > Quote Generator < /li> < /
+                ol > <
+                /nav> < /
+                div > <
                 Container >
                 <
                 div style = { styles.formContainer } >
@@ -251,9 +247,10 @@ const QuoteGenerator = () => {
                 name = "customerName"
                 value = { quoteData.customerName }
                 onChange = {
-                    (e) => setQuoteData({...quoteData, customerName: e.target.value }) }
-                /> <
-                /Grid> <
+                    (e) => setQuoteData({...quoteData, customerName: e.target.value })
+                }
+                /> < /
+                Grid > <
                 Grid item xs = { 12 }
                 sm = { 6 } >
                 <
@@ -264,9 +261,10 @@ const QuoteGenerator = () => {
                 name = "quoteNumber"
                 value = { quoteData.quoteNumber }
                 onChange = {
-                    (e) => setQuoteData({...quoteData, quoteNumber: e.target.value }) }
-                /> <
-                /Grid> <
+                    (e) => setQuoteData({...quoteData, quoteNumber: e.target.value })
+                }
+                /> < /
+                Grid > <
                 Grid item xs = { 12 } >
                 <
                 Input
@@ -276,8 +274,8 @@ const QuoteGenerator = () => {
                 />
 
                 <
-                /Grid> <
-                /Grid>
+                /Grid> < /
+                Grid >
 
                 {
                     isMobile ? ( <
@@ -295,7 +293,8 @@ const QuoteGenerator = () => {
                                 fullWidth name = "productname"
                                 value = { item.productname }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
+                                    (e) => handleInputChange(index, e)
+                                }
                                 margin = "normal" /
                                 >
                                 <
@@ -304,7 +303,8 @@ const QuoteGenerator = () => {
                                 fullWidth name = "description"
                                 value = { item.description }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
+                                    (e) => handleInputChange(index, e)
+                                }
                                 margin = "normal" /
                                 >
                                 <
@@ -314,7 +314,8 @@ const QuoteGenerator = () => {
                                 fullWidth name = "quantity"
                                 value = { item.quantity }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
+                                    (e) => handleInputChange(index, e)
+                                }
                                 margin = "normal" /
                                 >
                                 <
@@ -324,19 +325,22 @@ const QuoteGenerator = () => {
                                 fullWidth name = "price"
                                 value = { item.price }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
+                                    (e) => handleInputChange(index, e)
+                                }
                                 margin = "normal" /
                                 >
                                 <
                                 IconButton onClick = {
-                                    () => handleRemoveItem(index) }
+                                    () => handleRemoveItem(index)
+                                }
                                 sx = {
-                                    { color: 'red', mt: 1 } } >
+                                    { color: 'red', mt: 1 }
+                                } >
                                 <
                                 Delete / >
                                 <
-                                /IconButton> <
-                                /Box>
+                                /IconButton> < /
+                                Box >
                             ))
                         } <
                         /Box>
@@ -351,8 +355,8 @@ const QuoteGenerator = () => {
                         TableCell style = { styles.tableCell } > Description < /TableCell> <
                         TableCell style = { styles.tableCell } > Quantity < /TableCell> <
                         TableCell style = { styles.tableCell } > Price < /TableCell> <
-                        TableCell style = { styles.tableCell } > Action < /TableCell> <
-                        /TableRow> <
+                        TableCell style = { styles.tableCell } > Action < /TableCell> < /
+                        TableRow > <
                         /TableHead> <
                         TableBody > {
                             quoteData.items.map((item, index) => ( <
@@ -364,18 +368,20 @@ const QuoteGenerator = () => {
                                 fullWidth name = "productname"
                                 value = { item.productname }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
-                                /> <
-                                /TableCell> <
+                                    (e) => handleInputChange(index, e)
+                                }
+                                /> < /
+                                TableCell > <
                                 TableCell style = { styles.tableCell } >
                                 <
                                 TextField variant = "outlined"
                                 fullWidth name = "description"
                                 value = { item.description }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
-                                /> <
-                                /TableCell> <
+                                    (e) => handleInputChange(index, e)
+                                }
+                                /> < /
+                                TableCell > <
                                 TableCell style = { styles.tableCell } >
                                 <
                                 TextField type = "number"
@@ -383,9 +389,10 @@ const QuoteGenerator = () => {
                                 fullWidth name = "quantity"
                                 value = { item.quantity }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
-                                /> <
-                                /TableCell> <
+                                    (e) => handleInputChange(index, e)
+                                }
+                                /> < /
+                                TableCell > <
                                 TableCell style = { styles.tableCell } >
                                 <
                                 TextField type = "number"
@@ -393,25 +400,28 @@ const QuoteGenerator = () => {
                                 fullWidth name = "price"
                                 value = { item.price }
                                 onChange = {
-                                    (e) => handleInputChange(index, e) }
-                                /> <
-                                /TableCell> <
+                                    (e) => handleInputChange(index, e)
+                                }
+                                /> < /
+                                TableCell > <
                                 TableCell style = { styles.tableCell } >
                                 <
                                 IconButton onClick = {
-                                    () => handleRemoveItem(index) }
+                                    () => handleRemoveItem(index)
+                                }
                                 sx = {
-                                    { color: 'red' } } >
+                                    { color: 'red' }
+                                } >
                                 <
                                 Delete / >
                                 <
-                                /IconButton> <
-                                /TableCell> <
+                                /IconButton> < /
+                                TableCell > <
                                 /TableRow>
                             ))
                         } <
-                        /TableBody> <
-                        /Table>
+                        /TableBody> < /
+                        Table >
                     )
                 } <
                 div style = { styles.buttonGroup } >
@@ -429,12 +439,12 @@ const QuoteGenerator = () => {
                 type = "submit"
                 style = { styles.button } >
                 Submit Quote <
-                /Button> <
-                /div> <
-                /form> <
-                /div> <
-                /Container> <
-                /main>
+                /Button> < /
+                div > <
+                /form> < /
+                div > <
+                /Container> < /
+                main >
             );
         };
 
