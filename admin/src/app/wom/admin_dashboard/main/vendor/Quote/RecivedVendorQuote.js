@@ -55,7 +55,6 @@ const VendorQuote = () => {
                     { "targets": 2, "width": "300px" },
                     { "targets": 3, "width": "300px" },
                     { "targets": 5, "width": "300px" },
-                    { "targets": 4, "width": "400px" },
                     { "targets": 7, "width": "150px" },
                 ]
             });
@@ -105,8 +104,8 @@ const VendorQuote = () => {
             `}</style>
 
             <div className="container" style={{ overflowX: 'auto' }}>
-                <div className="table-responsive">
-                    <table id="bootstrapdatatable" className="table table-striped table-bordered">
+                <div className="table-responsive" style={{ height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '200%', height: 'auto' }}>
                         <thead>
                             <tr>
                                 <th>Enquiry Number</th>
