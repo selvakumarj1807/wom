@@ -45,9 +45,10 @@ const VendorQuote = () => {
                     { "targets": 6, "orderDataType": 'dom-date-custom', "width": "180px" },
                     { "targets": 0, "width": "100px" },
                     { "targets": 1, "width": "80px" },
-                    { "targets": 4, "width": "300px" },
+                    { "targets": 2, "width": "300px" },
+                    { "targets": 3, "width": "300px" },
                     { "targets": 5, "width": "300px" },
-                    { "targets": 7, "width": "150px" }
+                    { "targets": 7, "width": "150px" },
                 ]
             });
         }
@@ -117,8 +118,8 @@ const VendorQuote = () => {
             `}</style>
 
             <div className="container" style={{ overflowX: 'auto' }}>
-                <div className="table-responsive" style={{ width: isMobile ? '100%' : '200%', height: 'auto' }}>
-                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '180%', height: 'auto' }}>
+                <div className="table-responsive" style={{ width: '200%', height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '200%', height: 'auto' }}>
                         <thead>
                             <tr className="text-center">
                                 <th>Enquiry Number</th>

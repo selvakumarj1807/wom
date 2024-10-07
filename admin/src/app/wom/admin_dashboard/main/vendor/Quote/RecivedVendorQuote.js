@@ -35,53 +35,37 @@ const VendorQuote = () => {
     };
 
     useEffect(() => {
+        let table;
         if (data.length > 0) {
-            const table = $('#bootstrapdatatable').DataTable({
-                aLengthMenu: [
+            table = $('#bootstrapdatatable').DataTable({
+                "aLengthMenu": [
                     [3, 5, 10, 25, -1],
                     [3, 5, 10, 25, "All"]
                 ],
-                iDisplayLength: 3,
-                responsive: true, // Set responsive to true
-                autoWidth: false, // Disable auto width
-
-                order: [
+                "iDisplayLength": 3,
+                "responsive": true,  // Enable responsive table
+                "autoWidth": false,
+                "order": [
                     [6, 'desc']
-                ], // Assuming 'enquiryDate' is in the 6th column
-
-                columnDefs: [
-                    {
-                        targets: 6, // 'enquiryDate' column
-                        orderDataType: 'dom-date-custom',
-                        width: "180px"
-                    },
-                    {
-                        targets: 0, // 'Enquiry Number' column
-                        width: "100px"
-                    },
-                    {
-                        targets: 1, // 'Quote Number' column
-                        width: "100px"
-                    },
-                    {
-                        targets: 4, // 'Products' column
-                        width: "250px"
-                    },
-                    {
-                        targets: 5, // 'Quote Download' column
-                        width: "200px"
-                    },
-                    {
-                        targets: 7, // 'Edit Quote' column
-                        width: "100px"
-                    }
+                ],
+                "columnDefs": [
+                    { "targets": 6, "orderDataType": 'dom-date-custom', "width": "180px" },
+                    { "targets": 0, "width": "100px" },
+                    { "targets": 1, "width": "80px" },
+                    { "targets": 2, "width": "300px" },
+                    { "targets": 3, "width": "300px" },
+                    { "targets": 5, "width": "300px" },
+                    { "targets": 7, "width": "150px" },
                 ]
             });
-
-            return () => {
-                table.destroy(); // Cleanup on component unmount
-            };
         }
+
+        return () => {
+            if (table) {
+                table.destroy(true);
+                $('#bootstrapdatatable').empty();
+            }
+        };
     }, [data]);
 
     return (
@@ -120,12 +104,8 @@ const VendorQuote = () => {
             `}</style>
 
             <div className="container" style={{ overflowX: 'auto' }}>
-                <div className="table-responsive">
-                    <table
-                        id="bootstrapdatatable"
-                        className="table table-striped table-bordered"
-                        style={{ width: '100%', height: 'auto' }}
-                    >
+                <div className="table-responsive" style={{ width: '150%', height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '130%', height: 'auto' }}>
                         <thead>
                             <tr>
                                 <th>Enquiry Number</th>
@@ -142,10 +122,10 @@ const VendorQuote = () => {
                             {data.length > 0 ? (
                                 data.map((elem) => (
                                     <tr key={elem._id}>
-                                        <td style={{ textAlign: 'center',alignContent: 'center' }}>{elem.enquiryNumber}</td>
-                                        <td style={{ textAlign: 'center',alignContent: 'center' }}>{elem.quoteNumber}</td>
-                                        <td style={{ textAlign: 'center',alignContent: 'center' }}>{elem.email}</td>
-                                        <td style={{ textAlign: 'center',alignContent: 'center' }}>{elem.customerName}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.enquiryNumber}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.quoteNumber}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.email}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.customerName}</td>
                                         <td>
                                             <ul className="product-list">
                                                 {elem.items.map((item) => (
@@ -166,7 +146,7 @@ const VendorQuote = () => {
                                                 ))}
                                             </ul>
                                         </td>
-                                        <td style={{ wordWrap: 'break-word', color: 'orange',alignContent: 'center' }}>
+                                        <td style={{ wordWrap: 'break-word', color: 'orange', alignContent: 'center', textAlign: 'center' }}>
                                             {elem.attachedFile ? (
                                                 <a href={`https://wom-server.onrender.com/api/v1/vendor/vendorQuote/download/${elem.attachedFile}`} download>
                                                     {elem.attachedFile}
@@ -175,8 +155,8 @@ const VendorQuote = () => {
                                                 "No file attached"
                                             )}
                                         </td>
-                                        <td style={{ textAlign: 'center',alignContent: 'center' }}>{elem.quoteDate}</td>
-                                        <td style={{ textAlign: 'center', color: 'blue',alignContent: 'center' }}>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.quoteDate}</td>
+                                        <td style={{ textAlign: 'center', color: 'blue', alignContent: 'center' }}>
                                             <a href='/Admin/vendor/editQuote'>Edit</a>
                                         </td>
                                     </tr>
