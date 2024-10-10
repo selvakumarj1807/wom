@@ -1,0 +1,281 @@
+.material-icons {
+    cursor: pointer;
+}
+
+.invoice-container {
+    margin: auto;
+    padding: 0px 20px;
+    border: 1px solid grey;
+}
+
+.invoice-header {
+    display: flex;
+    padding: 70px 0%;
+    width: 100%;
+}
+
+.title {
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: rgb(66, 66, 66);
+}
+
+.date {
+    padding: 5px 0px;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgb(156, 156, 156);
+}
+
+.invoice-number {
+    width: 100px; /* Adjust this value as needed */
+    font-size: 17px;
+    letter-spacing: 2px;
+    color: rgb(62, 2, 139);
+    padding: 5px;
+    height: 40px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+
+
+.space {
+    width: 50%;
+}
+
+table {
+    table-layout: auto;
+    width: 100%;
+}
+
+table,
+th,
+td {
+    border-collapse: collapse;
+}
+
+th {
+    padding: 10px 0px;
+    border-bottom: 1px solid rgb(61, 54, 54);
+    border-bottom-style: dashed;
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: gray;
+    text-align: left;
+
+}
+
+
+td {
+    padding: 10px 0px;
+    border-bottom: 0.5px solid rgb(70, 45, 45);
+    text-align: left;
+
+
+
+}
+
+.dashed {
+    border-bottom: 1px solid rgb(59, 15, 15);
+    border-bottom-style: dashed;
+}
+
+.total {
+    font-weight: 800;
+    font-size: 20px !important;
+    color: black;
+}
+
+
+
+
+/* Example for disabling browser arrows on number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+
+.float {
+
+    width: 40px;
+    height: 40px;
+    background-color: rgb(14, 42, 71);
+    color: #FFF;
+    border-radius: 100%;
+    text-align: center;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.048),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.069),
+        0 12.5px 10px rgba(0, 0, 0, 0.085),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.101),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.122),
+        0 100px 80px rgba(0, 0, 0, 0.17);
+}
+
+.float:hover {
+    background-color: rgb(22, 53, 87);
+}
+
+.plus {
+    margin-top: 10px;
+}
+
+#sum {
+    text-align: right;
+    width: 100%;
+}
+
+#sum input[type=text] {
+    width: 100%;
+    font-size: 33px !important;
+    color: black;
+    text-align: right !important;
+    border: none; /* Dashed gray border */
+    padding: 10px;
+    border-radius: 5px;
+    /* Optional: Gives the input a slightly rounded border */
+    background-color: #f9f9f9;
+    /* Optional: Adds a light background color */
+}
+
+/* Modify input styles to add border color */
+input[type=text],
+input[type=number] {
+   
+    border: 2px solid #ddd4d4;
+    /* Solid black border */
+    border-radius: 5px;
+    /* Slightly rounded corners */
+    outline: none;
+}
+
+/* Change border color on focus */
+input[type=text]:focus,
+input[type=number]:focus {
+    background: #ffffff;
+    box-shadow: 11px 11px 22px #d9d9d9, -11px -11px 22px #ffffff;
+    border-color: blue;
+    /* New border color on focus (pink) */
+    border-width: 2px;
+}
+
+
+.print-btn, .download-btn {
+    padding: 10px 20px;
+    margin-top: 30px;
+    margin-left: 10px;
+    background-color: #0e2a47;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .print-btn:hover, .download-btn:hover {
+    background-color: #0a1e32;
+  }
+
+ /* Base styles for larger screens (laptops) will remain unchanged */
+
+/* Mobile devices (small screens, 600px and below) */
+@media only screen and (max-width: 600px) {
+  .invoice-container {
+    width: 100%;
+    padding: 10px;
+    box-shadow: none;
+    border: none;
+  }
+
+  .invoice-header {
+    display: block;
+    text-align: center;
+  }
+
+  .title-date {
+    width: 100%;
+    text-align: center;
+  }
+
+  .invoice-number {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .space {
+    display: none;
+  }
+
+  table {
+    font-size: 12px;
+    display: block;
+    overflow-x: auto; /* Allows scrolling for large tables */
+    white-space: nowrap;
+  }
+
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    margin-bottom: 10px; /* Spacing between inputs */
+  }
+
+  th, td {
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  .float {
+    width: 30px;
+    height: 30px;
+  }
+
+  #sum input[type="text"] {
+    font-size: 20px;
+    padding: 5px;
+  }
+
+  .print-btn, .download-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .invoice-container {
+    width: 80%;
+  }
+
+  .title-date, .invoice-number {
+    width: 30%;
+  }
+
+  .space {
+    width: 50%;
+  }
+}
+
+/* Make table scrollable on mobile */
+@media only screen and (max-width: 1000px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  th, td {
+    min-width: 100px; /* Adjust column width for better readability */
+  }
+}
