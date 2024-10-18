@@ -7,7 +7,6 @@ import './alertBox.css';
 function NavNotice() {
   const [notifications, setNotifications] = useState([]);
   const [vendorNotifications, setVendorNotifications] = useState([]); // For vendor notifications
-  const [showAlert, setShowAlert] = useState(false);
 
   // Function to fetch enquiry notifications
   const fetchNotifications = async () => {
@@ -20,7 +19,6 @@ function NavNotice() {
       setNotifications(unreadNotifications);
 
       // Show alert if there are unread notifications
-      setShowAlert(unreadNotifications.length > 0 || vendorNotifications.length > 0);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
@@ -37,7 +35,6 @@ function NavNotice() {
       setVendorNotifications(unreadVendorNotifications);
 
       // Show alert if there are unread vendor notifications
-      setShowAlert(notifications.length > 0 || unreadVendorNotifications.length > 0);
     } catch (error) {
       console.error('Error fetching vendor notifications:', error);
     }
@@ -57,7 +54,6 @@ function NavNotice() {
       );
 
       // Update alert visibility based on remaining unread notifications
-      setShowAlert(notifications.length > 1 || vendorNotifications.length > 0);
     } catch (error) {
       console.error('Error marking notification as read:', error);
     }
@@ -77,7 +73,6 @@ function NavNotice() {
       );
 
       // Update alert visibility based on remaining unread notifications
-      setShowAlert(notifications.length > 0 || vendorNotifications.length > 1);
     } catch (error) {
       console.error('Error marking vendor notification as read:', error);
     }
@@ -153,13 +148,14 @@ function NavNotice() {
         </li>
       </ul>
 
-      {/* Alert Box */}
+      {/* Alert Box 
       {showAlert && (
         <div className="alert alert-info fixed-alert">
           You have unread messages.
           <button onClick={() => setShowAlert(false)} className="btn-close" aria-label="Close"></button>
         </div>
       )}
+        */}
     </li>
   );
 }

@@ -6,7 +6,6 @@ import './alertBox.css';
 
 function NavNotice() {
   const [notifications, setNotifications] = useState([]);
-  const [showAlert, setShowAlert] = useState(false);
 
   // Retrieve the user's email from the cookie
   const emailCookie = Cookies.get('email');
@@ -36,7 +35,6 @@ function NavNotice() {
       setNotifications(unreadNotifications);
 
       // Show alert if there are unread notifications
-      setShowAlert(unreadNotifications.length > 0);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
@@ -83,7 +81,6 @@ function NavNotice() {
         ).length;
 
         // Update the alert visibility if any unread notifications are left
-        setShowAlert(unreadCount > 0);
       }
       // Update local state after successful backend update
       setNotifications(prevNotifications =>
@@ -91,7 +88,6 @@ function NavNotice() {
       );
 
       // Update alert visibility based on remaining unread notifications
-      setShowAlert(notifications.length > 1);
     } catch (error) {
       console.error("Error marking notification as read:", error);
       alert("An error occurred while marking the notification as read.");
@@ -148,13 +144,14 @@ function NavNotice() {
         </li>
       </ul>
 
-      {/* Alert Box */}
+      {/* Alert Box 
       {showAlert && (
         <div className="alert alert-info fixed-alert">
           You have unread messages.
           <button onClick={() => setShowAlert(false)} className="btn-close" aria-label="Close"></button>
         </div>
       )}
+        */}
     </li>
   );
 }

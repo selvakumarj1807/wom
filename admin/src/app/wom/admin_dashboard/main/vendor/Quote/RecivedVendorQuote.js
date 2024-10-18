@@ -3,11 +3,14 @@ import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom'; // Make sure to import the hook
 
 import axios from 'axios';
 
 const VendorQuote = () => {
     const [data, setData] = useState([]);
+    const navigate = useNavigate(); // Initialize the navigate function
+
 
     const fetchData = async () => {
         try {
@@ -43,7 +46,7 @@ const VendorQuote = () => {
                     [3, 5, 10, 25, "All"]
                 ],
                 "iDisplayLength": 3,
-                "responsive": true,  // Enable responsive table
+                "responsive": false,  // Enable responsive table
                 "autoWidth": false,
                 "order": [
                     [6, 'desc']
@@ -67,6 +70,16 @@ const VendorQuote = () => {
             }
         };
     }, [data]);
+
+    const handleClick = (enquiryNumber, quoteNumber, quoteDate) => {
+        // Set session variables
+        sessionStorage.setItem('enquiryNumber', enquiryNumber);
+        sessionStorage.setItem('quoteNumber', quoteNumber);
+        sessionStorage.setItem('quoteDate', quoteDate);
+
+        // Navigate to the new page
+        navigate(`/Admin/vendor/editQuote`);
+    };
 
     return (
         <div id="main" className="main" style={{ padding: '20px' }}>
@@ -156,8 +169,12 @@ const VendorQuote = () => {
                                             )}
                                         </td>
                                         <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.quoteDate}</td>
-                                        <td style={{ textAlign: 'center', color: 'blue', alignContent: 'center' }}>
-                                            <a href='/Admin/vendor/editQuote'>Edit</a>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>
+                                            <button
+                                                onClick={() => handleClick(elem.enquiryNumber, elem.quoteNumber, elem.quoteDate)}
+                                            >
+                                                Edit
+                                            </button>
                                         </td>
                                     </tr>
                                 ))
