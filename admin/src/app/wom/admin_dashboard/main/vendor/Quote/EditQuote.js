@@ -276,76 +276,85 @@ const Invoice = () => {
     <div id="main" className="main" style={{ padding: '20px' }}>
       <div className="invoice">
         <h1 style={{ textAlign: 'center' }}>Edit Quote</h1>
+
         <div>
           <h4>Invoice Number:</h4>
-          <input
-            type="text"
-            className="input-field"
-          />
+          <input type="text" className="input-field" />
         </div>
-        <table className="invoice-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Unit Price</th>
-              <th>Total</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                <td>
-                  <input
-                    type="text"
-                    name="product"
-                    value={row.product}
-                    onChange={(e) => handleInputChange(e, row.id)}
-                    className="input-field"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    name="unit"
-                    value={row.unit}
-                    onChange={(e) => handleInputChange(e, row.id)}
-                    className="input-field"
-                    min="0"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    name="price"
-                    value={row.price}
-                    onChange={(e) => handleInputChange(e, row.id)}
-                    className="input-field"
-                    min="0"
-                  />
-                </td>
-                <td>{Number(row.amount || 0).toFixed(2)}</td>
-                <td>
-                  <DeleteOutlineIcon
-                    onClick={() => deleteRow(row.id)}
-                    style={{ cursor: 'pointer' }}
-                  />
-                </td>
+
+        {/* Responsive Table Wrapper */}
+        <div className="table-container">
+          <table className="invoice-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.id}>
+                  <td>
+                    <input
+                      type="text"
+                      name="product"
+                      value={row.product}
+                      onChange={(e) => handleInputChange(e, row.id)}
+                      className="input-field"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      name="unit"
+                      value={row.unit}
+                      onChange={(e) => handleInputChange(e, row.id)}
+                      className="input-field"
+                      min="0"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      name="price"
+                      value={row.price}
+                      onChange={(e) => handleInputChange(e, row.id)}
+                      className="input-field"
+                      min="0"
+                    />
+                  </td>
+                  <td>{Number(row.amount || 0).toFixed(2)}</td>
+                  <td>
+                    <DeleteOutlineIcon
+                      onClick={() => deleteRow(row.id)}
+                      style={{ cursor: 'pointer' }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         <div>
           <button onClick={addNewRow} className="add-row-button">
             <AddIcon /> Add Row
           </button>
         </div>
+
+        <h3 style={{ textAlign: 'right', marginTop: '5px' }}>Total: ₹{total.toFixed(2)}</h3>
+
         <div className="total-container">
-          <h3>Total: ₹{total.toFixed(2)}</h3>
-          <button onClick={handlePrint}>Print Invoice</button>
+          <button onClick={handlePrint}>Print Invoice&nbsp;&nbsp;&nbsp;&nbsp;</button>
           <button onClick={handleDownloadPdf}>Download PDF</button>
         </div>
+
+        <center>
+          <button style={{ backgroundColor: 'rgb(1, 57, 117)' }}>Send Invoice</button>
+        </center>
       </div>
     </div>
   );
