@@ -48,6 +48,17 @@
   font-size: 1rem;
 }
 
+.invoice-number{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 30px;
+}
+
+.invoice-number .input-field{
+  width: 200px;
+}
+
 /* Buttons */
 .add-row-button,
 .total-container button {

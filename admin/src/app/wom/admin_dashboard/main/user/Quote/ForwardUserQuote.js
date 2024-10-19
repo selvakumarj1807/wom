@@ -3,155 +3,179 @@ import $ from 'jquery';
 import 'datatables.net-dt/css/dataTables.dataTables.css';
 import 'datatables.net';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom'; // Make sure to import the hook
+
+import axios from 'axios';
+
+const VendorQuote = () => {
+    const [data, setData] = useState([]);
+    const navigate = useNavigate(); // Initialize the navigate function
 
 
-const ForwardUserQuote = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check the initial window size
-    setIsMobile(window.innerWidth <= 768);
-
-    // Function to update state based on window size
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('https://wom-server.onrender.com/api/v1/admin/forwardEditQuoteAdmin');
+            const fetchedData = response.data.editQuoteForword;
+            setData(fetchedData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     };
 
-    // Add event listener for window resize
-    window.addEventListener('resize', handleResize);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    // Initialize DataTable
-    $('#bootstrapdatatable').DataTable({
-      "pagingType": "simple_numbers",
-      "aLengthMenu": [
-        [3, 5, 10, 25, -1],
-        [3, 5, 10, 25, "All"]
-      ],
-      "iDisplayLength": 3,
-      "responsive": false,
-      "autoWidth": false,
-
-    });
-
-
-    // Cleanup event listener on unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
+    // Custom sorting for the "DD/MM/YYYY - HH:mm AM/PM" date format
+    $.fn.dataTable.ext.order['dom-date-custom'] = function (settings, colIndex) {
+        return this.api().column(colIndex, { order: 'index' }).nodes().map(function (td) {
+            const dateText = $(td).text().trim();
+            const [datePart, timePart] = dateText.split(' - ');
+            const [day, month, year] = datePart.split('/');
+            const dateString = `${year}-${month}-${day} ${timePart}`;
+            return new Date(dateString).getTime();
+        });
     };
-  }, []);
 
-  return (
-    <div id="main" className="main" style={{ padding: '20px' }}>
-      <div>
-        <hr />
-        <h3 style={{ textAlign: 'center' }}>User Quote (Forward)</h3>
-        <hr />
+    useEffect(() => {
+        let table;
+        if (data.length > 0) {
+            table = $('#bootstrapdatatable').DataTable({
+                "aLengthMenu": [
+                    [3, 5, 10, 25, -1],
+                    [3, 5, 10, 25, "All"]
+                ],
+                "iDisplayLength": 3,
+                "responsive": false,  // Enable responsive table
+                "autoWidth": false,
+                "order": [
+                    [6, 'desc']
+                ],
+                "columnDefs": [
+                    { "targets": 7, "orderDataType": 'dom-date-custom', "width": "250px" },
+                    { "targets": 0, "width": "150px" },
+                    { "targets": 1, "width": "150px" },
+                    { "targets": 2, "width": "150px" },
+                    { "targets": 3, "width": "300px" },
+                    { "targets": 5, "width": "150px" },
+                    { "targets": 6, "width": "350px" },
+                    { "targets": 8, "width": "150px" },
+                ]
+            });
+        }
 
-        <div className="container" style={{ overflowX: 'auto' }}>
-          <div className="table-responsive" style={{ width: '100%', height: 'auto' }}>
-            <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
-              <thead>
-                <tr>
-                  <th scope="col">Quote Number</th>
-                  <th scope="col">Product Name</th>
-                  <th scope="col">Qunatity</th>
-                  <th scope="col">Unit Price</th>
-                  <th scope="col">Total Price</th>
-                  <th scope="col">Forward Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#256</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
-                </tr>
+        return () => {
+            if (table) {
+                table.destroy(true);
+                $('#bootstrapdatatable').empty();
+            }
+        };
+    }, [data]);
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#257</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
-                </tr>
+    return (
+        <div id="main" className="main" style={{ padding: '20px' }}>
+            <h2 style={{ textAlign: 'center', color: 'rgb(14, 42, 71)' }}>User Quote (Forward)</h2>
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#258</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>25/08/2024</td>
-                </tr>
+            <style>{`
+                .product-list {
+                    padding: 0;
+                    margin: 0;
+                    list-style: none;
+                }
+                .product-item {
+                    padding: 15px;
+                    border: 1px solid #ddd;
+                    margin-bottom: 10px;
+                }
+                .product-info {
+                    width: 100%;
+                    padding: 5px 0;
+                }
+                .product-label {
+                    font-weight: bold;
+                }
+                @media (max-width: 768px) {
+                    .product-item {
+                        padding: 10px;
+                    }
+                    table {
+                        width: 100% !important;
+                    }
+                    #bootstrapdatatable_wrapper {
+                        overflow-x: auto;
+                    }
+                }
+            `}</style>
 
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#259</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
-                </tr>
-
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#250</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>03/09/2024</td>
-                </tr>
-
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>#251</td>
-                  <td style={{ wordWrap: 'break-word' }}>Zhou Maomao5-speed R151 manual 6-speed AC60 automatic</td>
-                  <td style={{ wordWrap: 'break-word' }}>2</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 2500</td>
-                  <td style={{ wordWrap: 'break-word' }}>₹ 5000</td>
-                  <td style={{ wordWrap: 'break-word' }}>01/09/2024</td>
-                </tr>
-
-                {/*
-                <tr>
-                  <td style={{ wordWrap: 'break-word' }}>MDA126</td>
-                  <td style={{ wordWrap: 'break-word' }}>5-speed R151 manual 6-speed</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word' }}>Dec-7-2023</td>
-                  <td style={{ wordWrap: 'break-word', color: 'green', fontWeight: 'bold' }}>Accept</td>
-                </tr>
-                */}
-              </tbody>
-            </table>
-          </div>
+            <div className="container" style={{ overflowX: 'auto' }}>
+                <div className="table-responsive" style={{ height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '200%', height: 'auto' }}>
+                        <thead>
+                            <tr>
+                                <th>Invoice Number</th>
+                                <th>Enquiry Number</th>
+                                <th>Quote Number</th>
+                                <th>Enquiry User's Email</th>
+                                <th>Products</th>
+                                <th>Total</th>
+                                <th>Edit Quote Download</th>
+                                <th>Forward Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.length > 0 ? (
+                                data.map((elem) => (
+                                    <tr key={elem._id}>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.invoiceNumber}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.enquiryNumber}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.quoteNumber}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.email}</td>
+                                        <td>
+                                            <ul className="product-list">
+                                                {elem.items.map((item) => (
+                                                    <li key={item._id} className="product-item">
+                                                        <div className="product-info">
+                                                            <span className="product-label">Product Name:</span> {item.product}
+                                                        </div>
+                                                        <div className="product-info">
+                                                            <span className="product-label">Quantity:</span> {item.unit}
+                                                        </div>
+                                                        <div className="product-info">
+                                                            <span className="product-label">Price:</span> {item.price}
+                                                        </div>
+                                                        <div className="product-info">
+                                                            <span className="product-label">Total Price:</span> {item.amount}
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.total}</td>
+                                        <td style={{ wordWrap: 'break-word', color: 'orange', alignContent: 'center', textAlign: 'center' }}>
+                                            {elem.attachedFile ? (
+                                                <a href={`https://wom-server.onrender.com/api/v1/admin/forwardEditQuoteAdmin/download/${elem.attachedFile}`} download>
+                                                    {elem.attachedFile}
+                                                </a>
+                                            ) : (
+                                                "No file attached"
+                                            )}
+                                        </td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.forwordDate}</td>
+                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.action}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="9">No data available</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
-      </div>
-    </div>
-  );
+    );
 };
 
-export default ForwardUserQuote;
-
-// Inline Styles for Responsiveness
-const linkStyle = {
-  textDecoration: 'none',
-  fontSize: '18px', // Increased font size
-  color: 'white', // White text color
-  padding: '10px 15px',
-  display: 'block', // Ensures the link takes full width in the li
-  textAlign: 'center'
-};
-
-
-// Media Query in JS (Optional)
-const mediaQuery = window.matchMedia('(max-width: 600px)');
-
-if (mediaQuery.matches) {
-  linkStyle.fontSize = '12px'; // Adjust font size for mobile
-  linkStyle.padding = '8px 10px'; // Adjust padding for mobile
-}
-
+export default VendorQuote;

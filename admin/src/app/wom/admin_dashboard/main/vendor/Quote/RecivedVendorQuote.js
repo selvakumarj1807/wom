@@ -71,15 +71,6 @@ const VendorQuote = () => {
         };
     }, [data]);
 
-    const handleClick = (enquiryNumber, quoteNumber, quoteDate) => {
-        // Set session variables
-        sessionStorage.setItem('enquiryNumber', enquiryNumber);
-        sessionStorage.setItem('quoteNumber', quoteNumber);
-        sessionStorage.setItem('quoteDate', quoteDate);
-
-        // Navigate to the new page
-        navigate(`/Admin/vendor/editQuote`);
-    };
 
     return (
         <div id="main" className="main" style={{ padding: '20px' }}>
@@ -169,13 +160,9 @@ const VendorQuote = () => {
                                             )}
                                         </td>
                                         <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.quoteDate}</td>
-                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>
-                                            <button
-                                                onClick={() => handleClick(elem.enquiryNumber, elem.quoteNumber, elem.quoteDate)}
-                                            >
-                                                Edit
-                                            </button>
-                                        </td>
+                                        
+                                        <td style={{ textAlign: 'center', alignContent: 'center', color: 'blue' }}><a href={`/Admin/vendor/editQuote?enquiryNumber=${elem.enquiryNumber}&quoteNumber=${elem.quoteNumber}&quoteDate=${elem.quoteDate}&enquiryNo=${elem.enquiryNumber}`}>Edit Quote</a></td> 
+
                                     </tr>
                                 ))
                             ) : (
