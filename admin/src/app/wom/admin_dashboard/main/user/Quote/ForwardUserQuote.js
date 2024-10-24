@@ -38,9 +38,8 @@ const VendorQuote = () => {
     };
 
     useEffect(() => {
-        let table;
         if (data.length > 0) {
-            table = $('#bootstrapdatatable').DataTable({
+            const table = $('#bootstrapdatatable').DataTable({
                 "aLengthMenu": [
                     [3, 5, 10, 25, -1],
                     [3, 5, 10, 25, "All"]
@@ -49,7 +48,7 @@ const VendorQuote = () => {
                 "responsive": false,  // Enable responsive table
                 "autoWidth": false,
                 "order": [
-                    [6, 'desc']
+                    [7, 'desc']
                 ],
                 "columnDefs": [
                     { "targets": 7, "orderDataType": 'dom-date-custom', "width": "250px" },
@@ -62,14 +61,12 @@ const VendorQuote = () => {
                     { "targets": 8, "width": "150px" },
                 ]
             });
-        }
 
-        return () => {
-            if (table) {
+
+            return () => {
                 table.destroy(true);
-                $('#bootstrapdatatable').empty();
-            }
-        };
+            };
+        }
     }, [data]);
 
     return (
@@ -81,6 +78,7 @@ const VendorQuote = () => {
                     padding: 0;
                     margin: 0;
                     list-style: none;
+                    width: 450px;
                 }
                 .product-item {
                     padding: 15px;
@@ -120,7 +118,7 @@ const VendorQuote = () => {
                                 <th>Total</th>
                                 <th>Edit Quote Download</th>
                                 <th>Forward Date</th>
-                                <th>Action</th>
+                                <th>Payment</th>
                             </tr>
                         </thead>
                         <tbody>

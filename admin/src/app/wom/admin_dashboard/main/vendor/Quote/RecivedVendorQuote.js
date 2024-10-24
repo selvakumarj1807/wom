@@ -38,9 +38,8 @@ const VendorQuote = () => {
     };
 
     useEffect(() => {
-        let table;
         if (data.length > 0) {
-            table = $('#bootstrapdatatable').DataTable({
+            const table = $('#bootstrapdatatable').DataTable({
                 "aLengthMenu": [
                     [3, 5, 10, 25, -1],
                     [3, 5, 10, 25, "All"]
@@ -61,14 +60,12 @@ const VendorQuote = () => {
                     { "targets": 7, "width": "150px" },
                 ]
             });
-        }
 
-        return () => {
-            if (table) {
-                table.destroy(true);
-                $('#bootstrapdatatable').empty();
-            }
-        };
+
+            return () => {
+                table.destroy();
+            };
+        }
     }, [data]);
 
 
@@ -81,6 +78,7 @@ const VendorQuote = () => {
                     padding: 0;
                     margin: 0;
                     list-style: none;
+                    width: 450px;
                 }
                 .product-item {
                     padding: 15px;
@@ -160,8 +158,8 @@ const VendorQuote = () => {
                                             )}
                                         </td>
                                         <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.quoteDate}</td>
-                                        
-                                        <td style={{ textAlign: 'center', alignContent: 'center', color: 'blue' }}><a href={`/Admin/vendor/editQuote?enquiryNumber=${elem.enquiryNumber}&quoteNumber=${elem.quoteNumber}&quoteDate=${elem.quoteDate}&enquiryNo=${elem.enquiryNumber}`}>Edit Quote</a></td> 
+
+                                        <td style={{ textAlign: 'center', alignContent: 'center', color: 'blue' }}><a href={`/Admin/vendor/editQuote?enquiryNumber=${elem.enquiryNumber}&quoteNumber=${elem.quoteNumber}&quoteDate=${elem.quoteDate}&enquiryNo=${elem.enquiryNumber}`}>Edit Quote</a></td>
 
                                     </tr>
                                 ))

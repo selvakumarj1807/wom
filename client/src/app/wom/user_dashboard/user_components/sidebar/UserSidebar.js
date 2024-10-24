@@ -44,10 +44,25 @@ function UserSidebar() {
                         <i className="bi bi-chevron-down ms-auto"></i>
                     </Link>
                     <ul id='components-nav' className='nav-content collapse' data-bs-parent="#sidebar-nav">
+                        {/*
                         <li>
                             <Link to="/user/user/get_quote" className='a'>
                                 <i className="bi bi-circle"></i>
                                 <span>Get the quote</span>
+                            </Link>
+                        </li>
+                        */}
+                        
+                        <li>
+                            <Link to="/user/user/get_enquiry" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Get the Enquiry</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/user/user/get_UserQuote" className='a'>
+                                <i className="bi bi-circle"></i>
+                                <span>Get the Quote</span>
                             </Link>
                         </li>
                     </ul>

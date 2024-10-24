@@ -12,7 +12,9 @@ import UserMain from './user_components/user_main/UserMain';
 import RequestQuote from './user_components/user_manage/req_quote/RequestQuote.jsx';
 import RequiredInformation from './user_components/user_manage/req_quote/req_inform/RequiredInformation.jsx';
 import GetTheQuote from './user_components/user_manage/placeTheOrder/GetTheQuote.jsx';
-import GetTheInvoice from './user_components/user_manage/placeTheOrder/GetTheInvoice.jsx';
+import GetTheUserQuote from './user_components/user_manage/placeTheOrder/GetTheUserQuote.jsx';
+import GetTheEnquiry from './user_components/user_manage/placeTheOrder/GetTheEnquiry.jsx';
+import GetUserInvoice from './user_components/user_manage/placeTheOrder/GetUserInvoice.jsx';
 import UserOrderStatus from './user_components/user_manage/user_order_status/UserOrderStatus.js';
 import UserHistory from './user_components/user_manage/user_history/UserHistory.js';
 import UserPayment from './user_components/user_manage/placeTheOrder/payment/UserPayment.jsx';
@@ -34,7 +36,9 @@ function UserDashboard() {
         <Route path='/user/user_enquiry' element={<RequestQuote />} />
         <Route path='/user/required_inform' element={<RequiredInformation />} />
         <Route path='/user/get_quote' element={<GetTheQuote />} />
-        <Route path='/user/user_invoice' element={<GetTheInvoice />} />
+        <Route path='/user/get_Userinvoice' element={<GetUserInvoice />} />
+        <Route path='/user/get_UserQuote' element={<GetTheUserQuote />} />
+        <Route path='/user/get_enquiry' element={<GetTheEnquiry />} />
         <Route path='/user/user_order_status' element={<UserOrderStatus />} />
         <Route path='/user/user_history' element={<UserHistory />} />
         <Route path='/user/invoice/payment' element={<UserPayment />} />
