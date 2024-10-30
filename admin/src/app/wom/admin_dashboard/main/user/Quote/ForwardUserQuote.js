@@ -58,7 +58,6 @@ const VendorQuote = () => {
                     { "targets": 3, "width": "300px" },
                     { "targets": 5, "width": "150px" },
                     { "targets": 6, "width": "350px" },
-                    { "targets": 8, "width": "150px" },
                 ]
             });
 
@@ -107,7 +106,7 @@ const VendorQuote = () => {
 
             <div className="container" style={{ overflowX: 'auto' }}>
                 <div className="table-responsive" style={{ height: 'auto' }}>
-                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '200%', height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '150%', height: 'auto' }}>
                         <thead>
                             <tr>
                                 <th>Invoice Number</th>
@@ -118,7 +117,6 @@ const VendorQuote = () => {
                                 <th>Total</th>
                                 <th>Edit Quote Download</th>
                                 <th>Forward Date</th>
-                                <th>Payment</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,7 +158,6 @@ const VendorQuote = () => {
                                             )}
                                         </td>
                                         <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.forwordDate}</td>
-                                        <td style={{ textAlign: 'center', alignContent: 'center' }}>{elem.action}</td>
                                     </tr>
                                 ))
                             ) : (

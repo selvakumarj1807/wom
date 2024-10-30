@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 import axios from 'axios';
-
+ 
 const VendorQuote = () => {
     const [data, setData] = useState([]);
     const emailCookie = Cookies.get('email');
@@ -28,9 +28,26 @@ const VendorQuote = () => {
     }, []);
 
     useEffect(() => {
-        let table;
+        // Check the initial window size
+        setIsMobile(window.innerWidth <= 768);
+
+        // Function to update state based on window size
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
         if (data.length > 0) {
-            table = $('#bootstrapdatatable').DataTable({
+            const table = $('#bootstrapdatatable').DataTable({
                 "aLengthMenu": [
                     [3, 5, 10, 25, -1],
                     [3, 5, 10, 25, "All"]
@@ -48,17 +65,14 @@ const VendorQuote = () => {
                     { "targets": 2, "width": "300px" },
                     { "targets": 3, "width": "300px" },
                     { "targets": 5, "width": "300px" },
-                    { "targets": 7, "width": "150px" },
                 ]
             });
-        }
 
-        return () => {
-            if (table) {
-                table.destroy(true);
-                $('#bootstrapdatatable').empty();
-            }
-        };
+            return () => {
+                table.destroy();
+            };
+        }
+     
     }, [data]);
 
     return (
@@ -118,8 +132,8 @@ const VendorQuote = () => {
             `}</style>
 
             <div className="container" style={{ overflowX: 'auto' }}>
-                <div className="table-responsive" style={{ width: '200%', height: 'auto' }}>
-                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '200%', height: 'auto' }}>
+                <div className="table-responsive" style={{ width: isMobile ? '100%' : '200%', height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '160%', height: 'auto' }}>
                         <thead>
                             <tr className="text-center">
                                 <th>Enquiry Number</th>
@@ -129,7 +143,6 @@ const VendorQuote = () => {
                                 <th>Products</th>
                                 <th>Quote Download</th>
                                 <th>Quote Date</th>
-                                <th>Edit Quote</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -170,7 +183,6 @@ const VendorQuote = () => {
                                             )}
                                         </td>
                                         <td style = {{ textAlign: 'center', alignContent: 'center' }}>{elem.quoteDate}</td>
-                                        <td style = {{ textAlign: 'center', alignContent: 'center', color: 'blue' }} >{elem.action}</td>
                                     </tr>
                                 ))
                             ) : (

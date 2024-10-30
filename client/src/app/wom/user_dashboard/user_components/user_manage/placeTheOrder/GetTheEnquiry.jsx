@@ -53,6 +53,24 @@ const UserAcknowledge = () => {
     };
 
     useEffect(() => {
+        // Check the initial window size
+        setIsMobile(window.innerWidth <= 768);
+
+        // Function to update state based on window size
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        // Add event listener for window resize
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
         if (data.length > 0) {
             const table = $('#bootstrapdatatable').DataTable({
                 "aLengthMenu": [
@@ -87,7 +105,7 @@ const UserAcknowledge = () => {
                 <hr />
 
                 <div className="container" style={{ overflowX: 'auto' }}>
-                    <div className="table-responsive" style={{ width: isMobile ? '100%' : '200%', height: 'auto' }}>
+                    <div className="table-responsive" style={{ width: isMobile ? '100%' : '180%', height: 'auto' }}>
                         <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '100%', height: 'auto' }}>
                             <thead>
                                 <tr>

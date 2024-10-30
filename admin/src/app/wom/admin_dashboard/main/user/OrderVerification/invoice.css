@@ -160,3 +160,40 @@
     }
   }
   
+  /* Ensure the buttons are aligned responsively */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Add space between buttons */
+  flex-wrap: wrap; /* Ensure buttons wrap on smaller screens */
+  margin-top: 20px;
+}
+
+/* General button styles */
+.button-container button {
+  background-color: rgb(1, 57, 117);
+  color: white;
+  width: 200px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.button-container button:hover {
+  background-color: rgb(0, 50, 100);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .button-container button {
+      width: 80%; /* Buttons take most of the width on small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .button-container button {
+      width: 100%; /* Full width on very small screens */
+  }
+}

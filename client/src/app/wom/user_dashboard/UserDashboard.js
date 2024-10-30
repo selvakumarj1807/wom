@@ -17,6 +17,8 @@ import GetTheEnquiry from './user_components/user_manage/placeTheOrder/GetTheEnq
 import GetUserInvoice from './user_components/user_manage/placeTheOrder/GetUserInvoice.jsx';
 import UserOrderStatus from './user_components/user_manage/user_order_status/UserOrderStatus.js';
 import UserHistory from './user_components/user_manage/user_history/UserHistory.js';
+import UserViewProducts from './user_components/user_manage/user_history/UserViewProducts.js';
+
 import UserPayment from './user_components/user_manage/placeTheOrder/payment/UserPayment.jsx';
 import UserRegister from '../auth/user/UserRegister';
 import UserLogin from '../auth/user/UserLogin.js';
@@ -41,6 +43,8 @@ function UserDashboard() {
         <Route path='/user/get_enquiry' element={<GetTheEnquiry />} />
         <Route path='/user/user_order_status' element={<UserOrderStatus />} />
         <Route path='/user/user_history' element={<UserHistory />} />
+        <Route path='user/order/viewProducts/:id' element={<UserViewProducts />} />
+
         <Route path='/user/invoice/payment' element={<UserPayment />} />
         <Route path='/user_login' element={<UserLogin />} />
         <Route path='/user_register' element={<UserRegister />} />

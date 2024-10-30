@@ -107,7 +107,7 @@ const VendorQuote = () => {
 
             <div className="container" style={{ overflowX: 'auto' }}>
                 <div className="table-responsive" style={{ height: 'auto' }}>
-                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '200%', height: 'auto' }}>
+                    <table id="bootstrapdatatable" className="table table-striped table-bordered" style={{ width: '150%', height: 'auto' }}>
                         <thead>
                             <tr>
                                 <th>Enquiry Number</th>

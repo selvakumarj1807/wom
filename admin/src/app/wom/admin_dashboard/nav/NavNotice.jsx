@@ -7,6 +7,7 @@ import './alertBox.css';
 function NavNotice() {
   const [notifications, setNotifications] = useState([]);
   const [vendorNotifications, setVendorNotifications] = useState([]); // For vendor notifications
+  const [orderNotifications, setOrderNotifications] = useState([]);
 
   // Function to fetch enquiry notifications
   const fetchNotifications = async () => {
@@ -40,6 +41,21 @@ function NavNotice() {
     }
   };
 
+  // Function to fetch Order notifications
+  const fetchOrderNotifications = async () => {
+    try {
+      const response = await axios.get('https://wom-server.onrender.com/api/v1/admin/orderManagementUnread');
+      const newOrderNotifications = response.data.orderManage;
+
+      // Filter unread notifications
+      const unreadOrderNotifications = newOrderNotifications.filter(notification => !notification.isRead);
+      setOrderNotifications(unreadOrderNotifications);
+
+      // Show alert if there are unread notifications
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
   // Mark notification as read (for user enquiries)
   const markAsRead = async (notificationId) => {
     try {
@@ -78,12 +94,34 @@ function NavNotice() {
     }
   };
 
+  // Mark notification as read (for user Order)
+  const markOrderAsRead = async (notificationId) => {
+    try {
+      // Update 'isRead' status in the backend for user enquiry notifications
+      await axios.put(`https://wom-server.onrender.com/api/v1/admin/orderManagement/${notificationId}`, {
+        isRead: true,
+      });
+
+      // Update local state after successful backend update
+      setOrderNotifications(prevOrderNotifications =>
+        prevOrderNotifications.filter(notification => notification._id !== notificationId)
+      );
+
+      // Update alert visibility based on remaining unread notifications
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+
   useEffect(() => {
     fetchNotifications();
     fetchVendorNotifications(); // Fetch vendor notifications as well
+    fetchOrderNotifications();
     const interval = setInterval(() => {
       fetchNotifications();
       fetchVendorNotifications(); // Poll both sets of notifications
+      fetchOrderNotifications();
     }, 60000); // Poll every minute
 
     return () => clearInterval(interval); // Cleanup on unmount
@@ -93,12 +131,12 @@ function NavNotice() {
     <li className="nav-item dropdown">
       <Link to="#" className="nav-link nav-icon a" data-bs-toggle="dropdown">
         <i className="bi bi-bell"></i>
-        <span className="badge bg-primary badge-number">{notifications.length + vendorNotifications.length}</span>
+        <span className="badge bg-primary badge-number">{notifications.length + vendorNotifications.length + orderNotifications.length}</span>
       </Link>
 
       <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
         <li className="dropdown-header">
-          You have {notifications.length + vendorNotifications.length} new notifications
+          You have {notifications.length + vendorNotifications.length + orderNotifications.length} new notifications
         </li>
         <li>
           <hr className="dropdown-divider" />
@@ -132,6 +170,24 @@ function NavNotice() {
                 <p>{vendorNotification.vendorEmail}</p>
                 <p>{vendorNotification.quoteDate}</p>
                 <button onClick={() => markVendorAsRead(vendorNotification._id)} className="btn">Mark as read</button>
+              </div>
+            </li>
+            <li>
+              <hr className="dropdown-divider" />
+            </li>
+          </React.Fragment>
+        ))}
+
+        {/* Display user Order notifications */}
+        {orderNotifications.map((orderNotification, index) => (
+          <React.Fragment key={index}>
+            <li className="notification-item">
+              <i className={`bi ${orderNotification.icon} text-${orderNotification.type}`}></i>
+              <div>
+                <h4>{orderNotification.orderNumber}</h4>
+                <p>₹ {orderNotification.totalPaid}</p>
+                <p>{orderNotification.orderDate}</p>
+                <button onClick={() => markOrderAsRead(orderNotification._id)} className="btn">Mark as read</button>
               </div>
             </li>
             <li>
