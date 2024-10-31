@@ -55,6 +55,7 @@ import ForwardUserQuote from "./main/user/Quote/ForwardUserQuote";
 
 import RecivedOrderUser from "./main/user/OrderVerification/RecivedOrderUser";
 import ORderedViewProducts from "./main/user/OrderVerification/ORderedViewProducts";
+import ORderedViewProductsVendor from "./main/user/OrderVerification/ORderedViewProductsVendor";
 
 import UserDelivery from "./main/user/Delivery/UserDelivery";
 
@@ -128,6 +129,7 @@ function UserDashboard() {
 
         <Route path='/user/orderVerified' element={<RecivedOrderUser />} />
         <Route path='/user/order/viewProducts/:id' element={<ORderedViewProducts />} />
+        <Route path='/vendor/order/viewProductsVendor/:id' element={<ORderedViewProductsVendor />} />
 
 
         <Route path='/user/delivery' element={<UserDelivery />} />

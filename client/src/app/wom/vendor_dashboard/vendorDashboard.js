@@ -15,6 +15,7 @@ import ProductEdit from './dashboard/productRegister/ProductEdit'; // example im
 import QuoteGenerator from './dashboard/quoteManagement/QuoteGenerator';
 import QuoteSuccess from './dashboard/quoteManagement/QuoteSuccess'; // example import
 import Payment from './dashboard/PaymentResponse'; // example import
+import ViewProducts from './dashboard/ViewProducts'; // example import
 
 
 import Footer from '../user_dashboard/user_components/user_dash/footer/Footer';
@@ -42,6 +43,7 @@ function VendorDashboard() {
                 <Route path="quote/generator" element={<QuoteGenerator />} /> {/* Example route */}
                 <Route path="quote/success" element={<QuoteSuccess />} /> {/* Example route */}
                 <Route path="payment" element={<Payment />} /> {/* Example route */}
+                <Route path="viewProducts/:id" element={<ViewProducts />} />
                 {/* Add other routes here */}
             </Routes>
             <Footer />

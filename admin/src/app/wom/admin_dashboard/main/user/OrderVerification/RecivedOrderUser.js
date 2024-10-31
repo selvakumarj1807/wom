@@ -11,7 +11,6 @@ const VendorQuote = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate(); // Initialize the navigate function
 
-
   const fetchData = async () => {
     try {
       const response = await axios.get('https://wom-server.onrender.com/api/v1/admin/orderManagement');

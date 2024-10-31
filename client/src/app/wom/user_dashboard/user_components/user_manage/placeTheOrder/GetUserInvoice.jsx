@@ -16,8 +16,16 @@ const Invoice = () => {
     const [quoteDate, setQuoteDate] = useState('');
     const [email, setEmail] = useState('');
 
+    const [contactName, setContactName] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [address, setAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [pincode, setPincode] = useState('');
+    const [state, setState] = useState('');
+
     // Handle Invoice Number change
     const handleInvoiceNumberChange = (e) => setInvoiceNumber(e.target.value);
+
 
     useEffect(() => {
         const fetchInvoiceQuote = async (invoiceNumber, forwordDate) => {
@@ -61,6 +69,36 @@ const Invoice = () => {
         }
     }, [location.search]);
 
+    const fetchUserData = async () => {
+        try {
+            // Fetch the enquiry details using the enquiry number
+            const response = await axios.get(
+                `https://wom-server.onrender.com/api/v1/user/enquiry/enquiryNumber/${enquiryNumber}`
+            );
+
+            // Extract the relevant enquiry data
+            const fetchedData = response.data.enquiry;
+
+            if (fetchedData && fetchedData.length > 0) {
+                // Extract the email from the first enquiry object and store it in state
+                setContactName(fetchedData[0].contactName);
+                setMobile(fetchedData[0].mobileNumber);
+                setAddress(fetchedData[0].address);
+                setCity(fetchedData[0].city);
+                setPincode(fetchedData[0].postalCode);
+                setState(fetchedData[0].state);
+
+            }
+
+            // Update state with fetched data (if needed elsewhere)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUserData();
+    }, [enquiryNumber]);
 
     const handleInputChange = (e, id) => {
         const { name, value } = e.target;
@@ -118,6 +156,13 @@ const Invoice = () => {
         formData.append('invoiceNumber', invoiceNumber);
         formData.append('orderDate', formatDateTime);
         formData.append('orderNumber', generatedOrderNumber);
+
+        formData.append('contactName', contactName);
+        formData.append('mobile', mobile);
+        formData.append('address', address);
+        formData.append('city', city);
+        formData.append('pincode', pincode);
+        formData.append('state', state);
 
         try {
             const response = await axios.post(

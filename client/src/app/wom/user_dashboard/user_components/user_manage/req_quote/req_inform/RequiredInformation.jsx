@@ -21,7 +21,9 @@ const PartInformation = () => {
     postalCode: '',
     shippingMethod: '',
     state: '',
-    additionalNotes: ''
+    additionalNotes: '',
+    address: '',
+    city: ''
   });
 
   const [enquiryNumber, setEnquiryNumber] = useState(null);
@@ -356,28 +358,16 @@ const PartInformation = () => {
                   readOnly: true,
                 }} />
                 <TextField name="mobileNumber" label="Mobile Number" type="number" variant="outlined" onChange={handleInputChange} />
+                <TextField name="address" label="Address" type="text" variant="outlined" onChange={handleInputChange} />
+
               </Stack>
             </Grid>
             <Grid item xs={12} md={6}>
               <Stack spacing={2}>
+                <TextField name="city" label="City" type="text" variant="outlined" onChange={handleInputChange} />
+
                 <TextField name="postalCode" label="Postal (Zip) Code" variant="outlined" onChange={handleInputChange} />
-                <FormControl fullWidth>
-                  <Select
-                    name="shippingMethod"
-                    displayEmpty
-                    value={formValues.shippingMethod}
-                    onChange={handleInputChange}
-                  >
-                    <MenuItem disabled value="">Shipping Method</MenuItem>
-                    {shippingMethod.length > 0 ? (
-                      shippingMethod.map((elem, index) => (
-                        <MenuItem key={index} value={elem.shippingMethod}>{elem.shippingMethod}</MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem value="">No Shipping Method</MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
+
                 <FormControl fullWidth>
                   <Select
                     name="state"
@@ -395,6 +385,25 @@ const PartInformation = () => {
                     )}
                   </Select>
                 </FormControl>
+
+                <FormControl fullWidth>
+                  <Select
+                    name="shippingMethod"
+                    displayEmpty
+                    value={formValues.shippingMethod}
+                    onChange={handleInputChange}
+                  >
+                    <MenuItem disabled value="">Shipping Method</MenuItem>
+                    {shippingMethod.length > 0 ? (
+                      shippingMethod.map((elem, index) => (
+                        <MenuItem key={index} value={elem.shippingMethod}>{elem.shippingMethod}</MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem value="">No Shipping Method</MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+
               </Stack>
             </Grid>
             <Grid item xs={12}>

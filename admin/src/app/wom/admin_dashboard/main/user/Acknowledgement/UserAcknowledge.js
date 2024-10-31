@@ -80,12 +80,12 @@ const UserAcknowledge = () => {
         "autoWidth": false,
 
         // Set the initial order of the table by the 'enquiryDate' column in descending order
-        "order": [[11, 'desc']], // Assuming 'enquiryDate' is in the 12th column (index 11)
+        "order": [[13, 'desc']], // Assuming 'enquiryDate' is in the 12th column (index 11)
 
         // Apply custom sorting to the 'enquiryDate' column
         "columnDefs": [
           {
-            "targets": 11, // Index of 'enquiryDate' column
+            "targets": 13, // Index of 'enquiryDate' column
             "orderDataType": 'dom-date-custom' // Use custom sorting plugin
           }
         ]
@@ -118,6 +118,8 @@ const UserAcknowledge = () => {
                   <th scope="col">Cantact Name</th>
                   <th scope="col">Mobile</th>
                   <th scope="col">Email</th>
+                  <th scope="col">Address</th>
+                  <th scope="col">City</th>
                   <th scope="col">Postal Code</th>
                   <th scope="col">State</th>
                   <th scope="col">Shipping Method</th>
@@ -137,6 +139,8 @@ const UserAcknowledge = () => {
                       <td style={{ wordWrap: 'break-word' }}>{elem.contactName}</td>
                       <td style={{ wordWrap: 'break-word' }}>{elem.mobileNumber}</td>
                       <td style={{ wordWrap: 'break-word' }}>{elem.email}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.address}</td>
+                      <td style={{ wordWrap: 'break-word' }}>{elem.city}</td>
                       <td style={{ wordWrap: 'break-word' }}>{elem.postalCode}</td>
                       <td style={{ wordWrap: 'break-word' }}>{elem.state}</td>
                       <td style={{ wordWrap: 'break-word' }}>{elem.shippingMethod}</td>

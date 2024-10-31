@@ -122,7 +122,7 @@ function NavNotice() {
       fetchNotifications();
       fetchVendorNotifications(); // Poll both sets of notifications
       fetchOrderNotifications();
-    }, 60000); // Poll every minute
+    }, 2000); // Poll every minute
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
