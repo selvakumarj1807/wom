@@ -177,6 +177,7 @@ const QuoteGenerator = () => {
                                     name="quoteNumber"
                                     value={quoteData.quoteNumber}
                                     onChange={(e) => setQuoteData({ ...quoteData, quoteNumber: e.target.value })}
+                                    required
                                 />
                             </Grid>
                             <Grid item xs={12}>

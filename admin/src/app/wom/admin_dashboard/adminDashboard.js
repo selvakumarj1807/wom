@@ -16,38 +16,18 @@ import Dashboard from "./Dashboard/Dashboard";
 import RecycleEngineMarket from "./main/RecycleEngineMarket/RecycleEngineMarket";
 
 import UserManagement from "./Dashboard/UserManagement";
-
 import UserAcknowledge from "./main/user/Acknowledgement/UserAcknowledge";
-import UserStatus from "./main/user/OrderStatus/UserStatus";
-import UserHistory from "./main/user/OrderHistory/UserHistory";
-import UserInvoice from "./main/user/Invoice/UserInvoice";
-import UserPayment from "./main/user/Payment/UserPayment";
 
 import VendorManagement from "./Dashboard/VendorManage";
-
-import VendorAcknowledge from "./main/vendor/Acknoledgement/VendorAcknowledge";
-import VendorStatus from "./main/vendor/OrderStatus/VendorStatus";
-import VendorHistory from "./main/vendor/OrderHistory/VendorHistory";
-import VendorInvoice from "./main/vendor/Invoice/VendorInvoice";
-import VendorPayment from "./main/vendor/Payment/VendorPayment";
-import VendorDelivery from "./main/vendor/Delivery/VendorDelivery";
 import VendorRegistration from "./main/vendor/VendorRegistraion/VendorRegistration";
 import VendorProducts from "./main/vendor/VendorProducts/VendorProducts";
-
+import VendorAcknowledge from "./main/vendor/Acknoledgement/VendorAcknowledge";
 
 import AdminRoles from "./Dashboard/Access Manage/AdminRoles";
 import AdminPermission from "./Dashboard/Access Manage/AdminPermission";
 
-import RecivedUserForm from "./main/user/EnquiryForm/RecivedUserForm";
-import ForwardUserForm from "./main/user/EnquiryForm/ForwardUserForm";
-
-import RecivedVendorForm from "./main/vendor/EnquiryForm/RecivedVendorForm";
-import ForwardVendorForm from "./main/vendor/EnquiryForm/ForwardVendorForm";
-
 import PushNotification from "./Dashboard/PushNotification";
-
 import ViewPushNotification from "./Dashboard/ViewPushNotifications";
-
 
 import RecivedVendorQuote from "./main/vendor/Quote/RecivedVendorQuote";
 import EditQuote from "./main/vendor/Quote/EditQuote";
@@ -56,8 +36,6 @@ import ForwardUserQuote from "./main/user/Quote/ForwardUserQuote";
 import RecivedOrderUser from "./main/user/OrderVerification/RecivedOrderUser";
 import ORderedViewProducts from "./main/user/OrderVerification/ORderedViewProducts";
 import ORderedViewProductsVendor from "./main/user/OrderVerification/ORderedViewProductsVendor";
-
-import UserDelivery from "./main/user/Delivery/UserDelivery";
 
 import Reports from "./Dashboard/Reports";
 
@@ -92,35 +70,17 @@ function UserDashboard() {
         <Route path='/recycleEngineMarket' element={<RecycleEngineMarket />} />
 
         <Route path='/userManage' element={<UserManagement />} />
-
         <Route path='/user/acknow' element={<UserAcknowledge />} />
-        <Route path='/user/status' element={<UserStatus />} />
-        <Route path='/user/history' element={<UserHistory />} />
-        <Route path='/user/invoice' element={<UserInvoice />} />
-        <Route path='/user/payment' element={<UserPayment />} />
-        <Route path='/user/delivery' element={<UserDelivery />} />
 
         <Route path='/vendorManage' element={<VendorManagement />} />
-
         <Route path='/vendor/acknow' element={<VendorAcknowledge />} />
         <Route path='/vendor/VendorProducts' element={<VendorProducts />} />
-        <Route path='/vendor/status' element={<VendorStatus />} />
-        <Route path='/vendor/history' element={<VendorHistory />} />
-        <Route path='/vendor/invoice' element={<VendorInvoice />} />
-        <Route path='/vendor/payment' element={<VendorPayment />} />
         <Route path='/vendor/register' element={<VendorRegistration />} />
 
         <Route path='/access/roles' element={<AdminRoles />} />
         <Route path='/access/permission' element={<AdminPermission />} />
 
-        <Route path='/user/enquiry/recived' element={<RecivedUserForm />} />
-        <Route path='/user/enquiry/forward' element={<ForwardUserForm />} />
-
-        <Route path='/vendor/enquiry/recived' element={<RecivedVendorForm />} />
-        <Route path='/vendor/enquiry/forward' element={<ForwardVendorForm />} />
-
         <Route path='/PushNotification' element={<PushNotification />} />
-
         <Route path='/viewPushNotification' element={<ViewPushNotification />} />
 
         <Route path='/vendor/recivedQuote' element={<RecivedVendorQuote />} />
@@ -130,10 +90,6 @@ function UserDashboard() {
         <Route path='/user/orderVerified' element={<RecivedOrderUser />} />
         <Route path='/user/order/viewProducts/:id' element={<ORderedViewProducts />} />
         <Route path='/vendor/order/viewProductsVendor/:id' element={<ORderedViewProductsVendor />} />
-
-
-        <Route path='/user/delivery' element={<UserDelivery />} />
-        <Route path='/vendor/delivery' element={<VendorDelivery />} />
 
         <Route path='/report' element={<Reports />} />
 

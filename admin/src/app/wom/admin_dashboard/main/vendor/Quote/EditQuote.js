@@ -6,7 +6,7 @@ import html2pdf from 'html2pdf.js';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
- 
+
 const Invoice = () => {
   const location = useLocation();  // Move useLocation outside of useEffect
   const [enquiryNumber, setEnquiryNumber] = useState('');
@@ -389,6 +389,10 @@ const Invoice = () => {
     // Generate PDF blob
     const pdfBlob = await html2pdf().from(invoiceContent).toPdf().output('blob');
 
+    if (!invoiceNumber.trim()) { // Check if invoice number is empty
+      alert("Invoice Number is required");
+      return;
+    }
     const formatDate = (date) => {
       const d = new Date(date);
       const day = d.getDate().toString().padStart(2, '0');
@@ -455,6 +459,7 @@ const Invoice = () => {
             placeholder="#Inv1234"
             value={invoiceNumber} // Bind state value
             onChange={handleInvoiceNumberChange} // Update state on input change
+            required // Mark field as required
           />
         </div>
 

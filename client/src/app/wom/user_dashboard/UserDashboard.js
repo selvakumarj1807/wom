@@ -9,9 +9,7 @@ import UserSidebar from './user_components/sidebar/UserSidebar';
 import Footer from './user_components/user_dash/footer/Footer';
 import { Route, Routes } from 'react-router-dom';
 import UserMain from './user_components/user_main/UserMain';
-import RequestQuote from './user_components/user_manage/req_quote/RequestQuote.jsx';
 import RequiredInformation from './user_components/user_manage/req_quote/req_inform/RequiredInformation.jsx';
-import GetTheQuote from './user_components/user_manage/placeTheOrder/GetTheQuote.jsx';
 import GetTheUserQuote from './user_components/user_manage/placeTheOrder/GetTheUserQuote.jsx';
 import GetTheEnquiry from './user_components/user_manage/placeTheOrder/GetTheEnquiry.jsx';
 import GetUserInvoice from './user_components/user_manage/placeTheOrder/GetUserInvoice.jsx';
@@ -19,7 +17,6 @@ import UserOrderStatus from './user_components/user_manage/user_order_status/Use
 import UserHistory from './user_components/user_manage/user_history/UserHistory.js';
 import UserViewProducts from './user_components/user_manage/user_history/UserViewProducts.js';
 
-import UserPayment from './user_components/user_manage/placeTheOrder/payment/UserPayment.jsx';
 import UserRegister from '../auth/user/UserRegister';
 import UserLogin from '../auth/user/UserLogin.js';
 
@@ -35,9 +32,7 @@ function UserDashboard() {
       <UserSidebar />
       <Routes>
         <Route path='/' element={<UserMain />} />
-        <Route path='/user/user_enquiry' element={<RequestQuote />} />
         <Route path='/user/required_inform' element={<RequiredInformation />} />
-        <Route path='/user/get_quote' element={<GetTheQuote />} />
         <Route path='/user/get_Userinvoice' element={<GetUserInvoice />} />
         <Route path='/user/get_UserQuote' element={<GetTheUserQuote />} />
         <Route path='/user/get_enquiry' element={<GetTheEnquiry />} />
@@ -45,7 +40,6 @@ function UserDashboard() {
         <Route path='/user/user_history' element={<UserHistory />} />
         <Route path='user/order/viewProducts/:id' element={<UserViewProducts />} />
 
-        <Route path='/user/invoice/payment' element={<UserPayment />} />
         <Route path='/user_login' element={<UserLogin />} />
         <Route path='/user_register' element={<UserRegister />} />
       </Routes>

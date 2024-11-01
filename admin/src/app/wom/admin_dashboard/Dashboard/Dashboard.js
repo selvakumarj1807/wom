@@ -29,7 +29,7 @@ const Dashboard = () => {
                             <div style={cardStyle}>
                                 <FormOutlined style={iconStyle('red')} />
                                 <div style={cardInnerStyle}>
-                                    <p style={textPrimaryPStyle}>Number of Vendor Invoice</p>
+                                    <p style={textPrimaryPStyle}>Number of Invoice</p>
                                     <span style={textTitleStyle}>340</span>
                                 </div>
                             </div>
