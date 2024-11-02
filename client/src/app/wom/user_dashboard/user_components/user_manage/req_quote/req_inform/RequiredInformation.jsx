@@ -55,21 +55,16 @@ const PartInformation = () => {
 
   const [dataYear, setDataYear] = useState([]);
 
+  // Fetch functions
   const fetchDataYear = async () => {
     try {
-      // Make a GET request to fetch the updated list of years
       const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addYear');
-
-      // Extract the array from the response (assuming it's called addYear)
-      const fetchedData = response.data.addYear;
-
-      // Update the state that the table uses
-      setDataYear(fetchedData);
+      const sortedData = response.data.addYear.sort((a, b) => a.year - b.year); // Sort by year in ascending order
+      setDataYear(sortedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   useEffect(() => {
     fetchDataYear();

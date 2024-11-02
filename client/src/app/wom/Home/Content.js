@@ -29,11 +29,13 @@ export default function Content() {
   const fetchDataYear = async () => {
     try {
       const response = await axios.get('https://wom-server.onrender.com/api/v1/masterManagement/addYear');
-      setDataYear(response.data.addYear);
+      const sortedData = response.data.addYear.sort((a, b) => a.year - b.year); // Sort by year in ascending order
+      setDataYear(sortedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   const fetchDataMake = async () => {
     try {
