@@ -1,0 +1,7 @@
+Get-ExecutionPolicy
+
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+npm config set legacy-peer-deps true
+
+npm i
